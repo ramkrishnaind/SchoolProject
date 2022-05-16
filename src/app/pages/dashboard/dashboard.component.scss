@@ -1,0 +1,52 @@
+.div-1 {
+    border: 2px solid rgba(1, 89, 154, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.business-details .bus-width.set-item-width {
+    width: 14.5%;
+}
+
+.business-details-fullName {
+    width: 70%;
+}
+
+.business-details {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.top-heading {
+    color: #222D39;
+    font-size: 15px;
+}
+
+.form-btn {
+    margin-top: 70px;
+    margin-left: 525px;
+    width: 20%;
+}
+
+.img-div {
+    border: 1px solid #8892A0;
+    border-radius: 2px;
+    height: 140px;
+    width: 140px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.iconImage {
+    height: 120px;
+    width: 120px;
+    cursor: pointer;
+}

@@ -1,0 +1,115 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">ExamResult Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Standred</mat-label>
+                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
+                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Division</mat-label>
+                        <mat-select formControlName="idDivision" (selectionChange)="onChangeStandredForSubject($event)">
+                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Subject</mat-label>
+                        <mat-select formControlName="idSubject" (selectionChange)=" onChangeDivision($event,$event)">
+                            <mat-option *ngFor="let item of subjectName" [value]="item.idSubject">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select TestType</mat-label>
+                        <mat-select formControlName="idtestType">
+                            <mat-option *ngFor="let item of testTypeName" [value]="item.idtestType">{{item.discription}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Student</mat-label>
+                        <mat-select formControlName="idStudent">
+                            <mat-option *ngFor="let item of studentName" [value]="item.idStudent">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Obtain</mat-label>
+                        <input formControlName="obtain" matInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Min Marks</mat-label>
+                        <input formControlName="min" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Max Marks</mat-label>
+                        <input formControlName="max" matInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width-two">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Remark</mat-label>
+                        <input formControlName="remark" matInput>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="div-1" style="margin-top: 80px;">
+            <div class="business-details">
+                <div class="bus-width set-item-width-excel">
+                    <mat-label class="labelfont">Upload Result Excel File Here</mat-label>
+                </div>
+                <div class="bus-width set-item-width-excel">
+                    <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+                </div>
+                <div class="bus-width set-item-width-excel">
+                    <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Exam Result</button>
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+</div>

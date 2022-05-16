@@ -1,0 +1,57 @@
+$color:#ee447e;
+
+// .ng-star-inserted{
+//   .list-of-menu-itmes{
+//     .mat-list-item{background-color:$color; color:rgba(255,255,255,0.3);
+//       &.active{color:#fff}
+//     }  
+//     &.active,
+//     &:hover{
+//       .mat-list-item{color:#fff}
+//     }
+//   }
+// }
+.list-of-menu-itmes{
+  user-select: none;  
+  .mat-list-item{background-color:#F9F9F9; color:#011627; height:56px; font-size:15px;
+    .display-name{white-space:nowrap; overflow:hidden;text-overflow:ellipsis; width:calc(100% - 30px); padding-right:15px;}
+    .mat-icon{position:absolute; top:0; bottom:0; margin:auto; right:15px;}
+    .ic-menu{height:24px; width:24px; display:inline-block; margin-right:15px; }
+    .ic-dashboard{background-position:0 0;}
+    .ic-support-request{background-position:0 -24px;}
+    .ic-requestes{background-position:0 -168px;}
+    .ic-business-profile{background-position:0 -215px;}
+    .ic-catalogue-mang{background-position:0 -314px;}
+    .ic-vertical{background-position:0 -144px;}
+    .ic-category-man{background-position:0 -265px;}
+    .ic-sub-category{background-position:0 -408px;}
+    .ic-service-mana{background-position:0 -432px;}
+    .ic-user-mana{background-position:0 -120px;}
+    .ic-user-privile{background-position:0 -144px;}
+    .ic-business-reports{background-position:0 -193px;}
+    .ic-multi-langu{background-position:0 -192px;}
+    .ic-cust-app-tra{background-position:0 -216px;}
+    &.active,
+    &:hover{background-color:$color; color:#fff;
+      .ic-dashboard{background-position:-24px 0;}
+      .ic-support-request{background-position:-24px -24px;}
+      .ic-requestes{background-position:-24px -168px;}
+      .ic-business-profile{background-position:-24px -215px;}
+      .ic-catalogue-mang{background-position:-24px -314px;}
+      .ic-vertical{background-position:-24px -144px;}
+      .ic-category-man{background-position:-24px -265px;}
+      .ic-sub-category{background-position:-24px -408px;}
+      .ic-service-mana{background-position:-24px -432px;}
+      .ic-user-mana{background-position:-24px -120px;}
+      .ic-user-privile{background-position:-24px -144px;}
+      .ic-business-reports{background-position:-24px -193px;}
+      .ic-multi-langu{background-position:-24px -192px;}
+      .ic-cust-app-tra{background-position:-24px -216px;}
+    }    
+  }
+//   .expanded {
+//     background: #ee447e;
+//     color:#fff;
+//     .ic-catalogue-mang{background-position:-24px -96px;}
+// }
+}

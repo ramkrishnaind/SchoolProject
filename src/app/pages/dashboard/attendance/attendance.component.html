@@ -1,0 +1,98 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">Attendance Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Date</mat-label>
+                        <input formControlName="date" matInput>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Standred</mat-label>
+                        <mat-select (selectionChange)="onChangeStandred($event)">
+                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Division</mat-label>
+                        <mat-select (selectionChange)=" onChangeDivision($event,$event)">
+                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="business-details">
+                <div class="bus-width set-item-width-one">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Student Name</mat-label>
+                        <mat-select formControlName="idStudent">
+                            <mat-option *ngFor="let item of studentName" [value]="item.idStudent">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width-one">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Attendance Status</mat-label>
+                        <mat-select formControlName="present">
+                            <mat-option *ngFor="let item of presentStatus" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="business-details">
+                <div class="bus-width set-item-width-one">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Reason</mat-label>
+                        <input formControlName="reasons" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width-one">
+                    <button mat-raised-button color="primary" class="btn_sub" (click)="attendanceDetails()">Submit Attendance Manually</button>
+                </div>
+
+
+            </div>
+            
+        </div>
+    </form>
+
+    <div class="div-1" style="margin-top: 80px;">
+        <div class="business-details">
+            <div class="bus-width set-item-width">
+                <mat-label class="labelfont">Upload Attendance Excel File Here</mat-label>
+            </div>
+            <div class="bus-width set-item-width">
+                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>

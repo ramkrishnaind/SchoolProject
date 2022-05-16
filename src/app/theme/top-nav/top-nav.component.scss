@@ -1,0 +1,160 @@
+.header-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+    .brger-menu-logo {
+        width: 230px;
+        padding: 0 10px;
+    }
+    .mat-toolbar {
+        background-color: #fff;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        padding: 0;
+    }
+    .mat-icon {
+        color: #011627;
+    }
+    .logo {
+        margin-left: 20px;
+        a {
+            width: 84px;
+            display: block;
+            height: 45px;
+        }
+    }
+    .menu-icon {
+        cursor: pointer;
+        .ic-menu {
+            height: 24px;
+            width: 24px;
+            background-position: -48px 0;
+            display: block;
+        }
+    }
+    .heading h1 {
+        color: #222D39;
+        font-size: 24px;
+        font-weight: 700;
+    }
+    .right-header-bar {
+        width: calc(100% - 230px);
+        padding: 0 15px;
+    }
+    .user-profile-section {
+        cursor: pointer;
+         ::ng-deep .mat-button-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .usr-pro-pic {
+            height: 42px;
+            width: 42px;
+            border-radius: 100%;
+            margin-right: 18px;
+            overflow: hidden;
+            img {
+                object-fit: cover;
+                height: 42px;
+                width: 100%;
+            }
+        }
+        p {
+            color: #677798;
+            font-size: 15px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            .mat-icon {
+                color: #677798;
+            }
+        }
+    }
+}
+
+.logo img {
+    width: 70%;
+}
+
+::ng-deep .mat-menu-panel {
+    position: relative;
+    top: 13px;
+    z-index: -1;
+    overflow: inherit!important;
+    border: 1px solid #A9B0BD;
+    box-shadow: none;
+}
+
+::ng-deep .mat-menu-panel::after {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    border: 1px solid #A9B0BD;
+    height: 30px;
+    width: 30px;
+    background: white;
+    top: -16px;
+    right: -80px;
+    left: 0;
+    margin: 0 auto;
+    transform: rotate(45deg);
+    z-index: 1;
+}
+
+::ng-deep .mat-menu-panel::before {
+    position: absolute;
+    content: "";
+    background: white;
+    height: 22px;
+    width: 40px;
+    right: -80px;
+    left: 0;
+    margin: 0 auto;
+    z-index: 20;
+    top: -1px;
+}
+
+.set-pos {
+    position: relative;
+    z-index: 29;
+    border-bottom: 1px solid #A9B0BD;
+}
+
+@media (max-width:767px) {
+    .header-bar {
+        .heading h1 {
+            font-size: 20px;
+        }
+        .brger-menu-logo {
+            width: 165px;
+        }
+        .right-header-bar {
+            width: calc(100% - 165px);
+        }
+        .user-profile-section {
+            display: none;
+        }
+    }
+}
+
+@media (max-width:575px) {
+    .header-bar {
+        .brger-menu-logo {
+            width: 30px;
+            margin-left: 15px;
+            padding: 0;
+        }
+        .right-header-bar {
+            width: calc(100% - 40px);
+        }
+        .logo {
+            display: none;
+        }
+        .heading h1 {
+            font-size: 18px;
+        }
+        .right-header-bar {
+            padding: 0 15px 0 10px;
+        }
+    }
+}

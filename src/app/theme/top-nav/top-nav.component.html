@@ -1,0 +1,35 @@
+<div class="header-bar">
+    <mat-toolbar class="mat-elevation-z1">
+        <div fxLayout="row wrap" fxLayoutAlign="space-start center" class="brger-menu-logo">
+            <div class="menu-icon">
+                <i class="for-sprite-call ic-menu" id="menu" (click)="navService.toggle()"></i>
+            </div>
+            <div class="logo">
+                <a href="/dashboard"><img src="./assets/images/jayapinLogo.png" alt=""></a>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="right-header-bar">
+            <div class="heading">
+                <h1>
+                    <app-breadcrumb></app-breadcrumb>
+                </h1>
+            </div>
+
+            <div class="user-profile-section">
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" mat-button [matMenuTriggerFor]="beforeMenu">
+                    <div class="usr-pro-pic">
+                        <img src="./assets/images/user.jpg" alt="">
+                    </div>
+                    <p> Super Admin
+                        <mat-icon>expand_more</mat-icon>
+                    </p>
+                </div>
+                <mat-menu #beforeMenu="matMenu" xPosition="before">
+                    <button routerLink="/profile" mat-menu-item class="set-pos">Profile</button>
+                    <button mat-menu-item>  <a href="/">Logout</a></button>
+                </mat-menu>
+
+            </div>
+        </div>
+    </mat-toolbar>
+</div>

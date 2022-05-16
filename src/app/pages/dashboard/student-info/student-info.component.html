@@ -1,0 +1,231 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">Student Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+            <div class="main-div">
+                <div class="img-div add-logo-div">
+                    <input accept="image/*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
+                    <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
+                        <div class="add-logo flex center">
+                            <div>
+                                <div class="company-logo-text">+Add Photo</div>
+                            </div>
+
+                        </div>
+
+                        <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error>
+                    </div>
+                    <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
+                        <img [src]="form.get('businessLogoUrl').value">
+
+                        <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+                            Change Logo
+                        </div> -->
+                    </div>
+                </div>
+                <button mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button>
+                <div class="form-div">
+                    <div class="w-100">
+                        <div class="width-calc">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Student Name</mat-label>
+                                <input formControlName="name" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="width-calc">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Select Parent Name</mat-label>
+                                <mat-select formControlName="idParent">
+                                    <mat-option *ngFor="let item of parentName" [value]="item.idparent">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Standred</mat-label>
+                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event)">
+                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Division</mat-label>
+                        <mat-select formControlName="idDivision">
+                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Roll Number</mat-label>
+                        <input formControlName="rollno" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Gender</mat-label>
+                        <mat-select formControlName="gender">
+                            <mat-option *ngFor="let item of gender" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Date Of Birth</mat-label>
+                        <input formControlName="dob" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Age</mat-label>
+                        <input formControlName="age" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> BloodGroup</mat-label>
+                        <input formControlName="bloodgrp" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Primary Mobile Number</mat-label>
+                        <input formControlName="pmobileno" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Secondry Mobile Number</mat-label>
+                        <input formControlName="smobileno" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Emergency Mobile Number</mat-label>
+                        <input formControlName="emergancyConntact" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Email ID</mat-label>
+                        <input formControlName="email" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Student Secondry Email ID</mat-label>
+                        <input formControlName="semail" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Subjects</mat-label>
+                        <input formControlName="subjects" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Academic Year</mat-label>
+                        <input formControlName="academicyear" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Student Address - 1</mat-label>
+                        <input formControlName="address" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Student Adress -2</mat-label>
+                        <input formControlName="address2" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Student Nationality</mat-label>
+                        <mat-select formControlName="nationality">
+                            <mat-option *ngFor="let item of nationality" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Country</mat-label>
+                        <mat-select formControlName="country">
+                            <mat-option *ngFor="let item of country" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select State</mat-label>
+                        <mat-select formControlName="state">
+                            <mat-option *ngFor="let item of state" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select City</mat-label>
+                        <mat-select formControlName="city">
+                            <mat-option *ngFor="let item of city" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+
+
+            </div>
+            <button mat-raised-button color="primary" class="form-btn" (click)="submit()">Submit</button>
+        </div>
+    </form>
+</div>

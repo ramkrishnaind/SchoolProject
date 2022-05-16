@@ -1,0 +1,23 @@
+<div class="sucess_message" *ngIf="data.snackType == 'Done'">
+    <div class="alert alert-success" role="alert">
+        <div class="sank_bar">
+            <div class="img_sucess">
+                <img src='./assets/images/rightSucess.jpg'>
+            </div>
+            <div class="message"> {{data.message}}</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="sucess_message" *ngIf="data.snackType == 'Warning'">
+    <div class="alert alert-unsuccess" role="alert">
+        <div class="sank_bar">
+            <div class="img_sucess">
+                <img src='./assets/images/warning.jpg'>
+            </div>
+            <div class="message"> {{data.message}}</div>
+        </div>
+
+    </div>
+</div>

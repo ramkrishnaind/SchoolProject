@@ -1,0 +1,122 @@
+.business-details .bus-width.set-item-width-back {
+    width: 67%;
+}
+
+.business-details-back {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 58%;
+    margin-top: 2%;
+}
+
+.back-btn {
+    width: 31%;
+    mix-blend-mode: difference;
+}
+
+.border-form .add-logo {
+    border: 1px solid red;
+    height: 100px;
+    width: 100px;
+}
+
+.change-logo {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.main-div {
+    margin-bottom: 30px!important;
+}
+
+.company-logo-text {
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+.business-details .bus-width.set-item-width-two {
+    width: 99.5%;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.upload-btn {
+    margin-top: -10px;
+}
+
+.div-1 {
+    border: 2px solid rgba(1, 89, 154, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.business-details .bus-width.set-item-width {
+    width: 32.5%;
+}
+
+.business-details-fullName {
+    width: 70%;
+}
+
+.business-details {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.top-heading {
+    color: #222D39;
+    font-size: 15px;
+}
+
+.form-btn {
+    margin-top: 70px;
+    margin-left: 525px;
+    width: 20%;
+    mix-blend-mode: difference;
+}
+
+.btn_sub {
+    mix-blend-mode: difference;
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+.main-div {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    .form-div {
+        width: 90%;
+        margin-left: 5%;
+    }
+    .img-div {
+        border: 1px solid #8892A0;
+        border-radius: 2px;
+        height: 140px;
+        width: 140px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.display-none {
+    display: none;
+}

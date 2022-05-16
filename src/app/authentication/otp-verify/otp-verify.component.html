@@ -1,0 +1,40 @@
+<div class="d-none-n d-block-767">
+    <div class="logo-stripe">
+        <div class="beep-next-logo">
+            <a href="javascript:void(0)"><img src="./assets/images/jayapinLogo.png" alt="logo images"></a>
+        </div>
+    </div>
+</div>
+
+<div class="full-height-wid-bg position-relative d-flex align-items-center">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-end justify-content-center-991">
+            <div class="sign-up-login-box otp-verify position-relative">
+                <div class="beep-next-logo d-none-767">
+                    <a href="javascript:void(0)"><img src="/assets/images/jayapinLogo.png" alt=""></a>
+                </div>
+                <div class="login-form">
+                    <h1>Check OTP</h1>
+                    <p>Please check the OTP sent to: 70454 65989</p>
+
+
+                    <div class="example-container">
+                        <div class="ngopt">
+                            <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="config"></ng-otp-input>
+                        </div>
+
+                        <div class="d-flex justify-content-between resend-code">
+                            <p>0.05</p>
+                            <a href="javascript:void(0)">⭮ Resend OTP</a>
+                        </div>
+
+                        <div class="btn-action d-flex  justify-content-between">
+                            <button mat-raised-button class="w-48 box-shadow-none btn-cancel text-center" type="cancel" routerLink='/forget-password'>Cancel</button>
+                            <button mat-raised-button class="w-48 box-shadow-none btn-login text-center" type="submit" routerLink="/reset-password">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">Holiday Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+            <div class="main-div">
+                <div class="img-div add-logo-div" style="margin-left: 40%; margin-top: 4%;">
+                    <input accept="image/*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
+                    <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
+                        <div class="add-logo flex center">
+                            <div>
+                                <div class="company-logo-text">+Add Photo</div>
+                            </div>
+
+                        </div>
+
+                        <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error>
+                    </div>
+                    <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
+                        <img [src]="form.get('businessLogoUrl').value">
+
+                        <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+                            Change Logo
+                        </div> -->
+                    </div>
+                </div>
+                <button mat-button color="primary" class="upload-btn" (click)="upload()" style="margin-top: 4%;">Upload Image</button>
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Name of Holiday</mat-label>
+                        <input formControlName="name" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Date</mat-label>
+                        <input formControlName="date" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <button mat-raised-button color="primary" class="btn_sub" (click)="holidayDetails()">Submit Holiday Name</button>
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+</div>

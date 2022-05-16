@@ -1,0 +1,49 @@
+<!-- fxLayout="row wrap" fxLayoutAlign="space-start center" -->
+<div class="d-none-n d-block-767">
+    <div class="logo-stripe">
+        <div class="beep-next-logo">
+            <a href="javascript:void(0)"><img src="/assets/images/jayapinLogo.png" alt=""></a>
+        </div>
+    </div>
+</div>
+<div class="full-height-wid-bg position-relative d-flex align-items-center">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-end justify-content-center-991">
+            <div class="sign-up-login-box position-relative">
+                <div class="beep-next-logo d-none-767">
+                    <a href="javascript:void(0)"><img src="./assets/images/jayapinLogo.png" alt=""></a>
+                </div>
+                <div class="login-form">
+                    <h1>Login</h1>
+                    <div class="example-container">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter Your Email ID or Moblie Number</mat-label>
+                            <input matInput>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter your password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                        </mat-form-field>
+                        <div class="checkbox-forgotPassword d-flex justify-content-between align-items-center">
+                            <div>
+                                <mat-checkbox>Remember Me</mat-checkbox>
+                            </div>
+                            <a routerLink="/forget-password" class="forgot-password">
+                  Forgot Password ?
+                </a>
+                        </div>
+                        <div class="btn-action">
+                            <button mat-raised-button class="w-100 box-shadow-none btn-login text-center" type="submit" routerLink="/dashboard">Login</button>
+                        </div>
+                        <!-- <div class="text-center dont-account"> -->
+                        <!-- <p>Don't have an account? <a href="javascript:void(0)">Sign up</a></p> -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
