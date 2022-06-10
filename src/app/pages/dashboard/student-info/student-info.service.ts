@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import {environment} from './../../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Subject } from 'rxjs/Subject';
 import * as AWS from 'aws-sdk/global';
@@ -48,11 +48,12 @@ export class StudentInfoService {
 
   }
   getStandred(){
-    return this.http.get(`${this.baseurl}standard/`);
+    return this.http.get(`${this.baseurl}standard/?idSchool=1`);
   }
 
-  getDivision(idStandard){
-    const urlParams = new HttpParams().set('idStandard',idStandard.value);
+  getDivision(idStandard,idSchool?:any){
+    idSchool = 1;
+    const urlParams = new HttpParams().set('idStandard',idStandard.value).set('idSchool',idSchool);
     return this.http.get(`${this.baseurl}division/byStandard`, { params: urlParams });
    }
    studentInformation(body){

@@ -41,7 +41,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
      } 
      onChangeStandred(idStandard){
     
-      this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
+      this.studentInfoSerive.getDivision(idStandard,"1").subscribe( res =>{
         this.divisionData = res;
         this.divisionName = this.divisionData.data;
        
