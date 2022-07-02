@@ -20,7 +20,7 @@ export class OtpVerifyComponent implements OnInit {
     allowNumbersOnly:true,
     length: 6,
   };
-  constructor(private formBuilder: FormBuilder, private route: Router) { 
+  constructor(private formBuilder: FormBuilder, private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -42,6 +42,10 @@ export class OtpVerifyComponent implements OnInit {
 
   onOtpChange(otp) {
     this.otp = otp;
+  }
+
+  onSubmit(){
+    this.router.navigate(['./reset-password']);
   }
 
 }

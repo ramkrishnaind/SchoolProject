@@ -11,23 +11,27 @@ import { OtpVerifyComponent } from './authentication/otp-verify/otp-verify.compo
 
 export const AppRoutes: Routes = [
   { path: '', component: LoginComponent },
-  {
-    path: '',
-    component: PagesComponent,
-    children: [
-      {
-        path: 'dashboard',
-        loadChildren: () => import('src/app/pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-        data: { title: 'Dashboard' }
-      },
-      {
-        path: 'master',
-        loadChildren:() => import('src/app/pages/master/master.module').then(m => m.MasterModule),
-        data:{ title: 'Master'}
-      }
-
-     ]
+  { path :'pages',
+    loadChildren: () => import('src/app/pages/pages.module').then(m => m.PagesModule),
+    data: { title: 'pages' }
   },
+  // {
+  //   path: '',
+  //   component: PagesComponent,
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       loadChildren: () => import('src/app/pages/dashboard/dashboard.module').then(m => m.DashboardModule),
+  //       data: { title: 'Dashboard' }
+  //     },
+  //     {
+  //       path: 'master',
+  //       loadChildren:() => import('src/app/pages/master/master.module').then(m => m.MasterModule),
+  //       data:{ title: 'Master'}
+  //     }
+
+  //    ]
+  // },
   { path: 'forget-password', component: ForgetPasswordComponent },
   { path: 'otp', component: OtpVerifyComponent },
   { path: 'reset-password', component: ResetPasswordComponent },

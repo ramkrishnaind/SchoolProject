@@ -30,7 +30,7 @@
 
                         <div class="btn-action d-flex  justify-content-between">
                             <button mat-raised-button class="w-48 box-shadow-none btn-cancel text-center" type="cancel" routerLink='/forget-password'>Cancel</button>
-                            <button mat-raised-button class="w-48 box-shadow-none btn-login text-center" type="submit" routerLink="/reset-password">Submit</button>
+                            <button mat-raised-button class="w-48 box-shadow-none btn-login text-center" type="submit" (click)="onSubmit()">Submit</button>
                         </div>
                     </div>
                 </div>

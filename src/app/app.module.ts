@@ -10,16 +10,17 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { SharedModule } from './shared/shared.module';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { TopNavComponent } from './theme/top-nav/top-nav.component';
-import { MenuListItemComponent } from './theme/menu-list-item/menu-list-item.component';
-import { PagesComponent } from './pages/pages.component';
 import {OtpVerifyComponent} from './authentication/otp-verify/otp-verify.component';
 
 import { NgOtpInputModule } from  'ng-otp-input';
 import { ChartsModule } from 'ng2-charts';
 
+import {JwtInterceptor} from './helpers/jwt.interceptor';
+import {ErrorInterceptor} from './helpers/error.interceptor';
+
 import { AppRoutes } from './app-routing';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 
@@ -31,9 +32,6 @@ import { RouterModule } from '@angular/router';
     ForgetPasswordComponent,
     NotFoundComponent,
     ResetPasswordComponent,
-    TopNavComponent,
-    MenuListItemComponent,
-    PagesComponent
    
     
     
@@ -42,17 +40,20 @@ import { RouterModule } from '@angular/router';
     BrowserModule,
     BrowserAnimationsModule,
     SharedModule,
+    HttpClientModule,
     NgOtpInputModule,
    // ChartsModule,
     //RouterModule.forRoot(AppRoutes)
-    RouterModule.forRoot(AppRoutes,{useHash:true}),
+    RouterModule.forRoot(AppRoutes),
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
     NO_ERRORS_SCHEMA
   ],
   providers: [
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
+    // { provide: LocationStrategy, useClass: PathLocationStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

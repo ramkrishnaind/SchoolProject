@@ -1,0 +1,137 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">Homework Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+            <div class="main-div">
+                <div class="img-div add-logo-div">
+                    <input accept="*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
+                    <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
+                        <div class="add-logo flex center">
+                            <div>
+                                <div class="company-logo-text">+Add Photo OR File</div>
+                            </div>
+
+                        </div>
+
+                        <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error>
+                    </div>
+                    <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
+                        <img [src]="form.get('businessLogoUrl').value">
+
+                        <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+                            Change Logo
+                        </div> -->
+                    </div>
+                </div>
+                <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button>
+                <div class="form-div">
+                    <div class="w-100">
+                        <div class="width-calc">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>HomeWork Name</mat-label>
+                                <input formControlName="homeworkName" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="width-calc">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Select Teacher</mat-label>
+                                <mat-select formControlName="idTeacher">
+                                    <mat-option *ngFor="let item of teacherData" [value]="item.idTeacher">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Standred</mat-label>
+                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
+                            <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Division</mat-label>
+                        <mat-select formControlName="idDivision">
+                            <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Subject</mat-label>
+                        <mat-select formControlName="idSubject">
+                            <mat-option *ngFor="let item of subjectData" [value]="item.idSubject">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width-two">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Description</mat-label>
+                        <textarea formControlName="Description" matInput></textarea>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Assign Date</mat-label>
+                        <input readOnly [min]="minDate" [max]="maxDate" formControlName="assigndate" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Due Date</mat-label>
+                        <input readOnly [min]="minDate" [max]="maxDate" formControlName="duedate" matInput [matDatepicker]="duedate">
+                        <mat-datepicker-toggle matSuffix [for]="duedate"></mat-datepicker-toggle>
+                        <mat-datepicker #duedate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <button mat-raised-button color="primary" class="btn_sub" (click)=" homeworkInformation()">Submit HomeWork</button>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <div class="div-1" style="margin-top: 60px;">
+        <div class="business-details">
+            <div class="bus-width set-item-width">
+                <mat-label class="labelfont">Upload Homework File Here</mat-label>
+            </div>
+            <div class="bus-width set-item-width">
+                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

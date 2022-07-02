@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener, ViewChildren, QueryList, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
-import { NavItem } from '../theme/nav-item';
-import { NavService } from '../theme/nav.service';
+import { NavItem } from './theme/nav-item';
+import { NavService } from './theme/nav.service';
 
 @Component({
   selector: 'app-pages',
@@ -15,7 +15,7 @@ export class PagesComponent implements AfterViewInit {
   navItems: NavItem[] = [
     {
       displayName: 'Dashboard',
-      route: '/dashboard',
+      route: '/pages/dashboard',
       iconClass: 'ic-dashboard'
     },
     {
@@ -25,27 +25,27 @@ export class PagesComponent implements AfterViewInit {
       children: [
         {
           displayName: 'Parent',
-          route: '/master/parent',
+          route: '/pages/master/parent',
           iconClass: 'ic-vertical'
         },
         {
           displayName: 'Standred',
-          route: '/master/standred',
+          route: '/pages/master/standard',
           iconClass: 'ic-category-man'
         },
         {
           displayName: 'Division',
-          route: '/master/division',
+          route: '/pages/master/division',
           iconClass: 'ic-category-man'
         },
         {
           displayName: 'Subject',
-          route: '/master/subject',
+          route: '/pages/master/subject',
           iconClass: 'ic-category-man'
         },
         {
           displayName: 'Location',
-          route: '/master/location',
+          route: '/pages/master/location',
           iconClass: 'ic-category-man'
         },
       
