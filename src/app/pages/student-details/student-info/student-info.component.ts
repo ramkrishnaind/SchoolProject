@@ -20,7 +20,7 @@ export class StudentInfoComponent implements OnInit {
   state =  [];
   city =  [];
   BloodGroup =  [{name:"A+",value:'A+'},{name:"B+",value:'B+'}];
-  gender = [{ name: 'Male', value: 'Male'}, { name: 'Female', value:'Female' }, { name: 'Others', value: 'Others' }];
+  gender = [{ name: 'Male', value: 'male'}, { name: 'Female', value:'female' }, { name: 'Others', value: 'others' }];
   standardData;
   divisionData;
   parentData;
@@ -241,13 +241,16 @@ export class StudentInfoComponent implements OnInit {
     getSelectedSubject(){
       let arrOfSubjectId=[];
         this.subjectData.forEach(subject => {
-          if(this.form.get('subjects').value !=0){
+          if(this.form.get('subjects').value === 0){
             if(subject.idSubject !=0){
               arrOfSubjectId.push(subject.name);
             }
           }
           else{
-            arrOfSubjectId.push(subject.name);
+            const subjectIndex = this.form.get('subjects').value.indexOf(subject.idSubject);
+            if(subjectIndex != -1){
+              arrOfSubjectId.push(subject.name);
+            } 
           }
         });
         return arrOfSubjectId.toString();

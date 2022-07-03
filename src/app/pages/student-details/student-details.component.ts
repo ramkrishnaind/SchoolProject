@@ -39,24 +39,36 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
     });
     this.studentInfoSerive.getStandred({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
       this.standardData = res.data;
+      this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+      this.getDivisionData({value:this.form.get('idStandard').value})
+        
     });
      } 
      onChangeStandard(idStandard){
+      this.getDivisionData(idStandard);
+     }
+
+     getDivisionData(idStandard){
       this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
         this.divisionData = res.data;
-       
+        this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
+        this.getAllStudentData(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
       });
      }
      onChangeDivision(idDivision){
       const idStandard = this.form.get('idStandard').value;
+      this.getAllStudentData(idStandard,idDivision);
+     }
+
+     getAllStudentData(idStandard,idDivision){
       this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
-       this.studentData = res.data;
-       this.dataSource = new MatTableDataSource(this.studentData);
-       this.dataSource.paginator = this.paginator;
-       this.dataSource.sort = this.sort;
-      // this.dataSource = new MatTableDataSource(this.studentName);
-     
-       });
+        this.studentData = res.data;
+        this.dataSource = new MatTableDataSource(this.studentData);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       // this.dataSource = new MatTableDataSource(this.studentName);
+      
+        });
      }
  
   goStudentInfo(){
