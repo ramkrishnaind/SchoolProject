@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import {CommonService} from './../../../shared/common.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -16,15 +17,13 @@ export class StudentInfoPopupComponent implements OnInit {
   selectedFiles: FileList;
   logoError: boolean;
   nationality = [{name:"Indian",value:'Indian'},{name:"Japnies",value:'Japnies'}];
-  country = [{name:"India",value:'India'},{name:"Japan",value:'Japan'}];
-  state =  [{name:"Maharastra",value:'Maharastra'},{name:"Gurjat",value:'Gurjat'}];
-  city =  [{name:"Nagpur",value:'Nagpur'},{name:"Surat",value:'Surat'}];
-  gender = [{ name: 'All', value: 1 }, { name: 'Male', value: 'Male'}, { name: 'Female', value:'Female' }, { name: 'Others', value: 'Others' }];
-  standredData: any;
-  standredName;
+  country = [];
+  state =  [];
+  city =  [];
+  gender = [{ name: 'Male', value: 'Male'}, { name: 'Female', value:'Female' }, { name: 'Others', value: 'Others' }];
+  standardData;
   divisionData;
-  divisionName;
-  parentName;
+  parentData;
   name;
   rollno;
   idStudent;
@@ -43,9 +42,19 @@ export class StudentInfoPopupComponent implements OnInit {
   address: any;
   address2: any;
   idParent: any;
+  minDate = new Date(2000, 0, 1);
+  maxDate:Date;
+  EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
+  BloodGroup =  [{name:"A+",value:'A+'},{name:"B+",value:'B+'}];
+  idSchool:number=1;
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
     private activatedRoute:ActivatedRoute,private router:Router) {
+      
+      const currentYear = new Date().getFullYear();
+      this.maxDate = new Date(currentYear+1,0,1)
+
       this.activatedRoute.queryParams.subscribe(params =>{
+        console.log(params);
   this.name = params['name'];
   this.rollno = params['rollno'];
   this.dob = params['dob'];
@@ -68,63 +77,113 @@ export class StudentInfoPopupComponent implements OnInit {
 
     ngOnInit() {
       this.form = new FormGroup({
-        name:new FormControl(null, [Validators.required]),
+        name:new FormControl(this.name, [Validators.required,Validators.pattern("[A-Za-z ]*")]),
         // businessLogo: new FormControl(null, [Validators.required]),
         // businessLogoUrl: new FormControl(null, [Validators.required]),
         idStandard:new FormControl(null, [Validators.required]),
         idDivision:new FormControl(null, [Validators.required]),
-        rollno:new FormControl(null, [Validators.required]),
+        rollno:new FormControl(this.rollno, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10)]),
         gender:new FormControl(null, [Validators.required]),
-        age:new FormControl(null, [Validators.required]),
-        dob:new FormControl(null, [Validators.required]),
-        email:new FormControl(null, [Validators.required]),
-        pmobileno:new FormControl(null, [Validators.required]),
-        smobileno:new FormControl(null, [Validators.required]),
+        age:new FormControl(this.age, [Validators.required,Validators.pattern("^[0-9]*$")]),
+        dob:new FormControl(this.dob, [Validators.required]),
+        email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
+        pmobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+        smobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
         address:new FormControl(null, [Validators.required]),
         subjects:new FormControl(null, [Validators.required]),
         academicyear:new FormControl(null, [Validators.required]),
         idParent:new FormControl(null, [Validators.required]),
         bloodgrp:new FormControl(null, [Validators.required]),
-        semail:new FormControl(null, [Validators.required]),
+        semail:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
         address2:new FormControl(null, [Validators.required]),
-        emergancyConntact:new FormControl(null, [Validators.required]),
+        emergancyConntact:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
         nationality:new FormControl(null, [Validators.required]),
         country:new FormControl(null, [Validators.required]),
         state:new FormControl(null, [Validators.required]),
         city:new FormControl(null, [Validators.required]),
       });
-      this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
-    });
-    
-      this.studentInfoSerive.parentDetails().subscribe(res =>{
-       this.parentName = res;
-      });
+      
+      this.getStandardData();
+      this.getParentData();
+      this.getBloodGroupData();
+      this.getNationalityData();
+      this.getCountryData();
     
      
-      this.form.controls['name'].patchValue(this.name);
-      this.form.controls['rollno'].patchValue(this.rollno);
-      this.form.controls['dob'].patchValue(this.dob);
-      this.form.controls['age'].patchValue(this.age);
-      this.form.controls['bloodgrp'].patchValue(this.bloodgrp);
-      this.form.controls['pmobileno'].patchValue(this.pmobileno);
-      this.form.controls['smobileno'].patchValue(this.smobileno);
-      this.form.controls['emergancyConntact'].patchValue(this.emergancyConntact);
-      this.form.controls['email'].patchValue(this.email);
-      this.form.controls['semail'].patchValue(this.semail);
-      this.form.controls['subjects'].patchValue(this.subjects);
-      this.form.controls['academicyear'].patchValue(this.academicyear);
-      this.form.controls['address'].patchValue(this.address);
-      this.form.controls['address2'].patchValue(this.address2);
-      console.log("idStudent:::",this.idStudent);
+      // this.form.controls['name'].patchValue(this.name);
+      // this.form.controls['rollno'].patchValue(this.rollno);
+      // this.form.controls['dob'].patchValue(this.dob);
+      // this.form.controls['dob'].patchValue(this.idParent);
+      // this.form.controls['age'].patchValue(this.age);
+      // this.form.controls['bloodgrp'].patchValue(this.bloodgrp);
+      // this.form.controls['pmobileno'].patchValue(this.pmobileno);
+      // this.form.controls['smobileno'].patchValue(this.smobileno);
+      // this.form.controls['emergancyConntact'].patchValue(this.emergancyConntact);
+      // this.form.controls['email'].patchValue(this.email);
+      // this.form.controls['semail'].patchValue(this.semail);
+      // this.form.controls['subjects'].patchValue(this.subjects);
+      // this.form.controls['academicyear'].patchValue(this.academicyear);
+      // this.form.controls['address'].patchValue(this.address);
+      // this.form.controls['address2'].patchValue(this.address2);
+      // console.log("idStudent:::",this.idStudent);
   }
+
+    getStandardData(){
+      this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+        this.standardData = res.data;
+      });
+    }
+  
+    getParentData(){
+      this.studentInfoSerive.parentDetails().subscribe(res =>{
+        this.parentData = res;
+       });
+    }
+  
+    getBloodGroupData(){
+      this.studentInfoSerive.getListOfBloodGroupData().subscribe((res:any) =>{
+        this.BloodGroup = res;
+      })
+    }
+    getNationalityData(){
+      this.studentInfoSerive.getNationality().subscribe((res:any) =>{
+        this.nationality = res;
+      })
+    }
+    getCountryData(){
+      this.studentInfoSerive.getCountry().subscribe((res:any) =>{
+        this.country = res;
+      })
+    }
+    onChangeCountry(country){
+      this.getStateData();
+    }
+    getStateData(){
+      this.studentInfoSerive.getState().subscribe((res:any) =>{
+        res.forEach(dt => {
+          if(dt.idCountry === this.form.get('country').value){
+            this.state.push(dt);
+          }
+        });
+      })
+    }
+    onChangeState(state){
+      this.getCityData();
+    }
+    getCityData(){
+      this.studentInfoSerive.getCity().subscribe((res:any) =>{
+        res.forEach(dt => {
+          if(dt.idState === this.form.get('state').value){
+            this.city.push(dt);
+          }
+        });
+      })
+    }
 
     onChangeStandred(idStandard){
       
-      this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
-        this.divisionData = res;
-        this.divisionName = this.divisionData.data;
+      this.studentInfoSerive.getDivision(idStandard).subscribe( (res:any) =>{
+        this.divisionData = res.data;
        
       })
   
@@ -175,15 +234,23 @@ export class StudentInfoPopupComponent implements OnInit {
           semail:this.form.get('semail').value,
           address2:this.form.get('address2').value,
           emergancyConntact:this.form.get('emergancyConntact').value,
-          nationality:this.form.get('nationality').value,
-          country:this.form.get('country').value,
-          state:this.form.get('state').value,
-          city:this.form.get('city').value,
+          idNationality:this.form.get('nationality').value,
+          idCountry:this.form.get('country').value,
+          idState:this.form.get('state').value,
+          idCity:this.form.get('city').value,
           profileurl:'https://mytestschool.s3.ap-south-1.amazonaws.com/s3%3A//mytestschool/pics/'+`${this.fileName}`,
   
         };
         return body;
       }
+
+      dobClick(e){
+        // this.form.get('dob').setValue(moment(e).format('YYYY-MM-DD'));
+        let now = moment();
+        const age = now.diff(moment(e),'year');
+        this.form.get('age').setValue(age);
+      }
+      
       submit(){
         if(this.form.valid){
         const body = this.makeBody();

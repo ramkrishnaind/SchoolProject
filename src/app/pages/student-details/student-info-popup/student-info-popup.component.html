@@ -26,7 +26,7 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Parent Name</mat-label>
                         <mat-select formControlName="idParent">
-                            <mat-option *ngFor="let item of parentName" [value]="item.idparent">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of parentData" [value]="item.idparent">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -34,7 +34,7 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Standred</mat-label>
                         <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event)">
-                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -48,7 +48,7 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Division</mat-label>
                         <mat-select formControlName="idDivision">
-                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -74,7 +74,9 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> Date Of Birth</mat-label>
-                        <input formControlName="dob" matInput>
+                        <input readOnly [min]="minDate" [max]="maxDate" (ngModelChange)="dobClick($event)" formControlName="dob" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
@@ -86,7 +88,10 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> BloodGroup</mat-label>
-                        <input formControlName="bloodgrp" matInput>
+                        <!-- <input formControlName="bloodgrp" matInput> -->
+                        <mat-select formControlName="bloodgrp">
+                            <mat-option *ngFor="let item of BloodGroup" [value]="item.idBloodGroup">{{item.name}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
 
@@ -167,23 +172,23 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Student Nationality</mat-label>
                         <mat-select formControlName="nationality">
-                            <mat-option *ngFor="let item of nationality" [value]="item.value">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of nationality" [value]="item.idNationality">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Country</mat-label>
-                        <mat-select formControlName="country">
-                            <mat-option *ngFor="let item of country" [value]="item.value">{{item.name}}</mat-option>
+                        <mat-select formControlName="country" (selectionChange)="onChangeCountry($event)">
+                            <mat-option *ngFor="let item of country" [value]="item.idCountry">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select State</mat-label>
-                        <mat-select formControlName="state">
-                            <mat-option *ngFor="let item of state" [value]="item.value">{{item.name}}</mat-option>
+                        <mat-select formControlName="state" (selectionChange)="onChangeState($event)">
+                            <mat-option *ngFor="let item of state" [value]="item.idState">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -198,7 +203,7 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select City</mat-label>
                         <mat-select formControlName="city">
-                            <mat-option *ngFor="let item of city" [value]="item.value">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of city" [value]="item.idCity">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
 

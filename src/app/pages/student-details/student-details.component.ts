@@ -26,6 +26,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
   dataSource:any;
   displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','actions'];
   idSchoolDetail:number = 1;
+  selectedValue=11;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
     private route:ActivatedRoute) {
@@ -66,12 +67,15 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
      console.log("Student Name",studentName);
       this.router.navigate(['./StudentInfoPopup'],
       {
-        queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
-        "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
-         "emergancyConntact":studentName.emergancyConntact,"email":studentName.email,"semail":studentName.semail,
-          "subjects":studentName.subjects,"academicyear":studentName.academicyear,"address":studentName.address,
-          "address2":studentName.address2,
-         },
+        queryParams:{...studentName
+        // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
+        // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
+        //  "emergancyConntact":studentName.emergancyConntact,"email":studentName.email,"semail":studentName.semail,
+        //   "subjects":studentName.subjects,"academicyear":studentName.academicyear,"address":studentName.address,
+        //   "address2":studentName.address2,"idParent":studentName.idParent,"idStandard":studentName.idStandard,"idDivision":studentName.idDivision,
+        //   "gender":studentName.gender,"idNationality":studentName.nationality
+        //  },
+      },
          relativeTo :this.route
        }
        

@@ -49,7 +49,7 @@ export class StudentInfoComponent implements OnInit {
       dob:new FormControl(null, [Validators.required]),
       email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       pmobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-      smobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),,Validators.minLength(10)]),
+      smobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
       address:new FormControl(null, [Validators.required]),
       subjects:new FormControl(null, [Validators.required]),
       academicyear:new FormControl(null, [Validators.required]),
@@ -57,7 +57,7 @@ export class StudentInfoComponent implements OnInit {
       bloodgrp:new FormControl(null, [Validators.required]),
       semail:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       address2:new FormControl(null, [Validators.required]),
-      emergancyConntact:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),,Validators.minLength(10)]),
+      emergancyConntact:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
       nationality:new FormControl(null, [Validators.required]),
       country:new FormControl(null, [Validators.required]),
       state:new FormControl(null, [Validators.required]),
@@ -224,14 +224,14 @@ export class StudentInfoComponent implements OnInit {
         subjects:this.getSelectedSubject(),
         academicyear:this.form.get('academicyear').value,
         idParent:this.form.get('idParent').value,
-        bloodgrp:this.form.get('bloodgrp').value,
+        idBloodGroup:this.form.get('bloodgrp').value,
         semail:this.form.get('semail').value,
         address2:this.form.get('address2').value,
         emergancyConntact:this.form.get('emergancyConntact').value,
-        nationality:this.form.get('nationality').value,
-        country:this.form.get('country').value,
-        state:this.form.get('state').value,
-        city:this.form.get('city').value,
+        idNationality:this.form.get('nationality').value,
+        idCountry:this.form.get('country').value,
+        idState:this.form.get('state').value,
+        idCity:this.form.get('city').value,
         profileurl:this.studentImageDataUploadToS3.Location,
         idSchoolDetails:this.idSchool
 
@@ -240,17 +240,17 @@ export class StudentInfoComponent implements OnInit {
     }
     getSelectedSubject(){
       let arrOfSubjectId=[];
-      if(this.form.get('subjects').value === 0){
         this.subjectData.forEach(subject => {
-          if(subject.idSubject !=0){
-            arrOfSubjectId.push(subject.idSubject);
+          if(this.form.get('subjects').value !=0){
+            if(subject.idSubject !=0){
+              arrOfSubjectId.push(subject.name);
+            }
+          }
+          else{
+            arrOfSubjectId.push(subject.name);
           }
         });
-        return arrOfSubjectId;
-      }
-      else{
-        return this.form.get('subjects').value;
-      }
+        return arrOfSubjectId.toString();
       
     }
     submit(){
