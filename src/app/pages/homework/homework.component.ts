@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../services/student-info.service';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-homework',
@@ -13,7 +14,8 @@ export class HomeworkComponent implements OnInit {
   logoError: boolean;
   form: FormGroup;
   fileName;
-  selectedFiles: FileList;
+  selectedFile: File;
+  fileClick:boolean = false;
   standardData;
   divisionData;
   subjectData;
@@ -39,14 +41,15 @@ export class HomeworkComponent implements OnInit {
     this.form = new FormGroup({
       homeworkName:new FormControl(null,[Validators.required]),
       idTeacher:new FormControl(null,[Validators.required]),
-      businessLogo: new FormControl(null, [Validators.required]),
-      businessLogoUrl: new FormControl(null, [Validators.required]),
+      idStandard: new FormControl(null, [Validators.required]),
+      idDivision: new FormControl(null, [Validators.required]),
+      idSubject: new FormControl(null, [Validators.required]),
+      // businessLogo: new FormControl(null, [Validators.required]),
+      // businessLogoUrl: new FormControl(null, [Validators.required]),
       Description: new FormControl(null, [Validators.required]),
       assigndate: new FormControl(null, [Validators.required]),
       duedate: new FormControl(null, [Validators.required]),
-      idStandard: new FormControl(null, [Validators.required]),
-      idDivision: new FormControl(null, [Validators.required]),
-      idSubject: new FormControl(null, [Validators.required])
+      
       
      
     });
@@ -79,33 +82,33 @@ export class HomeworkComponent implements OnInit {
   addLogo(): void {
     document.getElementById('file').click();
   }
-  handleFileInput(event) {
-    if (event.target.files[0]) {
-      this.form.get('businessLogo').setValue(event.target.files[0]); 
-      this.logoError = false;           
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.form.get('businessLogoUrl').setValue(reader.result as string);        
-      }
-      reader.readAsDataURL(this.form.get('businessLogo').value);
-      event.value = null;
-    }
-  }
-  upload() {
-    const file = this.selectedFiles.item(0);
-    this.studentInfoSerive.uploadFile(file);
-    if(file){
-      this.commonService.openSnackbar('image uploaded successfully','Done');
-      }
-      else{
-        this.commonService.openSnackbar('please select image','Warning');
-      }
-    this.fileName = file.name;
-    console.log("::::::::::",this.fileName);
-  }
-     selectFile(event) {
-    this.selectedFiles = event.target.files;
-    }
+  // handleFileInput(event) {
+  //   if (event.target.files[0]) {
+  //     this.form.get('businessLogo').setValue(event.target.files[0]); 
+  //     this.logoError = false;           
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.form.get('businessLogoUrl').setValue(reader.result as string);        
+  //     }
+  //     reader.readAsDataURL(this.form.get('businessLogo').value);
+  //     event.value = null;
+  //   }
+  //}
+  // upload() {
+  //   const file = this.selectedFile.item(0);
+  //   this.studentInfoSerive.uploadFile(file);
+  //   if(file){
+  //     this.commonService.openSnackbar('image uploaded successfully','Done');
+  //     }
+  //     else{
+  //       this.commonService.openSnackbar('please select image','Warning');
+  //     }
+  //   this.fileName = file.name;
+  //   console.log("::::::::::",this.fileName);
+  // }
+    //  selectFile(event) {
+    // this.selectedFile = event.target.files;
+    // }
     makeBody(){
       const body ={
       homeworkName:this.form.get('homeworkName').value,
@@ -114,15 +117,15 @@ export class HomeworkComponent implements OnInit {
       idDivision:this.form.get('idDivision').value,
       idSubject:this.form.get('idSubject').value,
       description:this.form.get('Description').value,
-      assigndate:this.form.get('assigndate').value,
-      duedate:this.form.get('duedate').value,
+      assigndate:moment(this.form.get('assigndate').value).format('YYYY-MM-DD'),
+      duedate:moment(this.form.get('duedate').value).format('YYYY-MM-DD'),
       attachment:'https://mytestschool.s3.ap-south-1.amazonaws.com/s3%3A//mytestschool/pdf/'+`${this.fileName}`
        
       };
       return body;
     }
     homeworkInformation(){
-      if(this.form.valid){
+      if(this.form.valid && this.fileClick){
       const body = this.makeBody();
       this.studentInfoSerive.homeworkDetails(body).subscribe(res =>{
         this.commonService.openSnackbar('Student Homework Submitted Successfully','Done');
@@ -138,7 +141,17 @@ export class HomeworkComponent implements OnInit {
     }
 
     onFileChange(event){
+        console.log(event);
+        this.selectedFile = event.target.files[0];
+        this.fileClick = true;
+    }
 
+    upload(){
+      this.studentInfoSerive.uploadHomeWorkFile(this.selectedFile).subscribe((res:any)=>{
+        this.commonService.openSnackbar('image uploaded successfully','Done');
+      },error=>{
+        this.commonService.openSnackbar('File Do not uploaded','Error');
+      });
     }
 
 }

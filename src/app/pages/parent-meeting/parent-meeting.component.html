@@ -20,7 +20,9 @@
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Date</mat-label>
-                            <input formControlName="date" matInput>
+                            <input readOnly [min]="minDate" [max]="maxDate" formControlName="date" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
 
@@ -28,7 +30,7 @@
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Select Teacher</mat-label>
                             <mat-select formControlName="idteacher">
-                                <mat-option *ngFor="let item of teacherName" [value]="item.idTeacher">{{item.name}}
+                                <mat-option *ngFor="let item of teacherData" [value]="item.idTeacher">{{item.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -37,8 +39,8 @@
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Select Standred</mat-label>
-                            <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
-                                <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}
+                            <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event) ">
+                                <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -48,9 +50,8 @@
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Select Division</mat-label>
-                            <mat-select formControlName="idDivision"
-                            (selectionChange)="onChangeDivision($event) " >
-                                <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}
+                            <mat-select formControlName="idDivision">
+                                <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

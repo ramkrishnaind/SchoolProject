@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../services/student-info.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -13,76 +14,85 @@ import { StudentInfoService } from '../services/student-info.service';
 })
 export class ParentMeetingComponent implements OnInit {
   form: FormGroup;
-  standredData;
-  standredName;
-  divisionData;
-  divisionName;
-  studentData;
-  subjectName;
-  subjectData;
-  studentName;
-  teacherName;
-  dataSource;
+  standardData;
   teacherData;
+  divisionData;
+  studentData;
+  subjectData;
+  dataSource;
+  minDate:Date;
+  maxDate:Date;
+  idSchool:number=1;
   constructor(private router:Router,private studentInfoSerive: StudentInfoService, private commonService: CommonService,
-    private route :ActivatedRoute) { }
+    private route :ActivatedRoute) { 
+      const currentYear = new Date().getFullYear();
+      const m = new Date().getMonth();
+      if(m==0 || m==1 || m==2){
+        this.minDate = new Date(currentYear-1, 3, 1);
+        this.maxDate = new Date(currentYear, 2, 31);
+      }
+      else{
+        this.minDate = new Date(currentYear, 3, 1);
+        this.maxDate = new Date(currentYear + 1, 2, 31);
+      }
+    }
 //idMeeting, idTeacher, date, meetingTopics, idStandard, idDivision, meetingDescription, startTime, endTime, slotTime
   ngOnInit(): void {
     this.form = new FormGroup({
+      date: new FormControl(null, [Validators.required]),
       idteacher: new FormControl(null, [Validators.required]),
       idStandard: new FormControl(null, [Validators.required]),
       idDivision: new FormControl(null, [Validators.required]),
-      date: new FormControl(null, [Validators.required]),
       meetingTopics: new FormControl(null, [Validators.required]),
       meetingDescription: new FormControl(null, [Validators.required]),
       startTime: new FormControl(null, [Validators.required]),
       endTime: new FormControl(null, [Validators.required]),
       slotTime: new FormControl(null, [Validators.required]),
     });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res => {
-      this.standredData = res;
-      this.standredName = this.standredData.data;
-    });
+    
+    this.getStandardData();
+    this.getAllTeacher();
 
-    this.studentInfoSerive.getAllTeacher().subscribe(res => {
-      this.teacherData = res;
-      this.teacherName = this.teacherData.data;
-    });
+  }
 
+  getStandardData(){
+    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.standardData = res.data;
+    });
+  }
+
+  getAllTeacher(){
+    this.studentInfoSerive.getAllTeacher().subscribe((res:any) => {
+      this.teacherData = res.data;
+    });
   }
   back(){
     this.router.navigate(['../../dashboard'],{relativeTo:this.route});
   }
 
 
-  onChangeStandred(idStandard) {
-    this.studentInfoSerive.getDivision(idStandard).subscribe(res => {
-      this.divisionData = res;
-      this.divisionName = this.divisionData.data;
+  onChangeStandard(idStandard) {
+    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) => {
+      this.divisionData = res.data;
 
     });
   }
-  onChangeDivision(idStandard) {
-    this.studentInfoSerive.getAllSubject(idStandard).subscribe(res => {
-      this.subjectData = res;
-      this.subjectName = this.studentData.data;
-      this.dataSource = new MatTableDataSource(this.subjectName);
-    });
-  }
-
- 
-  // back() {
-  //   this.route.navigate(['/dashboard']);
+  // onChangeDivision(idStandard) {
+  //   this.studentInfoSerive.getAllSubject(idStandard).subscribe((res:any) => {
+  //     this.subjectData = res;
+  //     this.subjectName = this.studentData.data;
+  //     this.dataSource = new MatTableDataSource(this.subjectName);
+  //   });
   // }
 
   makeBody() {
     const body = {
+      date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
+      idTeacher: this.form.get('idteacher').value,
       idStandard: this.form.get('idStandard').value,
       idDivision: this.form.get('idDivision').value,
-      date: this.form.get('date').value,
       meetingDescription: this.form.get('meetingDescription').value,
       meetingTopics: this.form.get('meetingTopics').value,
-      idTeacher: this.form.get('idteacher').value,
       startTime: this.form.get('startTime').value,
       endTime: this.form.get('endTime').value,
       slotTime: 10

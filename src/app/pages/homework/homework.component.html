@@ -13,10 +13,37 @@
             <h6 class="top-heading">Homework Details</h6>
         </div>
     </div>
+
+    <div class="div-1" style="margin-top: 60px;">
+        <div class="business-details">
+            <div class="bus-width set-item-width">
+                <mat-label class="labelfont">Upload Homework File Here</mat-label>
+            </div>
+            <div class="bus-width set-item-width">
+                <input accept="*" type="file" id="file" class="display-none" (change)="onFileChange($event)">
+                <div (click)="addLogo()" class="cursor-pointer w-100">
+                    <div class="add-logo flex center">
+                        <div>
+                            <div class="company-logo-text">+Add File</div>
+                            <p *ngIf="fileClick && selectedFile">
+                                {{selectedFile.name}}
+                               </p>
+                            <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload</button>
+                        </div>
+                       
+                    </div>
+                    <!-- <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error> -->
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
     <form [formGroup]="form">
-        <div class="div-1">
-            <div class="main-div">
-                <div class="img-div add-logo-div">
+             <div class="div-1">
+                <!-- <div class="img-div add-logo-div">
                     <input accept="*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
                     <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
                         <div class="add-logo flex center">
@@ -31,21 +58,20 @@
                     <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
                         <img [src]="form.get('businessLogoUrl').value">
 
-                        <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+                         <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
                             Change Logo
-                        </div> -->
+                        </div>
                     </div>
                 </div>
-                <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button>
-                <div class="form-div">
-                    <div class="w-100">
-                        <div class="width-calc">
+                <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button> -->
+               
+                        <div class="business-details">
                             <mat-form-field class="example-full-width" appearance="fill">
                                 <mat-label>HomeWork Name</mat-label>
                                 <input formControlName="homeworkName" matInput>
                             </mat-form-field>
                         </div>
-                        <div class="width-calc">
+                        <div class="business-details">
                             <mat-form-field class="example-full-width" appearance="fill">
                                 <mat-label>Select Teacher</mat-label>
                                 <mat-select formControlName="idTeacher">
@@ -53,10 +79,7 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                    </div>
-                </div>
 
-            </div>
             <div class="business-details">
 
                 <div class="bus-width set-item-width">
@@ -113,25 +136,13 @@
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
-                    <button mat-raised-button color="primary" class="btn_sub" (click)=" homeworkInformation()">Submit HomeWork</button>
+                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)=" homeworkInformation()">Submit HomeWork</button>
                 </div>
 
             </div>
+
         </div>
+        
 
     </form>
-
-    <div class="div-1" style="margin-top: 60px;">
-        <div class="business-details">
-            <div class="bus-width set-item-width">
-                <mat-label class="labelfont">Upload Homework File Here</mat-label>
-            </div>
-            <div class="bus-width set-item-width">
-                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
-            </div>
-
-
-
-        </div>
-    </div>
 </div>

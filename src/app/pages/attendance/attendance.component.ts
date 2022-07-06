@@ -4,6 +4,7 @@ import { StudentInfoService } from '../services/student-info.service';
 import * as XLSX from 'xlsx';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 
 @Component({
@@ -43,7 +44,7 @@ export class AttendanceComponent implements OnInit {
       idDivision:new FormControl(null, [Validators.required]),
       idStudent:new FormControl(null,[Validators.required]),
       present:new FormControl(null,[Validators.required]),
-      reasons: new FormControl(null,[Validators.required]),
+      reasons: new FormControl('',),
     });
     
    this.getStandardData();
@@ -68,14 +69,13 @@ export class AttendanceComponent implements OnInit {
    }
 
   makeBody(){
-    const body =[{
-      idStudent:this.studentInfoSerive.getNameBasedonDataAndId(this.studentName,this.form.get('idStudent').value,'idStudent','name'),
-      present:this.form.get('present').value ,   
-      date: this.form.get('date').value,
-      reasons: this.form.get('reasons').value,
+    const body =[{ 
+      date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
       idStandard: this.studentInfoSerive.getNameBasedonDataAndId(this.standardData,this.form.get('idStandard').value,'idStandard','name'),
-      idDivision: this.studentInfoSerive.getNameBasedonDataAndId(this.divisionData,this.form.get('idDivision').value,'idDivision','name')
-     
+      idDivision: this.studentInfoSerive.getNameBasedonDataAndId(this.divisionData,this.form.get('idDivision').value,'idDivision','name'),
+      idStudent:this.studentInfoSerive.getNameBasedonDataAndId(this.studentName,this.form.get('idStudent').value,'idStudent','name'),
+      present:this.form.get('present').value ,  
+      reasons: this.form.get('reasons').value,
     }]; 
     return body;
   }

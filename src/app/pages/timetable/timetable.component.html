@@ -21,15 +21,15 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Standred</mat-label>
                         <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
-                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Division</mat-label>
-                        <mat-select formControlName="idDivision" (selectionChange)="onChangeStandredForSubject($event)">
-                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
+                        <mat-select formControlName="idDivision">
+                            <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -41,7 +41,7 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Subject</mat-label>
                         <mat-select formControlName="idSubject">
-                            <mat-option *ngFor="let item of subjectName" [value]="item.idSubject">{{item.name}}</mat-option>
+                            <mat-option *ngFor="let item of subjectData" [value]="item.idSubject">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="bus-width set-item-width">
                     <div class="bus-width set-item-width-excel">
-                        <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit School Timetable</button>
+                        <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit School Timetable</button>
                     </div>
 
                 </div>

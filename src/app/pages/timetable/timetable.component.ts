@@ -11,12 +11,10 @@ import {CommonService} from '../../shared/common.service';
 })
 export class TimetableComponent implements OnInit {
   form: FormGroup;
-  standredData;
-  standredName;
+  standardData;
   divisionData;
-  divisionName;
   subjectData;
-  subjectName;
+  idSchool:number=1;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route:ActivatedRoute) { }
 
@@ -28,32 +26,38 @@ export class TimetableComponent implements OnInit {
       day:new FormControl(null,[Validators.required]),
       time:new FormControl(null,[Validators.required]),
     });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
+    this.getStandardData();
+  }
+
+  getStandardData(){
+    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.standardData = res.data;
     });
   }
   onChangeStandred(idStandard){
-    
-    this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
-      this.divisionData = res;
-      this.divisionName = this.divisionData.data;
-     
+     this.getDivisionData(idStandard);
+     this.getAllSubject(idStandard);
+   }
+
+   getDivisionData(idStandard){
+    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe( (res:any) =>{
+      this.divisionData = res.data;
     });
    }
-   onChangeStandredForSubject(idStandard){
-     this.studentInfoSerive.getAllSubject(idStandard).subscribe(res =>{
-      this.subjectData = res;
-      this.subjectName = this.subjectData.data;
+   getAllSubject(idStandard){
+    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
+      this.subjectData = res.data;
      })
    }
+  
    makeBody(){
     const body =[{
       idStandard:this.form.get('idStandard').value,
       idDivision:this.form.get('idDivision').value,
       idSubject:this.form.get('idSubject').value,
       day:this.form.get('day').value,
-      time:this.form.get('time').value
+      time:this.form.get('time').value,
+      idSchoolDetails:this.idSchool
 
 }];
 return body;

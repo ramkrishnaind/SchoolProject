@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import {CommonService} from '../../shared/common.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-examtimetable',
   templateUrl: './examtimetable.component.html',
@@ -10,16 +11,26 @@ import {CommonService} from '../../shared/common.service';
 })
 export class ExamtimetableComponent implements OnInit {
   form: FormGroup;
-  standredData;
-  standredName;
+  standardData;
   divisionData;
-  divisionName;
   subjectData;
-  subjectName;
   testTypeData;
-  testTypeName;
+  minDate:Date;
+  maxDate:Date;
+  idSchool:number=1;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
-    private route :ActivatedRoute) { }
+    private route :ActivatedRoute) {
+      const currentYear = new Date().getFullYear();
+      const m = new Date().getMonth();
+      if(m==0 || m==1 || m==2){
+        this.minDate = new Date(currentYear-1, 3, 1);
+        this.maxDate = new Date(currentYear, 2, 31);
+      }
+      else{
+        this.minDate = new Date(currentYear, 3, 1);
+        this.maxDate = new Date(currentYear + 1, 2, 31);
+      }
+     }
 //idUnitTest, idStandard, idSubject, idDivision, date, time, idtestType
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -30,27 +41,36 @@ export class ExamtimetableComponent implements OnInit {
       date:new FormControl(null,[Validators.required]),
       time:new FormControl(null,[Validators.required])
       });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
+    
+      this.getAllStandardData();
+      this.getTestType();
+
+  }
+
+  getAllStandardData(){
+    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.standardData = res.data;
     });
-    this.studentInfoSerive.getTestType().subscribe(res =>{
-      this.testTypeData = res;
-      this.testTypeName = this.testTypeData.data;
+  }
+
+  getTestType(){
+    this.studentInfoSerive.getTestType().subscribe((res:any) =>{
+      this.testTypeData = res.data;
     });
   }
   onChangeStandred(idStandard){
-    
-    this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
-      this.divisionData = res;
-      this.divisionName = this.divisionData.data;
-     
+    this.getDivisionData(idStandard);
+    this.getAllSubjectData(idStandard);
+   }
+
+   getDivisionData(idStandard){
+    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) =>{
+      this.divisionData = res.data;
     });
    }
-   onChangeStandredForSubject(idStandard){
-     this.studentInfoSerive.getAllSubject(idStandard).subscribe(res =>{
-      this.subjectData = res;
-      this.subjectName = this.subjectData.data;
+   getAllSubjectData(idStandard){
+    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
+      this.subjectData = res.data;
      })
    }
    makeBody(){
@@ -59,8 +79,9 @@ export class ExamtimetableComponent implements OnInit {
       idDivision:this.form.get('idDivision').value,
       idSubject:this.form.get('idSubject').value,
       idtestType:this.form.get('idtestType').value,
-      date:this.form.get('date').value,
-      time:this.form.get('time').value
+      date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
+      time:this.form.get('time').value,
+      idSchoolDetails:this.idSchool
 };
 return body;
    }

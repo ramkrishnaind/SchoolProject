@@ -80,6 +80,12 @@ export class StudentInfoService {
    homeworkDetails(body){
      return this.http.post(`${this.baseurl}homework`,body);
    }
+   uploadHomeWorkFile(file:File){
+    // http://13.235.11.4/homework/upload?file
+    const formData: FormData = new FormData();
+    formData.append('Homework', file,file.name);
+    return this.http.post(`${this.baseurl}homework/upload?file`,formData);
+   }
    hoidayDetails(body){
     return this.http.post(`${this.baseurl}hollyday`,body);
    }
