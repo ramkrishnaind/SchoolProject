@@ -48,15 +48,33 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Week Day Like:Monday,Tuesday,.........,Saturday</mat-label>
-                        <input formControlName="day" matInput>
+                        <mat-select formControlName="day" multiple>
+                            <mat-option *ngFor="let days of daysDropDown" [value]="days.value">{{days.text}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
             </div>
             <div class="business-details">
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Time Like: 11:30 am to 12:00 pm</mat-label>
-                        <input formControlName="time" matInput>
+                        <mat-label>Start Time</mat-label>
+                        <div class="toggle-example">
+                        <input  formControlName="startTime" matInput [disableClick]="true" [ngxTimepicker]="start" (ngModelChange)="startClick($event)" readonly>
+                        <ngx-material-timepicker-toggle [for]="start"></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #start></ngx-material-timepicker>
+                        </div>
+                
+                    </mat-form-field>
+                </div>
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>End Time</mat-label>
+                        <div class="toggle-example">
+                        <input [min]="minForEndTime" formControlName="endTime" matInput [disableClick]="true" [ngxTimepicker]="end"  readonly>
+                        <ngx-material-timepicker-toggle [for]="end" [disabled]="disableEndTime"></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #end></ngx-material-timepicker>
+                        </div>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
@@ -68,4 +86,18 @@
             </div>
         </div>
     </form>
+
+    <div class="div-1" style="margin-top: 80px;">
+        <div class="business-details">
+            <div class="bus-width set-item-width">
+                <mat-label class="labelfont">Upload Timetable File Here</mat-label>
+            </div>
+            <div class="bus-width set-item-width">
+                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+            </div>
+
+
+
+        </div>
+    </div>
 </div>

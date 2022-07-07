@@ -22,6 +22,8 @@ export class ParentMeetingComponent implements OnInit {
   dataSource;
   minDate:Date;
   maxDate:Date;
+  minForEndTime;
+  disableEndTime:boolean=true;
   idSchool:number=1;
   constructor(private router:Router,private studentInfoSerive: StudentInfoService, private commonService: CommonService,
     private route :ActivatedRoute) { 
@@ -84,6 +86,10 @@ export class ParentMeetingComponent implements OnInit {
   //     this.dataSource = new MatTableDataSource(this.subjectName);
   //   });
   // }
+  startClick(e){
+    this.minForEndTime=e;
+    this.disableEndTime=false;
+  }
 
   makeBody() {
     const body = {
@@ -95,15 +101,19 @@ export class ParentMeetingComponent implements OnInit {
       meetingTopics: this.form.get('meetingTopics').value,
       startTime: this.form.get('startTime').value,
       endTime: this.form.get('endTime').value,
-      slotTime: 10
+      slotTime:  this.form.get('slotTime').value
     };
     return body;
   }
   submit() {
+    console.log(this.form);
     if (this.form.valid) {
       const body = this.makeBody();
-      this.studentInfoSerive.meetingDetails(body).subscribe(res => {
-        this.commonService.openSnackbar('Meeting Details Submitted Successfully', 'Done');
+      this.studentInfoSerive.meetingDetails(body).subscribe((res:any) => {
+        if(res.data === 'saved'){
+          this.commonService.openSnackbar('Meeting Details Submitted Successfully', 'Done');
+          this.form.reset();
+        }
       });
     }
     else {

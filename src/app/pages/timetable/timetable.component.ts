@@ -14,7 +14,18 @@ export class TimetableComponent implements OnInit {
   standardData;
   divisionData;
   subjectData;
+  minForEndTime;
+  disableEndTime:boolean=true;
   idSchool:number=1;
+  daysDropDown=[
+    {value:'Monday',text:'Monday'},
+    {value:'Tuesday',text:'Tuesday'},
+    {value:'Wednesday',text:'Wednesday'},
+    {value:'Thursday',text:'Thursday'},
+    {value:'Friday',text:'Friday'},
+    {value:'Saturday',text:'Saturday'},
+    {value:'Sunday',text:'Sunday'}
+  ]
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route:ActivatedRoute) { }
 
@@ -24,7 +35,8 @@ export class TimetableComponent implements OnInit {
       idDivision:new FormControl(null,[Validators.required]),
       idSubject:new FormControl(null,[Validators.required]),
       day:new FormControl(null,[Validators.required]),
-      time:new FormControl(null,[Validators.required]),
+      startTime: new FormControl(null, [Validators.required]),
+      endTime: new FormControl(null, [Validators.required]),
     });
     this.getStandardData();
   }
@@ -49,6 +61,11 @@ export class TimetableComponent implements OnInit {
       this.subjectData = res.data;
      })
    }
+
+   startClick(e){
+    this.minForEndTime=e;
+    this.disableEndTime=false;
+  }
   
    makeBody(){
     const body =[{
@@ -63,6 +80,7 @@ export class TimetableComponent implements OnInit {
 return body;
    }
    submit(){
+    console.log(this.form);
      if(this.form.valid){
     const body = this.makeBody();
     this.studentInfoSerive.timetable(body).subscribe(res =>{
@@ -73,9 +91,13 @@ return body;
   }
   else{
     this.commonService.openSnackbar('Please Fill All Field','Warning');
+  } 
   }
-   
+
+  onFileChange(e){
+
   }
+
   back(){
     this.router.navigate(['../../dashboard'],{relativeTo:this.route});
   }

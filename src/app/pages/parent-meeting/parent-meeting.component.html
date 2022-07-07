@@ -75,27 +75,40 @@
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Start Time</mat-label>
-                            <input formControlName="startTime" matInput>
+                            <div class="toggle-example">
+                            <input  formControlName="startTime" matInput [disableClick]="true" [ngxTimepicker]="start" (ngModelChange)="startClick($event)" readonly>
+                            <ngx-material-timepicker-toggle [for]="start"></ngx-material-timepicker-toggle>
+                            <ngx-material-timepicker #start></ngx-material-timepicker>
+                            </div>
+                    
                         </mat-form-field>
                     </div>
 
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>End Time</mat-label>
-                            <input formControlName="endTime" matInput>
+                            <div class="toggle-example">
+                            <input [min]="minForEndTime" formControlName="endTime" matInput [disableClick]="true" [ngxTimepicker]="end"  readonly>
+                            <ngx-material-timepicker-toggle [for]="end" [disabled]="disableEndTime"></ngx-material-timepicker-toggle>
+                            <ngx-material-timepicker #end></ngx-material-timepicker>
+                            </div>
                         </mat-form-field>
                     </div>
 
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Slot Time</mat-label>
-                            <input formControlName="slotTime" matInput>
+                            <mat-select formControlName="slotTime">
+                                <mat-option  [value]="5">5</mat-option>
+                                <mat-option  [value]="10">10</mat-option>
+                                <mat-option  [value]="15">15</mat-option>
+                            </mat-select>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="business-details">
                     <div class="bus-width set-item-width">
-                        <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Teacher Details</button>
+                        <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Teacher Details</button>
                     </div>
     
                 </div>

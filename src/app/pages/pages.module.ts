@@ -11,6 +11,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 import { PagesRoutingModule }  from './pages-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LogoutPopupComponent } from './components/logout-popup/logout-popup.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 // const routes: Routes = [
@@ -78,6 +79,7 @@ import { LogoutPopupComponent } from './components/logout-popup/logout-popup.com
    // NgxChartsModule,
     HttpClientModule,
     PagesRoutingModule,
+    NgxMaterialTimepickerModule
     // RouterModule.forChild(routes)
   ],
  
