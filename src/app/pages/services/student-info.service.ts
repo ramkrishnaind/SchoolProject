@@ -114,6 +114,9 @@ export class StudentInfoService {
   timetable(body){
     return this.http.post(`${this.baseurl}timetable`,body);
   }
+  timetableBulkUpload(body){
+    return this.http.post(`${this.baseurl}timetable/ByNameBulk`,body);
+  }
    standred(body){
   return this.http.post(`${this.baseurl}/standard`,body);
    }

@@ -120,3 +120,11 @@
 .display-none {
     display: none;
 }
+
+.toggle-example{
+    display: flex;
+}
+
+.toggle-example ngx-material-timepicker-toggle{
+    margin: -10px;
+}

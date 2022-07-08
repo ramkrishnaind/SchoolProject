@@ -89,7 +89,7 @@
                 <mat-label class="labelfont">Upload Attendance Excel File Here</mat-label>
             </div>
             <div class="bus-width set-item-width">
-                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+                <input accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" type="file" id="file" (change)="onFileChange($event)">
             </div>
 
 

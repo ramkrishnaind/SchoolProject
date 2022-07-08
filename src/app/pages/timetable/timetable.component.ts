@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import {CommonService} from '../../shared/common.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-timetable',
@@ -62,7 +63,7 @@ export class TimetableComponent implements OnInit {
      })
    }
 
-   startClick(e){
+   setLimitOfEndTimeBasedOnStartTime(e){
     this.minForEndTime=e;
     this.disableEndTime=false;
   }
@@ -72,8 +73,8 @@ export class TimetableComponent implements OnInit {
       idStandard:this.form.get('idStandard').value,
       idDivision:this.form.get('idDivision').value,
       idSubject:this.form.get('idSubject').value,
-      day:this.form.get('day').value,
-      time:this.form.get('time').value,
+      day:this.form.get('day').value.toString(),
+      time:this.form.get('startTime').value - this.form.get('endTime').value,
       idSchoolDetails:this.idSchool
 
 }];
@@ -94,8 +95,25 @@ return body;
   } 
   }
 
-  onFileChange(e){
+  onExcelUpload(event){
+    let workBook = null;
+    let jsonData = null;
+    const reader = new FileReader();
+    const file = event.target.files[0];
+    reader.onload = (event) => {
+      const data = reader.result;
+      workBook = XLSX.read(data, { type: 'binary' });
+      workBook.SheetNames.forEach(element => {
 
+        jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[element])
+        setTimeout(() =>{
+          this.studentInfoSerive.timetableBulkUpload(jsonData).subscribe(res =>{
+            this.commonService.openSnackbar('TimeTable of Student Attendance Uploaded Successfully','Done');
+          });
+        },5000);
+         }); 
+ }
+    reader.readAsBinaryString(file);
   }
 
   back(){

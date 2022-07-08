@@ -59,11 +59,10 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Start Time</mat-label>
                         <div class="toggle-example">
-                        <input  formControlName="startTime" matInput [disableClick]="true" [ngxTimepicker]="start" (ngModelChange)="startClick($event)" readonly>
+                        <input  formControlName="startTime" matInput [disableClick]="true" [ngxTimepicker]="start" (ngModelChange)="setLimitOfEndTimeBasedOnStartTime($event)" readonly>
                         <ngx-material-timepicker-toggle [for]="start"></ngx-material-timepicker-toggle>
                         <ngx-material-timepicker #start></ngx-material-timepicker>
                         </div>
-                
                     </mat-form-field>
                 </div>
 
@@ -93,7 +92,7 @@
                 <mat-label class="labelfont">Upload Timetable File Here</mat-label>
             </div>
             <div class="bus-width set-item-width">
-                <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+                <input accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" type="file" id="file" (change)="onExcelUpload($event)">
             </div>
 
 

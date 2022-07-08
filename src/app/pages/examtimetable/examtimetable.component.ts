@@ -17,6 +17,8 @@ export class ExamtimetableComponent implements OnInit {
   testTypeData;
   minDate:Date;
   maxDate:Date;
+  minForEndTime;
+  disableEndTime:boolean=true;
   idSchool:number=1;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute) {
@@ -39,7 +41,8 @@ export class ExamtimetableComponent implements OnInit {
       idSubject:new FormControl(null,[Validators.required]),
       idtestType:new FormControl(null,[Validators.required]),
       date:new FormControl(null,[Validators.required]),
-      time:new FormControl(null,[Validators.required])
+      startTime: new FormControl(null, [Validators.required]),
+      endTime: new FormControl(null, [Validators.required]),
       });
     
       this.getAllStandardData();
@@ -80,7 +83,7 @@ export class ExamtimetableComponent implements OnInit {
       idSubject:this.form.get('idSubject').value,
       idtestType:this.form.get('idtestType').value,
       date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
-      time:this.form.get('time').value,
+      time:this.form.get('startTime').value - this.form.get('endTime').value,
       idSchoolDetails:this.idSchool
 };
 return body;
@@ -97,6 +100,11 @@ return body;
     this.commonService.openSnackbar('Please Fill All Field','Warning');
   }
    
+  }
+
+  setLimitOfEndTimeBasedOnStartTime(data){
+    this.minForEndTime=data;
+    this.disableEndTime=false;
   }
   uploadResult(){
  this.router.navigate(['../../examResult'],{relativeTo:this.route});

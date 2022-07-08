@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
@@ -10,22 +10,18 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./examresult.component.scss']
 })
 export class ExamresultComponent implements OnInit {
+
+  @ViewChild('inputFile') inputFile: ElementRef;
+  
   form: FormGroup;
-  standredData;
-  standredName;
+  standardData;
   divisionData;
-  divisionName;
   subjectData;
-  subjectName;
   testTypeData;
-  testTypeName;
-  studentName;
   studentData;
+  idSchool:number=1;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute) { }
-
-
-
  
 
   ngOnInit(): void {
@@ -35,38 +31,43 @@ export class ExamresultComponent implements OnInit {
       idSubject:new FormControl(null,[Validators.required]),
       idtestType:new FormControl(null,[Validators.required]),
       idStudent:new FormControl(null,[Validators.required]),
-      obtain:new FormControl(null,[Validators.required]),
-      min:new FormControl(null,[Validators.required]),
-      max:new FormControl(null,[Validators.required]),
+      obtain:new FormControl(null,[Validators.required,Validators.pattern("^[0-9]*$")]),
+      min:new FormControl(null,[Validators.required,Validators.pattern("^[0-9]*$")]),
+      max:new FormControl(null,[Validators.required,Validators.pattern("^[0-9]*$")]),
       remark:new FormControl(null,[Validators.required]),
     });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
-    });
-    this.studentInfoSerive.getTestType().subscribe(res =>{
-      this.testTypeData = res;
-      this.testTypeName = this.testTypeData.data;
+    this.getAllStandardData();
+    this.getTestType();
+  }
+  getAllStandardData(){
+    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.standardData = res.data;
     });
   }
-  onChangeStandred(idStandard){
-    
-    this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
-      this.divisionData = res;
-      this.divisionName = this.divisionData.data;
-     
+
+  getTestType(){
+    this.studentInfoSerive.getTestType().subscribe((res:any) =>{
+      this.testTypeData = res.data;
+    });
+  }
+  onChangeStandard(idStandard){
+    this.getDivisionData(idStandard);
+    this.getAllSubjectData(idStandard);
+   }
+   getDivisionData(idStandard){
+    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) =>{
+      this.divisionData = res.data;
     });
    }
-   onChangeStandredForSubject(idStandard){
-     this.studentInfoSerive.getAllSubject(idStandard).subscribe(res =>{
-      this.subjectData = res;
-      this.subjectName = this.subjectData.data;
+   getAllSubjectData(idStandard){
+    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
+      this.subjectData = res.data;
      })
    }
-   onChangeDivision(idStandard,idDivision){
-    this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe(res =>{
-      this.studentData = res;
-     this.studentName = this.studentData.data;
+   onChangeDivision(idDivision){
+    const idStandardValue = this.form.get('idStandard').value;
+    this.studentInfoSerive.getAllStudent(idStandardValue,idDivision).subscribe((res:any) =>{
+      this.studentData = res.data;
      });
    }
    makeBody(){
@@ -98,6 +99,12 @@ return body;
    
   }
   onFileChange(ev) {
+    console.log(ev);
+    const isExcelFile = !!ev.target.files[0].name.match(/(.xls|.xlsx)/);
+    if (ev.target.files.length > 1 || !isExcelFile) {
+      this.inputFile.nativeElement.value = '';
+    }
+    if(isExcelFile){
     let workBook = null;
     let jsonData = null;
     const reader = new FileReader();
@@ -112,11 +119,10 @@ return body;
           console.log("upload Excel:::::::::::",res);
           this.commonService.openSnackbar('Upload Result Excel File Successfully','Done');
         })
-         });
-        
-        
+         });      
  }
     reader.readAsBinaryString(file);
+}
   }
   back(){
     // this.route.navigate(['/dashboard']);
