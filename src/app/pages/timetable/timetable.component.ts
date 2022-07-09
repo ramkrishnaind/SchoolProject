@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
@@ -11,6 +11,9 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./timetable.component.scss']
 })
 export class TimetableComponent implements OnInit {
+
+  @ViewChild('inputFile') inputFile: ElementRef;
+  
   form: FormGroup;
   standardData;
   divisionData;
@@ -66,6 +69,7 @@ export class TimetableComponent implements OnInit {
    setLimitOfEndTimeBasedOnStartTime(e){
     this.minForEndTime=e;
     this.disableEndTime=false;
+    this.form.get('endTime').setValue('');
   }
   
    makeBody(){
@@ -74,20 +78,23 @@ export class TimetableComponent implements OnInit {
       idDivision:this.form.get('idDivision').value,
       idSubject:this.form.get('idSubject').value,
       day:this.form.get('day').value.toString(),
-      time:this.form.get('startTime').value - this.form.get('endTime').value,
+      time:this.getTime(),
       idSchoolDetails:this.idSchool
 
 }];
 return body;
    }
+   getTime(){
+    const startTime = this.form.get('startTime').value
+    const endTime = this.form.get('endTime').value
+    return startTime + "-" + endTime
+   }
    submit(){
-    console.log(this.form);
      if(this.form.valid){
     const body = this.makeBody();
     this.studentInfoSerive.timetable(body).subscribe(res =>{
      this.commonService.openSnackbar('School Timetable Submitted Successfully','Done');
      this.form.reset();
-     
     });
   }
   else{
@@ -96,15 +103,19 @@ return body;
   }
 
   onExcelUpload(event){
+    const isExcelFile = !!event.target.files[0].name.match(/(.xls|.xlsx)/);
+    if (event.target.files.length > 1 || !isExcelFile) {
+      this.inputFile.nativeElement.value = '';
+    }
+    if(isExcelFile){
     let workBook = null;
     let jsonData = null;
     const reader = new FileReader();
     const file = event.target.files[0];
-    reader.onload = (event) => {
+    reader.onload = (eve) => {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
       workBook.SheetNames.forEach(element => {
-
         jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[element])
         setTimeout(() =>{
           this.studentInfoSerive.timetableBulkUpload(jsonData).subscribe(res =>{
@@ -114,6 +125,7 @@ return body;
          }); 
  }
     reader.readAsBinaryString(file);
+}
   }
 
   back(){

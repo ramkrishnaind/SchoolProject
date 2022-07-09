@@ -21,14 +21,13 @@
             </div>
             <div class="bus-width set-item-width">
                 <input accept="*" type="file" id="file" class="display-none" (change)="onFileChange($event)">
-                <div (click)="addLogo()" class="cursor-pointer w-100">
+                <div  class="cursor-pointer w-100">
                     <div class="add-logo flex center">
-                        <div>
-                            <div class="company-logo-text">+Add File</div>
-                            <p *ngIf="fileClick && selectedFile">
-                                {{selectedFile.name}}
-                               </p>
-                            <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload</button>
+                        <div class="add-file">
+                            <div class="company-logo-text" (click)="addLogo()">+Add File</div>
+                            <button type="button" mat-button color="accent" class="upload-btn" (click)="upload()" [disabled]="!fileClick">Upload</button>
+                            <div *ngIf="fileClick && selectedFile">{{process}}</div>
+                                <!-- <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
                         </div>
                        
                     </div>

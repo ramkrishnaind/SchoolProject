@@ -35,7 +35,7 @@ export class SyllabusComponent implements OnInit {
       this.standredData = res;
       this.standredName = this.standredData.data;
     });
-    this.studentInfoSerive.getTestType().subscribe(res =>{
+    this.studentInfoSerive.getTestType({idSchool:1}).subscribe(res =>{
       this.testTypeData = res;
       this.testTypeName = this.testTypeData.data;
     });

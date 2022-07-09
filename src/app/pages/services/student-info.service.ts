@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Subject } from 'rxjs/Subject';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +82,7 @@ export class StudentInfoService {
    uploadHomeWorkFile(file:File){
     // http://13.235.11.4/homework/upload?file
     const formData: FormData = new FormData();
-    formData.append('Homework', file,file.name);
+    formData.append('Homework', file);
     return this.http.post(`${this.baseurl}homework/upload?file`,formData);
    }
    hoidayDetails(body){
@@ -99,8 +98,8 @@ export class StudentInfoService {
    getAllTeacher(){
      return this.http.get(`${this.baseurl}teacher/getall`);
    }
-   getTestType(){
-     return this.http.get(`${this.baseurl}testtype`);
+   getTestType(opt:{idSchool:number}){
+     return this.http.get(`${this.baseurl}testtype?idSchool= ${opt.idSchool}`);
    }
    syllabus(body){
      return this.http.post(`${this.baseurl}syllabus`,body);

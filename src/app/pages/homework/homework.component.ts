@@ -23,6 +23,7 @@ export class HomeworkComponent implements OnInit {
   minDate:Date;
   maxDate:Date;
   idSchool:number=1
+  process='';
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute) { 
       const currentYear = new Date().getFullYear();
@@ -133,7 +134,7 @@ export class HomeworkComponent implements OnInit {
       });
     }
     else{
-      this.commonService.openSnackbar('Please Fill All Field','Warning');
+      this.commonService.openSnackbar('Please Fill All Field and Upload File also!','Warning');
     }
     }
     back(){
@@ -142,16 +143,24 @@ export class HomeworkComponent implements OnInit {
 
     onFileChange(event){
         console.log(event);
+        if(event.target.files[0]){
         this.selectedFile = event.target.files[0];
         this.fileClick = true;
+        this.process ='File Added'
+        this.commonService.openSnackbar('File Added successfully,Ready To upload','Done');
+        }
     }
 
     upload(){
-      this.studentInfoSerive.uploadHomeWorkFile(this.selectedFile).subscribe((res:any)=>{
-        this.commonService.openSnackbar('image uploaded successfully','Done');
+      const file = this.selectedFile;
+      if(file){
+      this.studentInfoSerive.uploadHomeWorkFile(file).subscribe((res:any)=>{
+        this.process ='File Uploaded Successfully';
+        this.commonService.openSnackbar('File uploaded successfully!','Done');
       },error=>{
         this.commonService.openSnackbar('File Do not uploaded','Error');
       });
     }
+  }
 
 }

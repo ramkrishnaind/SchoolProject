@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../services/student-info.service';
 import * as XLSX from 'xlsx';
@@ -13,6 +13,8 @@ import * as moment from 'moment';
   styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent implements OnInit {
+
+  @ViewChild('inputFile') inputFile: ElementRef;
   willDownload = false;
   form: FormGroup;
   studentName;
@@ -71,11 +73,11 @@ export class AttendanceComponent implements OnInit {
   makeBody(){
     const body =[{ 
       date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
-      idStandard: this.studentInfoSerive.getNameBasedonDataAndId(this.standardData,this.form.get('idStandard').value,'idStandard','name'),
-      idDivision: this.studentInfoSerive.getNameBasedonDataAndId(this.divisionData,this.form.get('idDivision').value,'idDivision','name'),
-      idStudent:this.studentInfoSerive.getNameBasedonDataAndId(this.studentName,this.form.get('idStudent').value,'idStudent','name'),
+      standard: this.studentInfoSerive.getNameBasedonDataAndId(this.standardData,this.form.get('idStandard').value,'idStandard','name'),
+      division: this.studentInfoSerive.getNameBasedonDataAndId(this.divisionData,this.form.get('idDivision').value,'idDivision','name'),
+      name:this.studentInfoSerive.getNameBasedonDataAndId(this.studentName,this.form.get('idStudent').value,'idStudent','name'),
       present:this.form.get('present').value ,  
-      reasons: this.form.get('reasons').value,
+      reason: this.form.get('reasons').value,
     }]; 
     return body;
   }
@@ -93,11 +95,16 @@ export class AttendanceComponent implements OnInit {
     this.commonService.openSnackbar('Please Fill All Field','Warning');
   }
   }
-  onFileChange(ev) {
+  onFileChange(event) {
+    const isExcelFile = !!event.target.files[0].name.match(/(.xls|.xlsx)/);
+    if (event.target.files.length > 1 || !isExcelFile) {
+      this.inputFile.nativeElement.value = '';
+    }
+    if(isExcelFile){
     let workBook = null;
     let jsonData = null;
     const reader = new FileReader();
-    const file = ev.target.files[0];
+    const file = event.target.files[0];
     reader.onload = (event) => {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
@@ -113,6 +120,7 @@ export class AttendanceComponent implements OnInit {
          }); 
  }
     reader.readAsBinaryString(file);
+}
   }
 
   back(){

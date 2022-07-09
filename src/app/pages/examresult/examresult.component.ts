@@ -46,7 +46,7 @@ export class ExamresultComponent implements OnInit {
   }
 
   getTestType(){
-    this.studentInfoSerive.getTestType().subscribe((res:any) =>{
+    this.studentInfoSerive.getTestType({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.testTypeData = res.data;
     });
   }
@@ -64,6 +64,11 @@ export class ExamresultComponent implements OnInit {
       this.subjectData = res.data;
      })
    }
+
+   setLimitBasedOnMaxValue(event){
+    this.form.get('min').setValidators([Validators.max(event)]);
+    this.form.get('obtain').setValidators([Validators.max(event)]);
+   }
    onChangeDivision(idDivision){
     const idStandardValue = this.form.get('idStandard').value;
     this.studentInfoSerive.getAllStudent(idStandardValue,idDivision).subscribe((res:any) =>{
@@ -80,7 +85,8 @@ export class ExamresultComponent implements OnInit {
       obtain:this.form.get('obtain').value,
       min:this.form.get('min').value,
       max:this.form.get('max').value,
-      remark:this.form.get('remark').value
+      remark:this.form.get('remark').value,
+      idSchoolDetails:this.idSchool
 }];
 return body;
    }
@@ -94,7 +100,7 @@ return body;
     });
   }
   else{
-    this.commonService.openSnackbar('Please Fill All Field','Warning');
+    this.commonService.openSnackbar('Please Fill All Field Correctly!','Warning');
   }
    
   }

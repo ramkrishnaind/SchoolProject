@@ -65,8 +65,8 @@
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Obtain</mat-label>
-                        <input formControlName="obtain" matInput>
+                        <mat-label>Max Marks</mat-label>
+                        <input formControlName="max" matInput  (ngModelChange)="setLimitBasedOnMaxValue($event)">
                     </mat-form-field>
                 </div>
             </div>
@@ -79,8 +79,8 @@
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Max Marks</mat-label>
-                        <input formControlName="max" matInput>
+                        <mat-label>Obtain</mat-label>
+                        <input formControlName="obtain" matInput>
                     </mat-form-field>
                 </div>
             </div>
@@ -102,13 +102,13 @@
 
         </div>
      </form>
-        <div class="div-1" style="margin-top: 80px;">
+        <div class="div-1" style="margin-top: 60px;">
             <div class="business-details">
                 <div class="bus-width set-item-width-excel">
                     <mat-label class="labelfont">Upload Result Excel File Here</mat-label>
                 </div>
                 <div class="bus-width set-item-width-excel">
-                    <input #inputFile type="file"  accept=".xls,.xlsx"  id="file" (change)="onFileChange($event)" />
+                    <input #inputFile type="file"  accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"  id="file" (change)="onFileChange($event)" />
                 </div>
                 <!-- <div class="bus-width set-item-width-excel">
                     <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="uploadExel()">Submit Exam Result</button>

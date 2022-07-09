@@ -89,6 +89,7 @@ export class ParentMeetingComponent implements OnInit {
   startClick(e){
     this.minForEndTime=e;
     this.disableEndTime=false;
+    this.form.get('endTime').setValue('');
   }
 
   makeBody() {

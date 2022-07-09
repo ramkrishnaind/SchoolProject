@@ -57,7 +57,7 @@ export class ExamtimetableComponent implements OnInit {
   }
 
   getTestType(){
-    this.studentInfoSerive.getTestType().subscribe((res:any) =>{
+    this.studentInfoSerive.getTestType({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.testTypeData = res.data;
     });
   }
@@ -83,16 +83,23 @@ export class ExamtimetableComponent implements OnInit {
       idSubject:this.form.get('idSubject').value,
       idtestType:this.form.get('idtestType').value,
       date: moment(this.form.get('date').value).format('YYYY-MM-DD'),
-      time:this.form.get('startTime').value - this.form.get('endTime').value,
+      time:this.getTime(),
       idSchoolDetails:this.idSchool
 };
 return body;
+   }
+
+   getTime(){
+    const startTime = this.form.get('startTime').value
+    const endTime = this.form.get('endTime').value
+    return startTime + "-" + endTime
    }
    submit(){
      if(this.form.valid){
     const body = this.makeBody();
     this.studentInfoSerive.examTimetable(body).subscribe(res =>{
-     this.commonService.openSnackbar('Syllabus Submitted Successfully','Done');
+     this.commonService.openSnackbar('Exam Timetable Submitted Successfully','Done');
+     this.form.reset();
      
     });
   }
@@ -105,6 +112,7 @@ return body;
   setLimitOfEndTimeBasedOnStartTime(data){
     this.minForEndTime=data;
     this.disableEndTime=false;
+    this.form.get('endTime').setValue('');
   }
   uploadResult(){
  this.router.navigate(['../../examResult'],{relativeTo:this.route});
