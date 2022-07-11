@@ -12,6 +12,7 @@ import { PagesRoutingModule }  from './pages-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LogoutPopupComponent } from './components/logout-popup/logout-popup.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { TeacherLinkComponent } from './components/teacher-link/teacher-link.component';
 
 
 // const routes: Routes = [
@@ -70,6 +71,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     DashboardComponent,
     ProfileComponent,
     LogoutPopupComponent,
+    TeacherLinkComponent,
 
    
   ],

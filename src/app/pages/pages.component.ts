@@ -48,6 +48,11 @@ export class PagesComponent implements AfterViewInit {
           route: '/pages/master/location',
           iconClass: 'ic-category-man'
         },
+        {
+          displayName: 'Teacher',
+          route: '/pages/master/teacher',
+          iconClass: 'ic-category-man'
+        },
       
       ]
     },

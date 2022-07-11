@@ -155,6 +155,7 @@ export class HomeworkComponent implements OnInit {
       const file = this.selectedFile;
       if(file){
       this.studentInfoSerive.uploadHomeWorkFile(file).subscribe((res:any)=>{
+        console.log(res);
         this.process ='File Uploaded Successfully';
         this.commonService.openSnackbar('File uploaded successfully!','Done');
       },error=>{

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { TeacherLinkComponent } from './components/teacher-link/teacher-link.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,9 @@ const routes: Routes = [
       children: [
         {
           path:'dashboard', component:DashboardComponent
+        },
+        {
+          path:'teacher', component:TeacherLinkComponent
         },
         {
           path:'attendance',
@@ -75,9 +79,9 @@ const routes: Routes = [
           data:{ title: 'Dashboard'}
         },
         {
-          path:'teacher',
+          path:'master/teacher',
           loadChildren: () => import('src/app/pages/teacher/teacher.module').then(m => m.TeacherModule),
-          data:{ title: 'Dashboard'}
+          data:{ title: 'Master'}
         },
         {
           path: 'master/parent',

@@ -2,10 +2,10 @@
     <div class="business-details-back">
         <div class="bus-width set-item-width-back" style="width: 67%;">
 
-            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+            <!-- <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
                 <mat-icon>keyboard_backspace</mat-icon>
                 <mat-label>Back</mat-label>
-            </button>
+            </button> -->
         </div>
 </div>
         <div class="bus-width set-item-width-back">
@@ -63,8 +63,8 @@
                 <div class="business-details">
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Secondary Email ID</mat-label>
-                            <input formControlName="semail" matInput>
+                            <mat-label>Education</mat-label>
+                            <input formControlName="education" matInput>
                         </mat-form-field>
                     </div>
                     <div class="bus-width set-item-width">
@@ -82,7 +82,7 @@
     
                 </div>
 
-                <div class="business-details">
+                <!-- <div class="business-details">
     
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
@@ -109,7 +109,8 @@
                         </mat-form-field>
                     </div>
     
-                </div>
+                </div> -->
+
                 <div class="business-details">
                     <div class="bus-width set-item-width">
                         <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit</button>
@@ -125,7 +126,7 @@
                     <mat-label class="labelfont">Upload Teacher Data</mat-label>
                 </div>
                 <div class="bus-width set-item-width">
-                    <input accept="*" type="file" id="file" (change)="onFileChange($event)">
+                    <input #inputFile type="file"  accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"  id="file" (change)="onFileChange($event)" />
                 </div>
     
     

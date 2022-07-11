@@ -82,7 +82,7 @@ export class StudentInfoService {
    uploadHomeWorkFile(file:File){
     // http://13.235.11.4/homework/upload?file
     const formData: FormData = new FormData();
-    formData.append('Homework', file);
+    formData.append('file', file);
     return this.http.post(`${this.baseurl}homework/upload?file`,formData);
    }
    hoidayDetails(body){
@@ -139,6 +139,9 @@ export class StudentInfoService {
      return this.http.post(`${this.baseurl}PaymentType`,body);
    }
 
+   saveTeacherData(body){
+    return this.http.post(`${this.baseurl}teacher`,body);
+  }
    teacherDetails(body){
     return this.http.post(`${this.baseurl}teacher/saveTeacherDetails`,body);
   }
