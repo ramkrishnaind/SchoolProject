@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../services/student-info.service';
 import { CommonService } from 'src/app/shared/common.service';
@@ -11,6 +11,8 @@ import * as moment from 'moment';
   styleUrls: ['./homework.component.scss']
 })
 export class HomeworkComponent implements OnInit {
+
+  @ViewChild('inputFile') inputFile: ElementRef;
   logoError: boolean;
   form: FormGroup;
   fileName;
@@ -24,6 +26,7 @@ export class HomeworkComponent implements OnInit {
   maxDate:Date;
   idSchool:number=1
   process='';
+  fileUploadUrl;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute) { 
       const currentYear = new Date().getFullYear();
@@ -120,7 +123,7 @@ export class HomeworkComponent implements OnInit {
       description:this.form.get('Description').value,
       assigndate:moment(this.form.get('assigndate').value).format('YYYY-MM-DD'),
       duedate:moment(this.form.get('duedate').value).format('YYYY-MM-DD'),
-      attachment:'https://mytestschool.s3.ap-south-1.amazonaws.com/s3%3A//mytestschool/pdf/'+`${this.fileName}`
+      attachment:this.fileUploadUrl
        
       };
       return body;
@@ -130,6 +133,7 @@ export class HomeworkComponent implements OnInit {
       const body = this.makeBody();
       this.studentInfoSerive.homeworkDetails(body).subscribe(res =>{
         this.commonService.openSnackbar('Student Homework Submitted Successfully','Done');
+        this.inputFile.nativeElement.value = '';
       this.form.reset();
       });
     }
@@ -142,7 +146,6 @@ export class HomeworkComponent implements OnInit {
     }
 
     onFileChange(event){
-        console.log(event);
         if(event.target.files[0]){
         this.selectedFile = event.target.files[0];
         this.fileClick = true;
@@ -155,7 +158,7 @@ export class HomeworkComponent implements OnInit {
       const file = this.selectedFile;
       if(file){
       this.studentInfoSerive.uploadHomeWorkFile(file).subscribe((res:any)=>{
-        console.log(res);
+        this.fileUploadUrl = res.data.body;
         this.process ='File Uploaded Successfully';
         this.commonService.openSnackbar('File uploaded successfully!','Done');
       },error=>{

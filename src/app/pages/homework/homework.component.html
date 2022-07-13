@@ -20,7 +20,7 @@
                 <mat-label class="labelfont">Upload Homework File Here</mat-label>
             </div>
             <div class="bus-width set-item-width">
-                <input accept="*" type="file" id="file" class="display-none" (change)="onFileChange($event)">
+                <input #inputFile  accept="*" type="file" id="file" class="display-none" (change)="onFileChange($event)">
                 <div  class="cursor-pointer w-100">
                     <div class="add-logo flex center">
                         <div class="add-file">
