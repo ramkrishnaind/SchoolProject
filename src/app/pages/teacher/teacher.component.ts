@@ -177,7 +177,7 @@ export class TeacherComponent implements OnInit {
       workBook.SheetNames.forEach(element => {
         jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[element])
         console.log("upload ExcelDATa:::::::::::",element);
-        this.studentInfoSerive.result(jsonData).subscribe(res =>{
+        this.studentInfoSerive.saveTeacherData(jsonData).subscribe(res =>{
           console.log("upload Excel:::::::::::",res);
           this.commonService.openSnackbar('Upload Result Excel File Successfully','Done');
         })
