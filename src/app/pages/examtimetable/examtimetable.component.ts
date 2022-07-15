@@ -51,7 +51,7 @@ export class ExamtimetableComponent implements OnInit {
   }
 
   getAllStandardData(){
-    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+    this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
     });
   }
@@ -61,7 +61,7 @@ export class ExamtimetableComponent implements OnInit {
       this.testTypeData = res.data;
     });
   }
-  onChangeStandred(idStandard){
+  onChangeStandard(idStandard){
     this.getDivisionData(idStandard);
     this.getAllSubjectData(idStandard);
    }

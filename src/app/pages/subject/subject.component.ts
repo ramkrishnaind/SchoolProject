@@ -17,8 +17,8 @@ export class SubjectComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name'];
-  standredData: any;
-  standredName;
+  standardData: any;
+  standardName;
   subjectname;
   dataSource:any;
   idStandardForSubjectView:number;
@@ -31,9 +31,9 @@ export class SubjectComponent implements OnInit {
       idStandard:new FormControl(null,[Validators.required])
       });
 
-      this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe(res =>{
-        this.standredData = res;
-        this.standredName = this.standredData.data;
+      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe(res =>{
+        this.standardData = res;
+        this.standardName = this.standardData.data;
        
       });
       
@@ -51,7 +51,7 @@ export class SubjectComponent implements OnInit {
   makeBody(){
     const body =[{
       name:this.form.get('name').value,
-      standard:this.studentInfoSerive.getNameBasedonDataAndId(this.standredName,this.form.get('idStandard').value,'idStandard','name'),
+      standard:this.studentInfoSerive.getNameBasedonDataAndId(this.standardName,this.form.get('idStandard').value,'idStandard','name'),
       schoolDetails:"SBPCOE"
      }];
     return body;

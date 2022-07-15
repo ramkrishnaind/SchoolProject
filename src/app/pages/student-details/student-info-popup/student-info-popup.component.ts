@@ -152,7 +152,7 @@ export class StudentInfoPopupComponent implements OnInit {
   }
 
     getStandardData(){
-      this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
         this.standardData = res.data;
       });
     }
@@ -203,7 +203,7 @@ export class StudentInfoPopupComponent implements OnInit {
       })
     }
 
-    onChangeStandred(idStandard){
+    onChangeStandard(idStandard){
       this.getDivisionData(idStandard);
   
     }

@@ -56,7 +56,7 @@ export class StudentInfoService {
   public getFile(){
     return this.uploadingData.asObservable();
   }
-  getStandred(opt:{idSchool:number}){
+  getStandard(opt:{idSchool:number}){
     return this.http.get(`${this.baseurl}standard/?idSchool= ${opt.idSchool}`);
   }
 
@@ -116,8 +116,13 @@ export class StudentInfoService {
   timetableBulkUpload(body){
     return this.http.post(`${this.baseurl}timetable/ByNameBulk`,body);
   }
-   standred(body){
+   standard(body){
   return this.http.post(`${this.baseurl}/standard`,body);
+   }
+   deleteStandard(body){
+    // return this.http.delete(`${this.baseurl}standard`,body);
+    const url = this.baseurl + 'standard';
+    return this.http.request('delete', url, { body: body });
    }
    division(body){
     return this.http.post(`${this.baseurl}division`,body);

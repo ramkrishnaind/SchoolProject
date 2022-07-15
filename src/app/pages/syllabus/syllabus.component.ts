@@ -11,8 +11,8 @@ import {CommonService} from '../../shared/common.service';
 })
 export class SyllabusComponent implements OnInit {
   form: FormGroup;
-  standredData;
-  standredName;
+  standardData;
+  standardName;
   divisionData;
   divisionName;
   subjectData;
@@ -31,9 +31,9 @@ export class SyllabusComponent implements OnInit {
       marks:new FormControl(null,[Validators.required]),
       chapters:new FormControl(null,[Validators.required])
       });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
+    this.studentInfoSerive.getStandard({idSchool:1}).subscribe(res =>{
+      this.standardData = res;
+      this.standardName = this.standardData.data;
     });
     this.studentInfoSerive.getTestType({idSchool:1}).subscribe(res =>{
       this.testTypeData = res;
@@ -41,7 +41,7 @@ export class SyllabusComponent implements OnInit {
     });
 
   }
-  onChangeStandred(idStandard){
+  onChangeStandard(idStandard){
     
     this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
       this.divisionData = res;
@@ -49,7 +49,7 @@ export class SyllabusComponent implements OnInit {
      
     });
    }
-   onChangeStandredForSubject(idStandard){
+   onChangeStandardForSubject(idStandard){
      this.studentInfoSerive.getAllSubject(idStandard).subscribe(res =>{
       this.subjectData = res;
       this.subjectName = this.subjectData.data;

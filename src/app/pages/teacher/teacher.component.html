@@ -1,92 +1,109 @@
 <div class="container">
-    <div class="business-details-back">
-        <div class="bus-width set-item-width-back" style="width: 67%;">
-
-            <!-- <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+  <div class="business-details-back">
+    <div class="bus-width set-item-width-back" style="width: 67%">
+      <!-- <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
                 <mat-icon>keyboard_backspace</mat-icon>
                 <mat-label>Back</mat-label>
             </button> -->
-        </div>
-</div>
-        <div class="bus-width set-item-width-back">
-            <h6 class="top-heading">Teacher Details</h6>
-        </div>
+    </div>
+  </div>
+  <div class="bus-width set-item-width-back">
+    <h6 class="top-heading">Teacher Details</h6>
+  </div>
 
-        <form [formGroup]="form">
-            <div class="div-1">
-                <div class="main-div">
-                    <div class="img-div add-logo-div">
-                        <input accept="*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
-                        <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
-                            <div class="add-logo flex center">
-                                <div>
-                                    <div class="company-logo-text">+Add Photo OR File</div>
-                                </div>
-    
-                            </div>
-    
-                            <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error>
-                        </div>
-                        <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
-                            <img [src]="form.get('businessLogoUrl').value">
-    
-                            <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+  <form [formGroup]="form">
+    <div class="div-1">
+      <div class="main-div">
+        <div class="img-div add-logo-div">
+          <input
+            accept="*"
+            type="file"
+            id="file"
+            class="display-none"
+            (change)="selectFile($event)"
+            (input)="handleFileInput($event)"
+          />
+          <div
+            *ngIf="!form.get('businessLogoUrl').value"
+            (click)="addLogo()"
+            class="cursor-pointer w-100"
+          >
+            <div class="add-logo flex center">
+              <div>
+                <div class="company-logo-text">+Add Photo OR File</div>
+              </div>
+            </div>
+
+            <mat-error *ngIf="logoError == true" class="img-error"
+              >Photo is required</mat-error
+            >
+          </div>
+          <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
+            <img [src]="form.get('businessLogoUrl').value" />
+
+            <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
                                 Change Logo
                             </div> -->
-                        </div>
-                    </div>
-                    <button  type="button"  mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button>
-                    <div class="form-div">
-                        <div class="w-100">
-                            <div class="width-calc">
-                                <mat-form-field class="example-full-width" appearance="fill">
-                                    <mat-label>Teacher Name</mat-label>
-                                    <input formControlName="teacher" matInput>
-                                </mat-form-field>
-                            </div>
-                            <div class="width-calc">
-                                <!-- <mat-form-field class="example-full-width" appearance="fill">
+          </div>
+        </div>
+        <button
+          type="button"
+          mat-button
+          color="primary"
+          class="upload-btn"
+          (click)="upload()"
+        >
+          Upload Image
+        </button>
+        <div class="form-div">
+          <div class="w-100">
+            <div class="width-calc">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Teacher Name</mat-label>
+                <input formControlName="teacher" matInput />
+              </mat-form-field>
+            </div>
+            <div class="width-calc">
+              <!-- <mat-form-field class="example-full-width" appearance="fill">
                                     <mat-label>Select Teacher</mat-label>
                                     <mat-select formControlName="idteacher">
                                         <mat-option *ngFor="let item of teacherName" [value]="item.idTeacher">{{item.name}}</mat-option>
                                     </mat-select>
                                 </mat-form-field> -->
-                                <mat-form-field class="example-full-width" appearance="fill">
-                                    <mat-label>Email ID</mat-label>
-                                    <input formControlName="email" matInput>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-    
-                </div>
-                <div class="business-details">
-                    <div class="bus-width set-item-width">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Education</mat-label>
-                            <input formControlName="education" matInput>
-                        </mat-form-field>
-                    </div>
-                    <div class="bus-width set-item-width">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Whatsapp Number</mat-label>
-                            <input formControlName="whatsappNumber" matInput>
-                        </mat-form-field>
-                    </div>
-                    <div class="bus-width set-item-width">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label> Phone Number</mat-label>
-                            <input formControlName="phoneNumber" matInput>
-                        </mat-form-field>
-                    </div>
-    
-                </div>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Email ID</mat-label>
+                <input formControlName="email" matInput />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Education</mat-label>
+            <input formControlName="education" matInput />
+          </mat-form-field>
+        </div>
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Whatsapp Number</mat-label>
+            <input formControlName="whatsappNumber" matInput />
+          </mat-form-field>
+        </div>
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label> Phone Number</mat-label>
+            <input formControlName="phoneNumber" matInput />
+          </mat-form-field>
+        </div>
+      </div>
 
-                <!-- <div class="business-details">
+      <!-- <div class="business-details">
     
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Select Standred</mat-label>
+                            <mat-label>Select Standard</mat-label>
                             <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event) ">
                                 <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
                             </mat-select>
@@ -111,29 +128,37 @@
     
                 </div> -->
 
-                <div class="business-details">
-                    <div class="bus-width set-item-width">
-                        <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit</button>
-                    </div>
-    
-                </div>
-            </div>
-    
-        </form>
-        <div class="div-1" style="margin-top: 60px;">
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-label class="labelfont">Upload Teacher Data</mat-label>
-                </div>
-                <div class="bus-width set-item-width">
-                    <input #inputFile type="file"  accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"  id="file" (change)="onFileChange($event)" />
-                </div>
-    
-    
-    
-            </div>
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn_sub"
+            (click)="submit()"
+          >
+            Submit
+          </button>
         </div>
-        <!-- <form [formGroup]="form">
+      </div>
+    </div>
+  </form>
+  <div class="div-1" style="margin-top: 60px">
+    <div class="business-details">
+      <div class="bus-width set-item-width">
+        <mat-label class="labelfont">Upload Teacher Data</mat-label>
+      </div>
+      <div class="bus-width set-item-width">
+        <input
+          #inputFile
+          type="file"
+          accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+          id="file"
+          (change)="onFileChange($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <!-- <form [formGroup]="form">
             <div class="div-1">
                 <div class="business-details">
 
@@ -148,9 +173,9 @@
                     </div>
                     <div class="bus-width set-item-width">
                         <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Select Standred</mat-label>
-                            <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
-                                <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}
+                            <mat-label>Select Standard</mat-label>
+                            <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event) ">
+                                <mat-option *ngFor="let item of standardName" [value]="item.idStandard">{{item.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

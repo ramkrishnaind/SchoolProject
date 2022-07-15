@@ -40,7 +40,7 @@ export class ExamresultComponent implements OnInit {
     this.getTestType();
   }
   getAllStandardData(){
-    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+    this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
     });
   }

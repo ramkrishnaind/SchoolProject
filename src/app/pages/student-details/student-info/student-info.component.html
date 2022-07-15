@@ -63,7 +63,7 @@
 
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Standred</mat-label>
+                        <mat-label>Select Standard</mat-label>
                         <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event)">
                             <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
                         </mat-select>

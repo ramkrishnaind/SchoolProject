@@ -1,80 +1,109 @@
 <div class="container">
-    <div class="business-details-back">
-        <div class="bus-width set-item-width-back" style="width: 67%;">
-
-            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
-                    <mat-icon>keyboard_backspace</mat-icon>
-                    <mat-label>Back</mat-label>
-                    </button>
-
-        </div>
-
-        <div class="bus-width set-item-width-back">
-            <h6 class="top-heading">Syllabus Information</h6>
-        </div>
+  <div class="business-details-back">
+    <div class="bus-width set-item-width-back" style="width: 67%">
+      <button
+        mat-raised-button
+        color="primary"
+        matSuffix
+        class="back-btn"
+        (click)="back()"
+      >
+        <mat-icon>keyboard_backspace</mat-icon>
+        <mat-label>Back</mat-label>
+      </button>
     </div>
-    <form [formGroup]="form" (ngSubmit)="form.reset()">
-        <div class="div-1">
-            <div class="business-details">
 
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Standred</mat-label>
-                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandred($event) ">
-                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Division</mat-label>
-                        <mat-select formControlName="idDivision" (selectionChange)="onChangeStandredForSubject($event)">
-                            <mat-option *ngFor="let item of divisionName" [value]="item.idDivision">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-
-
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Subject</mat-label>
-                        <mat-select formControlName="idSubject">
-                            <mat-option *ngFor="let item of subjectName" [value]="item.idSubject">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select TestType</mat-label>
-                        <mat-select formControlName="type">
-                            <mat-option *ngFor="let item of testTypeName" [value]="item.idtestType">{{item.discription}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Enter Marks Details like-15/20</mat-label>
-                        <input formControlName="marks" matInput>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Enter Chapter Range like-1-7</mat-label>
-                        <input formControlName="chapters" matInput>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <button mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Syllabus</button>
-                </div>
-
-            </div>
+    <div class="bus-width set-item-width-back">
+      <h6 class="top-heading">Syllabus Information</h6>
+    </div>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="form.reset()">
+    <div class="div-1">
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select Standard</mat-label>
+            <mat-select
+              formControlName="idStandard"
+              (selectionChange)="onChangeStandard($event)"
+            >
+              <mat-option
+                *ngFor="let item of standardName"
+                [value]="item.idStandard"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
         </div>
-    </form>
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select Division</mat-label>
+            <mat-select
+              formControlName="idDivision"
+              (selectionChange)="onChangeStandardForSubject($event)"
+            >
+              <mat-option
+                *ngFor="let item of divisionName"
+                [value]="item.idDivision"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select Subject</mat-label>
+            <mat-select formControlName="idSubject">
+              <mat-option
+                *ngFor="let item of subjectName"
+                [value]="item.idSubject"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select TestType</mat-label>
+            <mat-select formControlName="type">
+              <mat-option
+                *ngFor="let item of testTypeName"
+                [value]="item.idtestType"
+                >{{ item.discription }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Enter Marks Details like-15/20</mat-label>
+            <input formControlName="marks" matInput />
+          </mat-form-field>
+        </div>
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Enter Chapter Range like-1-7</mat-label>
+            <input formControlName="chapters" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn_sub"
+            (click)="submit()"
+          >
+            Submit Syllabus
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

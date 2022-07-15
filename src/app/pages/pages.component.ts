@@ -29,7 +29,7 @@ export class PagesComponent implements AfterViewInit {
           iconClass: 'ic-vertical'
         },
         {
-          displayName: 'Standred',
+          displayName: 'Standard',
           route: '/pages/master/standard',
           iconClass: 'ic-category-man'
         },

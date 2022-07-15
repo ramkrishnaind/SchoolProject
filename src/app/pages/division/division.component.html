@@ -1,59 +1,76 @@
 <div class="container">
-    <h6 class="top-heading">Division Details</h6>
-    <form [formGroup]="form">
-        <div class="div-1">
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Standred</mat-label>
-                        <mat-select formControlName="idStandard">
-                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Enter Division</mat-label>
-                        <input formControlName="name" matInput>
-                    </mat-form-field>
-                </div>
-
-                <div class="bus-width set-item-width">
-                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="addDivision()">Submit Division</button>
-                </div>
-
-
-            </div>
+  <h6 class="top-heading">Division Details</h6>
+  <form [formGroup]="form">
+    <div class="div-1">
+      <div class="business-details">
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select Standard</mat-label>
+            <mat-select formControlName="idStandard">
+              <mat-option
+                *ngFor="let item of standardName"
+                [value]="item.idStandard"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
         </div>
-        <div class="div-1">
-            <div class="business-details">
-                <div class="bus-width set-item-width-one">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Standred</mat-label>
-                        <mat-select (selectionChange)="onChangeStandred($event)">
-                            <mat-option *ngFor="let item of standredName" [value]="item.idStandard">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-
-
-            </div>
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-            
-            <mat-paginator showFirstLastButtons
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            aria-label="Select page">
-           </mat-paginator>
-
+        <div class="bus-width set-item-width">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Enter Division</mat-label>
+            <input formControlName="name" matInput />
+          </mat-form-field>
         </div>
-    </form>
+
+        <div class="bus-width set-item-width">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            class="btn_sub"
+            (click)="addDivision()"
+          >
+            Submit Division
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="div-1">
+      <div class="business-details">
+        <div class="bus-width set-item-width-one">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Select Standard</mat-label>
+            <mat-select (selectionChange)="onChangeStandard($event)">
+              <mat-option
+                *ngFor="let item of standardName"
+                [value]="item.idStandard"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+        matSort
+      >
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        showFirstLastButtons
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
+  </form>
 </div>

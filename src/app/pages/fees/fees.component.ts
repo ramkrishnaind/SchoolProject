@@ -13,8 +13,8 @@ export class FeesComponent implements OnInit {
   feeType: any;
   form: FormGroup;
   form1: FormGroup;
-  standredName;
-  standredData: any;
+  standardName;
+  standardData: any;
   studentName;
   studentData;
   divisionData;
@@ -41,9 +41,9 @@ export class FeesComponent implements OnInit {
       reference: new FormControl(null,[Validators.required]),
       status: new FormControl(null,[Validators.required])
     });
-    this.studentInfoSerive.getStandred({idSchool:1}).subscribe(res =>{
-      this.standredData = res;
-      this.standredName = this.standredData.data;
+    this.studentInfoSerive.getStandard({idSchool:1}).subscribe(res =>{
+      this.standardData = res;
+      this.standardName = this.standardData.data;
      
     });
     this.studentInfoSerive.getFeesType().subscribe(res =>{
@@ -59,7 +59,7 @@ export class FeesComponent implements OnInit {
 // paymentmethod: "Net Banking"
 // reference: "TXN2344822533"
 // status: "paid"
-  onChangeStandred(idStandard){
+  onChangeStandard(idStandard){
     
     this.studentInfoSerive.getDivision(idStandard).subscribe( res =>{
       this.divisionData = res;

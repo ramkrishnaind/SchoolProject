@@ -37,7 +37,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
       idStandard:new FormControl(null, [Validators.required]),
       idDivision:new FormControl(null, [Validators.required]),
     });
-    this.studentInfoSerive.getStandred({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
+    this.studentInfoSerive.getStandard({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
       this.standardData = res.data;
       this.form.get('idStandard').setValue(this.standardData[0].idStandard);
       this.getDivisionData({value:this.form.get('idStandard').value})

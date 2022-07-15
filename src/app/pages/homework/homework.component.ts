@@ -57,7 +57,7 @@ export class HomeworkComponent implements OnInit {
       
      
     });
-    this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) =>{
+    this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
     });
     this.studentInfoSerive.getAllTeacher().subscribe((res:any) =>{
@@ -66,7 +66,7 @@ export class HomeworkComponent implements OnInit {
     
   }
 
-  onChangeStandred(idStandard){
+  onChangeStandard(idStandard){
     this.getAllDivisionBasedOnStandard(idStandard);
     this.getAllSubject(idStandard);
    }

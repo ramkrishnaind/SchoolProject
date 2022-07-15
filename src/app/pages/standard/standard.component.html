@@ -1,18 +1,18 @@
 <div class="container">
-    <h6 class="top-heading">Standred Details</h6>
+    <h6 class="top-heading">Standard Details</h6>
     <form [formGroup]="form">
         <div class="div-1">
             <div class="business-details">
 
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Enter Standred</mat-label>
+                        <mat-label>Enter Standard</mat-label>
                         <input formControlName="name" matInput>
                     </mat-form-field>
                 </div>
 
                 <div class="bus-width set-item-width">
-                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="addStandred()">Submit Standred</button>
+                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="addStandard()">Submit Standard</button>
                 </div>
 
 
@@ -23,7 +23,32 @@
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                        
+                        <div *ngIf="!element.edit">{{element.name}}</div>
+
+
+                        <div *ngIf="element.edit">   
+                            <mat-form-field>
+                            <input type="text" matInput name="name-{{index}}" [(ngModel)]="element.name"   [ngModelOptions]="{standalone: true}" />
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button  *ngIf="!element.edit" type="button" mat-raised-button color="accent" (click)="onEdit(element)">Edit</button>
+                        <button *ngIf="element.edit" type="button" mat-raised-button color="accent" (click)="updateStandard(element)">Done</button> 
+                    </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="delete">
+                        <th mat-header-cell *matHeaderCellDef> Delete </th>
+                        <td mat-cell *matCellDef="let element"><button type="button" mat-raised-button color="accent" (click)="onDelete(element)" [disabled]="element.edit">Delete</button> </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

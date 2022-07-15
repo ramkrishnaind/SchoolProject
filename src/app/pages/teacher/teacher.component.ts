@@ -53,7 +53,7 @@ export class TeacherComponent implements OnInit {
   }
 
   // getStandardData(){
-  //   this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe((res:any) => {
+  //   this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) => {
   //     this.standardData = res.data;
   //   });
   // }

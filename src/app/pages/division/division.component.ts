@@ -18,8 +18,8 @@ export class DivisionComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name'];
-  standredData: any;
-  standredName;
+  standardData: any;
+  standardName;
   divisionName=[];
   dataSource:any;
   idStandardForDataView:number;
@@ -32,13 +32,13 @@ export class DivisionComponent implements OnInit {
       name:new FormControl(null, [Validators.required]),
       idStandard:new FormControl(null,[Validators.required])
       });
-      this.studentInfoSerive.getStandred({idSchool:this.idSchool}).subscribe(res =>{
-        this.standredData = res;
-        this.standredName = this.standredData.data;
+      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe(res =>{
+        this.standardData = res;
+        this.standardName = this.standardData.data;
        
       });
   }
-  onChangeStandred(idStandard){
+  onChangeStandard(idStandard){
     this.idStandardForDataView = idStandard.value
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe( (res:any) =>{
       this.divisionName = res.data
