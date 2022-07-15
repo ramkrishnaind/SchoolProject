@@ -19,7 +19,7 @@ export class StandardComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
-  displayedColumns: string[] = ['name','edit','delete'];
+  displayedColumns: string[] = ['name','action'];
   standardData=[];
   dataSource:any;
   idSchool:number=1

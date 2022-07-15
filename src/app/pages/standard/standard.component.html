@@ -38,21 +38,22 @@
 
                 </ng-container>
 
-                <ng-container matColumnDef="edit">
-                    <th mat-header-cell *matHeaderCellDef> Edit </th>
-                    <td [style.width.px]="200" mat-cell *matCellDef="let element">
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td [style.width.px]="400" mat-cell *matCellDef="let element">
                         <button  *ngIf="!element.edit" type="button" mat-raised-button color="accent" (click)="onEdit(element)">Edit</button>
+                        <button  *ngIf="!element.edit" [ngStyle]="{'margin-left.px': 10}"  type="button" mat-raised-button color="accent" (click)="onDelete(element)">Delete</button>
                         <button *ngIf="element.edit" type="button" mat-raised-button color="accent" (click)="onUpdate(element)">Update</button> 
                         <button *ngIf="element.edit" [ngStyle]="{'margin-left.px': 10}"  type="button" mat-raised-button color="accent" (click)="onCancel(element)">Cancel</button> 
                     </td>
                 </ng-container>
                 
-                <ng-container matColumnDef="delete">
+                <!-- <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> Delete </th>
                         <td [style.width.px]="200"  mat-cell *matCellDef="let element">
                             <button  type="button" mat-raised-button color="accent" (click)="onDelete(element)">Delete</button>
                          </td>
-                </ng-container>
+                </ng-container> -->
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
