@@ -47,9 +47,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MessageBarComponent } from './message-bar/message-bar.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { PopupComponent } from './popup/popup.component';
 
 @NgModule({
-  declarations: [MessageBarComponent],
+  declarations: [MessageBarComponent, PopupComponent],
   imports: [
     NgxMaterialTimepickerModule,
     ReactiveFormsModule,

@@ -23,6 +23,7 @@ export class StandardComponent implements OnInit {
   standardName=[];
   dataSource:any;
   idSchool:number=1
+  changeInStandardValue:string;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
 
   ngOnInit(): void {
@@ -41,15 +42,20 @@ export class StandardComponent implements OnInit {
     });
   }
 
-  updateStandard(e){
+  changeStandard(event){
+  this.changeInStandardValue = event.target.value
+  }
+
+  onUpdate(e){
     e.edit = false;
    console.log(e);
    const body ={
       "idStandard": e.idStandard,
-      "name": e.name,
+      "name": this.changeInStandardValue,
       "idSchoolDetails": e.idSchoolDetails
    }
    this.studentInfoSerive.standard(body).subscribe(res =>{
+    e.name = this.changeInStandardValue;
     this.commonService.openSnackbar('Standard Updated Successfully','Done');
   });
 
@@ -63,21 +69,32 @@ export class StandardComponent implements OnInit {
 
   onDelete(data){
     console.log(data);
-    const body ={
-      "idStandard": data.idStandard,
-      "name": data.name,
-      "idSchoolDetails": data.idSchoolDetails
-   }
-   this.studentInfoSerive.deleteStandard(body).subscribe((res:any) =>{
-    this.commonService.openSnackbar('Standard Deleted Successfully','Done');
-    const index = this.dataSource.data.findIndex(data => data.idStandard === res.idStandard);
-    if( index != -1){
-      this.dataSource.data.splice(index, 1);
-      this.paginator.length = this.dataSource.data.length;
-      this.dataSource.paginator = this.paginator
-      this.table.renderRows();
-    }
-  });
+    const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Standard?');
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        const body ={
+          "idStandard": data.idStandard,
+          "name": data.name,
+          "idSchoolDetails": data.idSchoolDetails
+       }
+       this.studentInfoSerive.deleteStandard(body).subscribe((res:any) =>{
+        this.commonService.openSnackbar('Standard Deleted Successfully','Done');
+        const index = this.dataSource.data.findIndex(data => data.idStandard === res.idStandard);
+        if( index != -1){
+          this.dataSource.data.splice(index, 1);
+          this.paginator.length = this.dataSource.data.length;
+          this.dataSource.paginator = this.paginator
+          this.table.renderRows();
+        }
+      });
+      }
+    });
+   
+  
+  }
+
+  onCancel(data){
+    data.edit = false;
   }
 
   makeBody(){
