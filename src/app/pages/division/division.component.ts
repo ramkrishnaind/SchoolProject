@@ -17,13 +17,14 @@ export class DivisionComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name','action'];
   standardData: any;
-  standardName;
-  divisionName=[];
+  divisionData=[];
   dataSource:any;
   idStandardForDataView:number;
   idSchool:number=1
+  changeInDivisionValue:string;
+  selectedStandard;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
 
 
@@ -32,22 +33,89 @@ export class DivisionComponent implements OnInit {
       name:new FormControl(null, [Validators.required]),
       idStandard:new FormControl(null,[Validators.required])
       });
-      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe(res =>{
-        this.standardData = res;
-        this.standardName = this.standardData.data;
-       
+      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
+        this.standardData = res.data;
+        // this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.selectedStandard = this.standardData[0].idStandard;
+        this.getDivisionData({value:this.selectedStandard})
+        this.idStandardForDataView = this.selectedStandard;
       });
   }
   onChangeStandard(idStandard){
     this.idStandardForDataView = idStandard.value
+    this.getDivisionData(this.idStandardForDataView);
+  }
+
+  getDivisionData(idStandard){
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe( (res:any) =>{
-      this.divisionName = res.data
-      this.dataSource = new MatTableDataSource(this.divisionName);
+      this.divisionData = res.data
+      this.divisionData.forEach((data)=>{
+        data.edit = false;
+      })
+      this.dataSource = new MatTableDataSource(this.divisionData);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
      
     });
   }
+
+  onEdit(ele){
+    ele.edit = true;
+  }
+
+  onCancel(data){
+    data.edit = false;
+  }
+
+  changeDivision(event){
+    this.changeInDivisionValue = event.target.value
+  }
+
+  onUpdate(e){
+    e.edit = false;
+   console.log(e);
+   const body ={
+      "idDivision":e.idDivision,
+      "idStandard": e.idStandard,
+      "name": this.changeInDivisionValue,
+      "idSchoolDetails": e.idSchoolDetails
+   }
+   this.studentInfoSerive.division(body).subscribe(res =>{
+    e.name = this.changeInDivisionValue;
+    this.commonService.openSnackbar('Division Updated Successfully','Done');
+  });
+
+  }
+
+  onDelete(data){
+    console.log(data);
+    const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Division?');
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        const body ={
+          "idDivision":data.idDivision,
+          "idStandard": data.idStandard,
+          "name": data.name,
+          "idSchoolDetails": data.idSchoolDetails
+       }
+       this.studentInfoSerive.delete('division',body).subscribe((res:any) =>{
+        this.commonService.openSnackbar('Division Deleted Successfully','Done');
+        const index = this.dataSource.data.findIndex(data => data.idDivision === res.idDivision);
+        if( index != -1){
+          this.dataSource.data.splice(index, 1);
+          this.paginator.length = this.dataSource.data.length;
+          this.dataSource.paginator = this.paginator
+          this.table.renderRows();
+        }
+      });
+      }
+    });
+   
+  
+  }
+
+  
+
   makeBody(){
     const body ={
       name:this.form.get('name').value,
@@ -62,9 +130,9 @@ export class DivisionComponent implements OnInit {
       this.studentInfoSerive.division(body).subscribe((res:any) =>{
         if(this.idStandardForDataView === res.idStandard){
           this.dataSource.data.push(res);
-          this.table.renderRows();
           this.paginator.length = this.dataSource.data.length;
           this.dataSource.paginator = this.paginator
+          this.table.renderRows();
 
         }
         this.commonService.openSnackbar('Division Submitted Successfully','Done');

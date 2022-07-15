@@ -62,8 +62,6 @@ export class StandardComponent implements OnInit {
   }
 
   onEdit(ele){
-    console.log(ele);
-    console.log(this.standardData);
     ele.edit = true;
   }
 
@@ -77,7 +75,7 @@ export class StandardComponent implements OnInit {
           "name": data.name,
           "idSchoolDetails": data.idSchoolDetails
        }
-       this.studentInfoSerive.deleteStandard(body).subscribe((res:any) =>{
+       this.studentInfoSerive.delete('standard',body).subscribe((res:any) =>{
         this.commonService.openSnackbar('Standard Deleted Successfully','Done');
         const index = this.dataSource.data.findIndex(data => data.idStandard === res.idStandard);
         if( index != -1){

@@ -119,9 +119,9 @@ export class StudentInfoService {
    standard(body){
   return this.http.post(`${this.baseurl}/standard`,body);
    }
-   deleteStandard(body){
+   delete(endUrl,body){
     // return this.http.delete(`${this.baseurl}standard`,body);
-    const url = this.baseurl + 'standard';
+    const url = this.baseurl + endUrl;
     return this.http.request('delete', url, { body: body });
    }
    division(body){
