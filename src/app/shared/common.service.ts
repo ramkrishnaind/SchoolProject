@@ -31,9 +31,10 @@ export class CommonService {
   }
   openDialog(popupTitle:string,message:string){
   const dialogRef = this.dialog.open(PopupComponent,{
+    restoreFocus:false,
     data:{
       title:popupTitle,
-      message:message
+      message:message,
     }
   });
 

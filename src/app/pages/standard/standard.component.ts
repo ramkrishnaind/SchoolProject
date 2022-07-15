@@ -20,7 +20,7 @@ export class StandardComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name','edit','delete'];
-  standardName=[];
+  standardData=[];
   dataSource:any;
   idSchool:number=1
   changeInStandardValue:string;
@@ -32,11 +32,11 @@ export class StandardComponent implements OnInit {
      });
      
      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
-      this.standardName = res.data;
-      this.standardName.forEach((data)=>{
+      this.standardData = res.data;
+      this.standardData.forEach((data)=>{
         data.edit = false;
       })
-      this.dataSource = new MatTableDataSource(this.standardName);
+      this.dataSource = new MatTableDataSource(this.standardData);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
@@ -63,7 +63,7 @@ export class StandardComponent implements OnInit {
 
   onEdit(ele){
     console.log(ele);
-    console.log(this.standardName);
+    console.log(this.standardData);
     ele.edit = true;
   }
 

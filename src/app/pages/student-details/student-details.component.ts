@@ -24,7 +24,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','actions'];
+  displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','edit','delete'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -93,7 +93,11 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
        
        );
       
-         }
+    }
+
+    onDelete(data){
+
+    }
       
     ngAfterViewInit() {
       // this.dataSource.paginator = this.paginator;
