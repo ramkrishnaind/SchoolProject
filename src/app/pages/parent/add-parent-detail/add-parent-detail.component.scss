@@ -93,3 +93,26 @@
 .display-none {
     display: none;
 }
+
+
+.btn {
+    color: #ffff;
+    background-color: #ffff;
+}
+
+.back-btn {
+    width: 31%;
+    mix-blend-mode: difference;
+}
+
+.business-details .bus-width.set-item-width-back {
+    width: 67%;
+}
+
+.business-details-back {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 58%;
+    margin-top: 2%;
+}

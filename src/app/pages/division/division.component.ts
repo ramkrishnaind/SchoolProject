@@ -43,7 +43,7 @@ export class DivisionComponent implements OnInit {
   }
   onChangeStandard(idStandard){
     this.idStandardForDataView = idStandard.value
-    this.getDivisionData(this.idStandardForDataView);
+    this.getDivisionData(idStandard);
   }
 
   getDivisionData(idStandard){

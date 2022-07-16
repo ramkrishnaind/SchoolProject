@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ParentComponent } from './parent.component';
+import { ParentListComponent } from './parent-list.component';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
+import { AddParentDetailComponent } from './add-parent-detail/add-parent-detail.component';
 
 const routes: Routes = [
-  {path:'',component:ParentComponent}
+  {path:'',component:ParentListComponent},
+  {path:'add-parent',component:AddParentDetailComponent}
 
 ]
 
 
 @NgModule({
   declarations: [
-    ParentComponent
+    ParentListComponent,
+    AddParentDetailComponent,
   ],
   imports: [
     CommonModule,

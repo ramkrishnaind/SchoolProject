@@ -1,19 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {ParentService} from './parent.service';
-import {CommonService} from './../../shared/common.service';
-import { StudentInfoService } from '../services/student-info.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/common.service';
+import { StudentInfoService } from '../../services/student-info.service';
+import { ParentService } from '../parent.service';
+
 @Component({
-  selector: 'app-parent',
-  templateUrl: './parent.component.html',
-  styleUrls: ['./parent.component.scss']
+  selector: 'app-add-parent-detail',
+  templateUrl: './add-parent-detail.component.html',
+  styleUrls: ['./add-parent-detail.component.scss']
 })
-export class ParentComponent implements OnInit {
+export class AddParentDetailComponent implements OnInit {
+
   @Input() newItemEvent: string;
   logoError: boolean;
   form: FormGroup;
   fileName;
-  gender = [{ name: 'Male', value: 'Male'}, { name: 'Female', value:'Female' }, { name: 'Others', value: 'Others' }];
+  gender = [{ name: 'Male', value: 'male'}, { name: 'Female', value:'female' }, { name: 'Others', value: 'others' }];
   role = [{ name: "Admin", value: 3 },{ name: "Teacher", value: 2 }, { name: "Parent", value: 1 },];
   nationality = [];
   country = [];
@@ -23,8 +27,16 @@ export class ParentComponent implements OnInit {
   selectedFiles: FileList;
   parentImageDataUploadToS3;
   idSchool:number=1;
+  idToNavigate;
+  parentData;
   constructor(private parentService:ParentService,private commonService:CommonService,
-    private studentInfoSerive:StudentInfoService) { 
+    private studentInfoSerive:StudentInfoService,
+    private router:Router,private dialog: MatDialog,
+    private route:ActivatedRoute) { 
+      this.idToNavigate = +this.route.snapshot.queryParams['idParent'] || 0;
+      if(this.idToNavigate != 0){
+        this.getSpecificParentData();
+      }
   }
 
   ngOnInit(): void {
@@ -50,6 +62,42 @@ export class ParentComponent implements OnInit {
    
     this.getNationalityData();
     this.getCountryData();
+  }
+
+  getSpecificParentData(){
+    this.studentInfoSerive.parentDetails().subscribe((res:any) =>{
+      res.forEach(data => {
+        if(data.idparent === this.idToNavigate){
+          this.parentData = data;
+          console.log(this.parentData);
+          this.updateValue();
+        }
+      });
+     });
+  }
+
+  updateValue(){
+    this.form.get('parentName').setValue(this.parentData.name);
+    this.form.get('address1').setValue(this.parentData.address1);
+    this.form.get('address2').setValue(this.parentData.address2);
+    this.form.get('mobilenumber').setValue(this.parentData.pmobile_no);
+    this.form.get('secMobilnumber').setValue(this.parentData.smobileno);
+    this.form.get('emgMobilenumber').setValue(this.parentData.emergencyNo);
+    this.form.get('email').setValue(this.parentData.pemail);
+
+    this.form.get('secEmail').setValue(this.parentData.semail);
+    this.form.get('gender').setValue(this.parentData.gender);
+
+    this.form.get('role').setValue(this.parentData.idRole);
+    this.form.get('nationality').setValue(this.parentData.idNationality);
+    this.form.get('country').setValue(this.parentData.idCountry);
+    this.getStateData();
+    this.form.get('state').setValue(this.parentData.idState);
+    this.getCityData();
+    this.form.get('city').setValue(this.parentData.idCity);
+
+    this.form.get('postelCode').setValue(this.parentData.zipcode);
+    // this.form.get('parentName').setValue(this.parentData.name);
   }
 
   getNationalityData(){
@@ -113,6 +161,7 @@ export class ParentComponent implements OnInit {
         // this.CommonService.hideSppiner();
         console.log(uploadingData);
         this.parentImageDataUploadToS3 =uploadingData.data;
+        console.log(this.parentImageDataUploadToS3);
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
         } else {
@@ -161,4 +210,9 @@ export class ParentComponent implements OnInit {
        this.commonService.openSnackbar('Please Fill All Field','Warning');
     }
    }
+
+   back(){
+    this.router.navigate(['../../parent'],{relativeTo:this.route});
+   }
+
 }
