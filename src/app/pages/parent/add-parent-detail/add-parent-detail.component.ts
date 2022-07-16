@@ -28,7 +28,7 @@ export class AddParentDetailComponent implements OnInit {
   parentImageDataUploadToS3;
   idSchool:number=1;
   idToNavigate;
-  parentData;
+  parentEditData;
   constructor(private parentService:ParentService,private commonService:CommonService,
     private studentInfoSerive:StudentInfoService,
     private router:Router,private dialog: MatDialog,
@@ -45,14 +45,14 @@ export class AddParentDetailComponent implements OnInit {
       businessLogo: new FormControl(null, [Validators.required]),
       businessLogoUrl: new FormControl(null, [Validators.required]),
       address1:new FormControl(null, [Validators.required]),
-      address2:new FormControl(null, [Validators.required]),
+      address2:new FormControl(null,[Validators.required]),
       mobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
       secMobilnumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
       emgMobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
       email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       secEmail:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       gender:new FormControl(null, [Validators.required]),
-      role:new FormControl(null, [Validators.required]),
+      role:new FormControl(1, [Validators.required]),
       nationality:new FormControl(null, [Validators.required]),
       country:new FormControl(null, [Validators.required]),
       state:new FormControl(null, [Validators.required]),
@@ -68,8 +68,8 @@ export class AddParentDetailComponent implements OnInit {
     this.studentInfoSerive.parentDetails().subscribe((res:any) =>{
       res.forEach(data => {
         if(data.idparent === this.idToNavigate){
-          this.parentData = data;
-          console.log(this.parentData);
+          this.parentEditData = data;
+          console.log(this.parentEditData);
           this.updateValue();
         }
       });
@@ -77,37 +77,51 @@ export class AddParentDetailComponent implements OnInit {
   }
 
   updateValue(){
-    this.form.get('parentName').setValue(this.parentData.name);
-    this.form.get('address1').setValue(this.parentData.address1);
-    this.form.get('address2').setValue(this.parentData.address2);
-    this.form.get('mobilenumber').setValue(this.parentData.pmobile_no);
-    this.form.get('secMobilnumber').setValue(this.parentData.smobileno);
-    this.form.get('emgMobilenumber').setValue(this.parentData.emergencyNo);
-    this.form.get('email').setValue(this.parentData.pemail);
+    this.form.get('parentName').setValue(this.parentEditData.name);
+    this.form.get('address1').setValue(this.parentEditData.address1);
+    this.form.get('address2').setValue(this.parentEditData.address2);
+    this.form.get('mobilenumber').setValue(this.parentEditData.pmobile_no);
+    this.form.get('secMobilnumber').setValue(this.parentEditData.smobileno);
+    this.form.get('emgMobilenumber').setValue(this.parentEditData.emergencyNo);
+    this.form.get('email').setValue(this.parentEditData.pemail);
 
-    this.form.get('secEmail').setValue(this.parentData.semail);
-    this.form.get('gender').setValue(this.parentData.gender);
+    this.form.get('secEmail').setValue(this.parentEditData.semail);
+    this.form.get('gender').setValue(this.parentEditData.gender);
 
-    this.form.get('role').setValue(this.parentData.idRole);
-    this.form.get('nationality').setValue(this.parentData.idNationality);
-    this.form.get('country').setValue(this.parentData.idCountry);
+    this.form.get('role').setValue(this.parentEditData.idRole);
+    this.form.get('nationality').setValue(this.parentEditData.idNationality);
+    this.form.get('country').setValue(this.parentEditData.idCountry);
     this.getStateData();
-    this.form.get('state').setValue(this.parentData.idState);
+    this.form.get('state').setValue(this.parentEditData.idState);
     this.getCityData();
-    this.form.get('city').setValue(this.parentData.idCity);
+    this.form.get('city').setValue(this.parentEditData.idCity);
 
-    this.form.get('postelCode').setValue(this.parentData.zipcode);
+    this.form.get('postelCode').setValue(this.parentEditData.zipcode);
     // this.form.get('parentName').setValue(this.parentData.name);
   }
 
   getNationalityData(){
     this.studentInfoSerive.getNationality().subscribe((res:any) =>{
       this.nationality = res;
+      if(this.idToNavigate === 0){
+      this.nationality.forEach((data:any)=>{
+           if(data.name === 'INDIAN'){
+            this.form.get('nationality').setValue(data.idNationality);
+           }
+      });
+    }
     })
   }
   getCountryData(){
     this.studentInfoSerive.getCountry().subscribe((res:any) =>{
       this.country = res;
+      if(this.idToNavigate === 0){
+      this.country.forEach((data:any)=>{
+        if(data.name === 'INDIA'){
+         this.form.get('country').setValue(data.idCountry);
+        }
+   });
+  }
     })
   }
   onChangeCountry(country){

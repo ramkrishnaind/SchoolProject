@@ -91,11 +91,21 @@ export class StudentInfoComponent implements OnInit {
   getNationalityData(){
     this.studentInfoSerive.getNationality().subscribe((res:any) =>{
       this.nationality = res;
+      this.nationality.forEach((data:any)=>{
+        if(data.name === 'INDIAN'){
+         this.form.get('nationality').setValue(data.idNationality);
+        }
+   });
     })
   }
   getCountryData(){
     this.studentInfoSerive.getCountry().subscribe((res:any) =>{
       this.country = res;
+      this.country.forEach((data:any)=>{
+        if(data.name === 'INDIA'){
+         this.form.get('country').setValue(data.idCountry);
+        }
+   });
     })
   }
   onChangeCountry(country){

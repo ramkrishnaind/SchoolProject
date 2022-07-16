@@ -4,18 +4,21 @@ import {SharedModule} from '../../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 // import {StudentInfoService} from './student-info/student-info.service';
-import { TeacherComponent } from './teacher.component';
+import { TeacherListComponent } from './teacher-list.component';
 import { ChartsModule } from 'ng2-charts';
+import { AddTeacherRecordComponent } from './add-teacher-record/add-teacher-record.component';
 
 
 const routes: Routes = [
-  {path:'',component:TeacherComponent}
+  {path:'',component:TeacherListComponent},
+  {path:'add-teacher',component:AddTeacherRecordComponent}
 
 ]
 
 @NgModule({
   declarations: [
-    TeacherComponent
+    TeacherListComponent,
+    AddTeacherRecordComponent
    
   ],
   imports: [

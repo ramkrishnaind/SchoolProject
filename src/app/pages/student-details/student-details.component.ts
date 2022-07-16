@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import {StudentInfoPopupComponent} from './student-info-popup/student-info-popup.component'
 import { MatSort } from '@angular/material/sort';
+import { CommonService } from '../../shared/common.service';
 
 @Component({
   selector: 'app-student-details',
@@ -29,7 +30,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
   selectedValue=11;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute) {
+    private route:ActivatedRoute,private commonService:CommonService) {
     
   }
   ngOnInit(): void {
@@ -96,7 +97,25 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
     }
 
     onDelete(data){
+      const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Student Details?');
+      dialogRef.afterClosed().subscribe(result => {
+        if(result){
+        //   const body ={
+        //     ...data
+        //  }
+        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
+        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
+        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
+        //   if( index != -1){
+        //     this.dataSource.data.splice(index, 1);
+        //     this.paginator.length = this.dataSource.data.length;
+        //     this.dataSource.paginator = this.paginator
+        //     this.table.renderRows();
+        //   }
+        // });
 
+        }
+      });
     }
       
     ngAfterViewInit() {

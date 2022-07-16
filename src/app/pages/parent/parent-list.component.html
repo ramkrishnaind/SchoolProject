@@ -1,10 +1,13 @@
 <div class="container">
       <div class="header">
-            <h6 class="top-heading">Parent Details</h6>
-            <div [style.margin-left.px]="10" class="company-logo-text" (click)="addParent()">+Add</div>
+            <h2 [style.margin-bottom.px]="30">Parent Details</h2>
     </div>
 
+<button class="add-button"  type="button" mat-mini-fab color="primary" (click)="addParent()">
+            <mat-icon>add</mat-icon>
+        </button>
     <div class="div-1">
+        
         <div class="mat-elevation-z8">
             <table mat-table [dataSource]="dataSource">
 

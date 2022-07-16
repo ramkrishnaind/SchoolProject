@@ -3,15 +3,17 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/common.service';
-import { StudentInfoService } from '../services/student-info.service';
 import * as XLSX from 'xlsx';
-@Component({
-  selector: 'app-teacher',
-  templateUrl: './teacher.component.html',
-  styleUrls: ['./teacher.component.scss']
-})
-export class TeacherComponent implements OnInit {
+import { StudentInfoService } from '../../services/student-info.service';
 
+@Component({
+  selector: 'app-add-teacher-record',
+  templateUrl: './add-teacher-record.component.html',
+  styleUrls: ['./add-teacher-record.component.scss']
+})
+export class AddTeacherRecordComponent implements OnInit {
+
+  
   @ViewChild('inputFile') inputFile: ElementRef;
   form: FormGroup;
   fileName;
@@ -22,12 +24,18 @@ export class TeacherComponent implements OnInit {
   studentData;
   subjectData;
   dataSource;
-  teacherData;
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   teacherImageDataUploadToS3;
   idSchool:number=1;
+  idToNavigate;
+  teacherEditData;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
-    private route:ActivatedRoute) { }
+    private route:ActivatedRoute) {
+      this.idToNavigate = +this.route.snapshot.queryParams['id'] || 0;
+      if(this.idToNavigate != 0){
+        this.getSpecificTeacherData();
+      }
+     }
 
   ngOnInit(): void {
 
@@ -50,6 +58,27 @@ export class TeacherComponent implements OnInit {
     // this.getStandardData();
     // this.getTeacherData();
     
+  }
+
+  getSpecificTeacherData(){
+    this.studentInfoSerive.getAllTeacher().subscribe((res:any) =>{
+      res.data.forEach(data => {
+        if(data.idTeacher === this.idToNavigate){
+          this.teacherEditData = data;
+          console.log(this.teacherEditData);
+          this.updateValue();
+        }
+      });
+     });
+  }
+
+  updateValue(){
+    this.form.get('teacher').setValue(this.teacherEditData.name);
+    this.form.get('email').setValue(this.teacherEditData.email);
+    this.form.get('education').setValue(this.teacherEditData.education);
+    this.form.get('whatsappNumber').setValue(this.teacherEditData.whatsappno);
+    this.form.get('phoneNumber').setValue(this.teacherEditData.contact);
+    // this.form.get('parentName').setValue(this.parentData.name);
   }
 
   // getStandardData(){
@@ -186,4 +215,9 @@ export class TeacherComponent implements OnInit {
     reader.readAsBinaryString(file);
 }
   }
+
+  back(){
+    this.router.navigate(['../../teacher'],{relativeTo:this.route});
+   }
+
 }
