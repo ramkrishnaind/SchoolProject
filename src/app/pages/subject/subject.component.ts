@@ -16,13 +16,14 @@ export class SubjectComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name','action'];
   standardData: any;
-  standardName;
-  subjectname;
+  subjectData;
   dataSource:any;
   idStandardForSubjectView:number;
   idSchool:number=1
+  changeInSubjectValue:string;
+  selectedStandard;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
 
   ngOnInit(): void {
@@ -31,27 +32,88 @@ export class SubjectComponent implements OnInit {
       idStandard:new FormControl(null,[Validators.required])
       });
 
-      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe(res =>{
-        this.standardData = res;
-        this.standardName = this.standardData.data;
-       
+      this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
+        this.standardData = res.data;
+        this.selectedStandard = this.standardData[0].idStandard;
+        this.idStandardForSubjectView = this.selectedStandard;
+        this.getAllSubjectData();
       });
       
   }
   onChangeSubject(idStandard){
     this.idStandardForSubjectView = idStandard.value
+    this.getAllSubjectData();
+  }
+
+  getAllSubjectData(){
     this.studentInfoSerive.getAllSubject(this.idStandardForSubjectView,this.idSchool).subscribe( (res:any) =>{
-      this.subjectname = res.data
-      this.dataSource = new MatTableDataSource(this.subjectname);
+      this.subjectData = res.data
+      this.standardData.forEach((data)=>{
+        data.edit = false;
+      });
+      this.dataSource = new MatTableDataSource(this.subjectData);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-     
     });
   }
+
+  onEdit(ele){
+    ele.edit = true;
+  }
+
+  onCancel(data){
+    data.edit = false;
+  }
+
+  changeSubject(event){
+    this.changeInSubjectValue = event.target.value
+    console.log(this.changeInSubjectValue);
+  }
+
+  onUpdate(e){
+    e.edit = false;
+   console.log(e);
+   const body ={
+      "idSubject": e.idSubject,
+      "name": this.changeInSubjectValue,
+      "idStandard": e.idStandard,
+      "idSchoolDetails": e.idSchoolDetails
+   }
+   this.studentInfoSerive.subject(body).subscribe(res =>{
+    e.name = this.changeInSubjectValue;
+    this.commonService.openSnackbar('Subject Updated Successfully','Done');
+  });
+
+  }
+
+  onDelete(data){
+    console.log(data);
+    const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Subject?');
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        const body ={
+          ...data
+       }
+       this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
+        this.commonService.openSnackbar('Subject Deleted Successfully','Done');
+        const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
+        if( index != -1){
+          this.dataSource.data.splice(index, 1);
+          this.paginator.length = this.dataSource.data.length;
+          this.dataSource.paginator = this.paginator
+          this.table.renderRows();
+        }
+      });
+      }
+    });
+   
+  
+  }
+
   makeBody(){
     const body =[{
       name:this.form.get('name').value,
-      standard:this.studentInfoSerive.getNameBasedonDataAndId(this.standardName,this.form.get('idStandard').value,'idStandard','name'),
+      standard:this.studentInfoSerive.getNameBasedonDataAndId(this.standardData,this.form.get('idStandard').value,'idStandard','name'),
       schoolDetails:"SBPCOE"
      }];
     return body;
@@ -65,10 +127,10 @@ export class SubjectComponent implements OnInit {
           this.table.renderRows();
           this.paginator.length = this.dataSource.data.length;
           this.dataSource.paginator = this.paginator
-
+          
         }
-        this.commonService.openSnackbar('Subject Submitted Successfully','Done');
         this.form.reset()
+        this.commonService.openSnackbar('Subject Submitted Successfully','Done');
       });
     }
     else{
