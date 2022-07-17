@@ -1,16 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StudentInfoService } from '../services/student-info.service';
-import {CommonService} from '../../shared/common.service';
+import { StudentInfoService } from '../../services/student-info.service';
+import {CommonService} from '../../../shared/common.service';
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-timetable',
-  templateUrl: './timetable.component.html',
-  styleUrls: ['./timetable.component.scss']
+  selector: 'app-add-timetable',
+  templateUrl: './add-timetable.component.html',
+  styleUrls: ['./add-timetable.component.scss']
 })
-export class TimetableComponent implements OnInit {
+export class AddTimetableComponent implements OnInit {
 
   @ViewChild('inputFile') inputFile: ElementRef;
   
@@ -129,7 +129,7 @@ return body;
   }
 
   back(){
-    this.router.navigate(['../../dashboard'],{relativeTo:this.route});
+    this.router.navigate(['../../timetable'],{relativeTo:this.route});
   }
 
 }

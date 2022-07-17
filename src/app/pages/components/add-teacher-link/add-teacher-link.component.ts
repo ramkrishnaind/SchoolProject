@@ -5,11 +5,11 @@ import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../../services/student-info.service';
 
 @Component({
-  selector: 'app-teacher-link',
-  templateUrl: './teacher-link.component.html',
-  styleUrls: ['./teacher-link.component.scss']
+  selector: 'app-add-teacher-link',
+  templateUrl: './add-teacher-link.component.html',
+  styleUrls: ['./add-teacher-link.component.scss']
 })
-export class TeacherLinkComponent implements OnInit {
+export class AddTeacherLinkComponent implements OnInit {
 
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
     private route:ActivatedRoute) { }
@@ -92,7 +92,7 @@ export class TeacherLinkComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['../dashboard'],{relativeTo:this.route});
+    this.router.navigate(['../teacher-list'],{relativeTo:this.route});
   }
 
 }

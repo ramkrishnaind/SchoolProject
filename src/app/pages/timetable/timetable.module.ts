@@ -4,18 +4,21 @@ import {SharedModule} from '../../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 // import {StudentInfoService} from './student-info/student-info.service';
-import { TimetableComponent } from './timetable.component';
+import { TimetableListComponent } from './timetable-list.component';
 import { ChartsModule } from 'ng2-charts';
+import { AddTimetableComponent } from './add-timetable/add-timetable.component';
 
 
 const routes: Routes = [
-  {path:'',component:TimetableComponent}
+  {path:'',component:TimetableListComponent},
+  {path:'add-timetable',component:AddTimetableComponent}
 
 ]
 
 @NgModule({
   declarations: [
-    TimetableComponent
+    TimetableListComponent,
+    AddTimetableComponent
    
   ],
   imports: [

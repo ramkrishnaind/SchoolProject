@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/shared/common.service';
-import { StudentInfoService } from '../services/student-info.service';
+import { StudentInfoService } from '../../services/student-info.service';
 import * as moment from 'moment';
 
-
 @Component({
-  selector: 'app-parent-meeting',
-  templateUrl: './parent-meeting.component.html',
-  styleUrls: ['./parent-meeting.component.scss']
+  selector: 'app-add-parent-meet',
+  templateUrl: './add-parent-meet.component.html',
+  styleUrls: ['./add-parent-meet.component.scss']
 })
-export class ParentMeetingComponent implements OnInit {
+export class AddParentMeetComponent implements OnInit {
+
   form: FormGroup;
   standardData;
   teacherData;
@@ -69,7 +69,7 @@ export class ParentMeetingComponent implements OnInit {
     });
   }
   back(){
-    this.router.navigate(['../../dashboard'],{relativeTo:this.route});
+    this.router.navigate(['../../parentMeet'],{relativeTo:this.route});
   }
 
 

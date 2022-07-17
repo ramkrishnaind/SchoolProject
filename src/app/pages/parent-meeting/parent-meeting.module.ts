@@ -4,19 +4,22 @@ import {SharedModule} from '../../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 // import {StudentInfoService} from './student-info/student-info.service';
-import { ParentMeetingComponent } from './parent-meeting.component';
+import { ParentMeetingListComponent } from './parent-meeting-list.component';
 import { ChartsModule } from 'ng2-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AddParentMeetComponent } from './add-parent-meet/add-parent-meet.component';
 
 
 const routes: Routes = [
-  {path:'',component:ParentMeetingComponent}
+  {path:'',component:ParentMeetingListComponent},
+  {path :'add-parent-meet',component:AddParentMeetComponent}
 
 ]
 
 @NgModule({
   declarations: [
-    ParentMeetingComponent
+    ParentMeetingListComponent,
+    AddParentMeetComponent
    
   ],
   imports: [

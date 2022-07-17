@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit  {
     this.router.navigate(['../parentMeet'],{relativeTo:this.route});
   }
   goTeacher(){
-    this.router.navigate(['../teacher'],{relativeTo:this.route});
+    this.router.navigate(['../teacher-list'],{relativeTo:this.route});
   }
 
 }

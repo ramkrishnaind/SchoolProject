@@ -10,7 +10,7 @@
         </div>
 
         <div class="bus-width set-item-width-back">
-            <h2>Exam TimeTable Detail</h2>
+            <h2>Timetable</h2>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
-                    <button mat-raised-button color="primary" class="form-btn" (click)="addExamTimeTable()">Upload Exam Timetable</button>
+                    <button mat-raised-button color="primary" class="form-btn" (click)="addTimeTable()"> Add Timetable</button>
                 </div>
             </div>
         </form>
@@ -94,7 +94,7 @@
             <ng-container matColumnDef="action">
                 <th class="action" mat-header-cell *matHeaderCellDef> Actions </th>
                 <td [style.width.px]="220" [style.height.px]="60" mat-cell *matCellDef="let element">
-                    <button   type="button" mat-button color="primary" (click)="editExamTimetable(element)">Edit</button>
+                    <button   type="button" mat-button color="primary" (click)="editTimeTable(element)">Edit</button>
                     <button   [ngStyle]="{'margin-left.px': 10}"  type="button" mat-button color="accent" (click)="onDelete(element)">Delete</button>
                    
                 </td>
