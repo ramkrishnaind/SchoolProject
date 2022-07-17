@@ -10,17 +10,18 @@
         </div>
 
         <div class="bus-width set-item-width-back">
-            <h6 class="top-heading">ExamResult Details</h6>
+            <h2>Exam Result Detail</h2>
         </div>
     </div>
-    <form [formGroup]="form">
-        <div class="div-1">
+
+    <div class="div-1">
+        <form [formGroup]="form">
             <div class="business-details">
 
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Standard</mat-label>
-                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event) ">
+                        <mat-select  [(value)]="selectedValue" formControlName="idStandard" (selectionChange)="onChangeStandard($event)">
                             <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -28,94 +29,82 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Select Division</mat-label>
-                        <mat-select formControlName="idDivision" (selectionChange)="onChangeDivision($event)">
+                        <mat-select formControlName="idDivision" (selectionChange)=" onChangeDivision($event)">
                             <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
+                <div class="bus-width set-item-width">
+                    <button mat-raised-button color="primary" class="form-btn" (click)="addExamResult()">Upload Exam Result</button>
+                </div>
+            </div>
+        </form>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource">
 
 
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Subject</mat-label>
-                        <mat-select formControlName="idSubject">
-                            <mat-option *ngFor="let item of subjectData" [value]="item.idSubject">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select TestType</mat-label>
-                        <mat-select formControlName="idtestType">
-                            <mat-option *ngFor="let item of testTypeData" [value]="item.idtestType">{{item.discription}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Select Student</mat-label>
-                        <mat-select formControlName="idStudent">
-                            <mat-option *ngFor="let item of studentData" [value]="item.idStudent">{{item.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Max Marks</mat-label>
-                        <input formControlName="max" matInput  (ngModelChange)="setLimitBasedOnMaxValue($event)">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Min Marks</mat-label>
-                        <input formControlName="min" matInput>
-                    </mat-form-field>
-                </div>
-                <div class="bus-width set-item-width">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Obtain</mat-label>
-                        <input formControlName="obtain" matInput>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="business-details">
-                <div class="bus-width set-item-width-two">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Remark</mat-label>
-                        <textarea formControlName="remark" matInput></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
 
-            <div class="business-details">
-                <div class="bus-width set-item-width">
-                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Exam Result</button>
-                </div>
 
-            </div>
+                <ng-container matColumnDef="standardName">
+                    <th mat-header-cell *matHeaderCellDef>Standard Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.standardName}} </td>
+                </ng-container>
 
+
+                <ng-container matColumnDef="divisionName">
+                    <th mat-header-cell *matHeaderCellDef>Division Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.divisionName}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.date | date:'mediumDate'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="present">
+                    <th mat-header-cell *matHeaderCellDef>Attendance</th>
+                    <td mat-cell *matCellDef="let element"> {{element.present}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="reason">
+                    <th mat-header-cell *matHeaderCellDef>Reason</th>
+                    <td mat-cell *matCellDef="let element"> {{element.reason}} </td>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef>Edit </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button type="button" mat-button color="primary" (click)="editStudent(element)">Edit</button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button  type="button" mat-button color="accent" (click)="onDelete(element)">Delete</button>
+                     </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="action">
+                <th class="action" mat-header-cell *matHeaderCellDef> Actions </th>
+                <td [style.width.px]="220" [style.height.px]="60" mat-cell *matCellDef="let element">
+                    <button   type="button" mat-button color="primary" (click)="editResult(element)">Edit</button>
+                    <button   [ngStyle]="{'margin-left.px': 10}"  type="button" mat-button color="accent" (click)="onDelete(element)">Delete</button>
+                   
+                </td>
+            </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
-     </form>
-        <div class="div-1" style="margin-top: 60px;">
-            <div class="business-details">
-                <div class="bus-width set-item-width-excel">
-                    <mat-label class="labelfont">Upload Result Excel File Here</mat-label>
-                </div>
-                <div class="bus-width set-item-width-excel">
-                    <input #inputFile type="file"  accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"  id="file" (change)="onFileChange($event)" />
-                </div>
-                <!-- <div class="bus-width set-item-width-excel">
-                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="uploadExel()">Submit Exam Result</button>
-                </div> -->
-
-
-            </div>
-        </div>
-    
+    </div>
 </div>

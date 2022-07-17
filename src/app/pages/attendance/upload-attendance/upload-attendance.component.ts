@@ -1,18 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { StudentInfoService } from '../services/student-info.service';
+import { StudentInfoService } from '../../services/student-info.service';
 import * as XLSX from 'xlsx';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
-
 @Component({
-  selector: 'app-attendance',
-  templateUrl: './attendance.component.html',
-  styleUrls: ['./attendance.component.scss']
+  selector: 'app-upload-attendance',
+  templateUrl: './upload-attendance.component.html',
+  styleUrls: ['./upload-attendance.component.scss']
 })
-export class AttendanceComponent implements OnInit {
+export class UploadAttendanceComponent implements OnInit {
 
   @ViewChild('inputFile') inputFile: ElementRef;
   willDownload = false;
@@ -124,7 +123,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   back(){
-    this.router.navigate(['../../dashboard'],{relativeTo:this.route});
+    this.router.navigate(['../../attendance'],{relativeTo:this.route});
   }
-  
 }

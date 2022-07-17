@@ -21,7 +21,7 @@ export class ParentListComponent implements OnInit {
   
  parentData:any;
   dataSource:any;
-  displayedColumns: string[] = ['name','address1','address2' ,'gender','pemail','pmobile_no','smobileno','edit','delete'];
+  displayedColumns: string[] = ['name','address1','address2' ,'gender','pemail','pmobile_no','smobileno','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   

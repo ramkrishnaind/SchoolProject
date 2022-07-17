@@ -1,0 +1,98 @@
+
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back" style="width: 67%;">
+
+            <button mat-raised-button color="primary" matSuffix class="back-btn" (click)="back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                    <mat-label>Back</mat-label>
+                    </button>
+
+        </div>
+
+        <div class="bus-width set-item-width-back">
+            <h6 class="top-heading">ExamTimeTable Details</h6>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+            <div class="business-details">
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Standard</mat-label>
+                        <mat-select formControlName="idStandard" (selectionChange)="onChangeStandard($event) ">
+                            <mat-option *ngFor="let item of standardData" [value]="item.idStandard">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Division</mat-label>
+                        <mat-select formControlName="idDivision">
+                            <mat-option *ngFor="let item of divisionData" [value]="item.idDivision">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Subject</mat-label>
+                        <mat-select formControlName="idSubject">
+                            <mat-option *ngFor="let item of subjectData" [value]="item.idSubject">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select TestType</mat-label>
+                        <mat-select formControlName="idtestType">
+                            <mat-option *ngFor="let item of testTypeData" [value]="item.idtestType">{{item.discription}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Enter Exam Date </mat-label>
+                        <input readOnly [min]="minDate" [max]="maxDate" formControlName="date" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Start Time</mat-label>
+                        <div class="toggle-example">
+                        <input  formControlName="startTime" matInput [disableClick]="true" [ngxTimepicker]="start" (ngModelChange)="setLimitOfEndTimeBasedOnStartTime($event)" readonly>
+                        <ngx-material-timepicker-toggle [for]="start"></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #start></ngx-material-timepicker>
+                        </div>
+                    </mat-form-field>
+                </div>
+
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>End Time</mat-label>
+                        <div class="toggle-example">
+                        <input [min]="minForEndTime" formControlName="endTime" matInput [disableClick]="true" [ngxTimepicker]="end"  readonly>
+                        <ngx-material-timepicker-toggle [for]="end" [disabled]="disableEndTime"></ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #end></ngx-material-timepicker>
+                        </div>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit ExamTimeTable</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

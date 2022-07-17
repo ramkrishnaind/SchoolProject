@@ -55,12 +55,13 @@ export class StudentInfoPopupComponent implements OnInit {
   parentId;
   profileurl:string;
   gen;
+  studentImageDataUploadToS3;
   // byDefaultStandardSelect;
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
     private activatedRoute:ActivatedRoute,private router:Router,private fb: FormBuilder) {
       
       const currentYear = new Date().getFullYear();
-      this.maxDate = new Date(currentYear+1,0,1)
+      this.maxDate = new Date();
 
       this.activatedRoute.queryParams.subscribe(params =>{
         console.log(params);
@@ -98,8 +99,8 @@ export class StudentInfoPopupComponent implements OnInit {
     ngOnInit() {
       this.form = this.fb.group({
         name:new FormControl(this.name, [Validators.required,Validators.pattern("[A-Za-z ]*")]),
-        // businessLogo: new FormControl(null, [Validators.required]),
-        // businessLogoUrl: new FormControl(null, [Validators.required]),
+        businessLogo: new FormControl(null, [Validators.required]),
+        businessLogoUrl: new FormControl(null, [Validators.required]),
         idStandard:new FormControl(this.standardId, [Validators.required]),
         idDivision:new FormControl(this.divisionId, [Validators.required]),
         rollno:new FormControl(this.rollno, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10)]),
@@ -239,6 +240,48 @@ export class StudentInfoPopupComponent implements OnInit {
     //    selectFile(event) {
     //   this.selectedFiles = event.target.files;
     //   }
+    
+  addLogo(): void {
+    document.getElementById('file').click();
+  }
+  handleFileInput(event) {
+    if (event.target.files[0]) {
+      this.form.get('businessLogo').setValue(event.target.files[0]); 
+      this.logoError = false;           
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.form.get('businessLogoUrl').setValue(reader.result as string);        
+      }
+      reader.readAsDataURL(this.form.get('businessLogo').value);
+      event.value = null;
+    }
+  }
+  upload() {
+    const file = this.selectedFiles.item(0);
+    this.studentInfoSerive.uploadFile(file);
+    this.fileName = file.name;
+    console.log("::::::::::::::::::",this.fileName)
+    setTimeout(() => {
+
+      this.studentInfoSerive.getFile().subscribe((uploadingData) => {
+        // this.CommonService.hideSppiner();
+        console.log(uploadingData);
+        this.studentImageDataUploadToS3 =uploadingData.data;
+        if (uploadingData.status == "error") {
+          this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
+        } else {
+          this.commonService.openSnackbar(uploadingData.message,'Done');
+        }
+        // this.chatBubbleForm.controls['avatarImage'].setValue(resData.data, { emitModelToViewChange: false });
+        // this.imageUrl = this.chatBubbleForm.controls['avatarImage'].value;
+      });
+
+    },0);
+  }
+  
+     selectFile(event) {
+    this.selectedFiles = event.target.files;
+    }
       makeBody(){
         const body ={
           idStudent:this.idStudent,

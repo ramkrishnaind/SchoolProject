@@ -49,6 +49,9 @@ export class DashboardComponent implements OnInit  {
   goExamTimeTable(){
     this.router.navigate(['../examTimeTable'],{relativeTo:this.route});
   }
+  goExamResult(){
+    this.router.navigate(['../examResult'],{relativeTo:this.route});
+  }
   goTimetable(){
     this.router.navigate(['../timetable'],{relativeTo:this.route});
   }

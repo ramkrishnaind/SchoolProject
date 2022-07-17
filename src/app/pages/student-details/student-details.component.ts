@@ -25,7 +25,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','edit','delete'];
+  displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -81,6 +81,7 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
       this.router.navigate(['./StudentInfoPopup'],
       {
         queryParams:{...studentName
+          // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
         // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
         // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
         //  "emergancyConntact":studentName.emergancyConntact,"email":studentName.email,"semail":studentName.semail,

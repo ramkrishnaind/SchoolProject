@@ -19,7 +19,7 @@ $color:#ee447e;
 
 .back-btn {
     width: 31%;
-    mix-blend-mode: difference;
+    // mix-blend-mode: difference;
 }
 
 .business-details .bus-width.set-item-width-back {
@@ -41,7 +41,7 @@ table {
 .form-btn {
     width: 100%;
     height: 77%;
-    mix-blend-mode: difference;
+    // mix-blend-mode: difference;
 }
 
 .business-details .bus-width.set-item-width {
@@ -60,4 +60,9 @@ table {
 
 .example-full-width {
     width: 100%;
+}
+
+.action{
+    vertical-align: middle;
+    text-align: center;
 }

@@ -62,14 +62,34 @@
     width: 32.5%;
 }
 
-.business-details-fullName {
-    width: 70%;
+.business-details .bus-width.set-item-width-one {
+    width: 49.5%;
+}
+
+.business-details .bus-width.set-item-width-two {
+    width: 99.5%;
 }
 
 .business-details {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+}
+
+.labelfont {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: large;
+}
+
+.btn_sub {
+    // mix-blend-mode: difference;
+    margin-left: 30%;
+    margin-top: 3%;
+}
+
+.exe_btn {
+    // mix-blend-mode: difference;
 }
 
 .example-full-width {
@@ -83,7 +103,7 @@
 
 .form-btn {
     margin-top: 70px;
-    margin-left: 439px;
+    margin-left: 525px;
     width: 20%;
     // mix-blend-mode: difference;
 }

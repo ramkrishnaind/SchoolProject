@@ -1,17 +1,18 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { StudentInfoService } from '../services/student-info.service';
+import { StudentInfoService } from '../../services/student-info.service';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-homework',
-  templateUrl: './homework.component.html',
-  styleUrls: ['./homework.component.scss']
+  selector: 'app-add-homework',
+  templateUrl: './add-homework.component.html',
+  styleUrls: ['./add-homework.component.scss']
 })
-export class HomeworkComponent implements OnInit {
+export class AddHomeworkComponent implements OnInit {
 
+  
   @ViewChild('inputFile') inputFile: ElementRef;
   logoError: boolean;
   form: FormGroup;
@@ -142,7 +143,7 @@ export class HomeworkComponent implements OnInit {
     }
     }
     back(){
-      this.router.navigate(['../../dashboard'],{relativeTo:this.route});
+      this.router.navigate(['../../homework'],{relativeTo:this.route});
     }
 
     onFileChange(event){
@@ -166,5 +167,6 @@ export class HomeworkComponent implements OnInit {
       });
     }
   }
+
 
 }

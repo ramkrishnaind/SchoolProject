@@ -7,7 +7,6 @@ import { PagesComponent } from './pages.component';
 import { MenuListItemComponent } from './theme/menu-list-item/menu-list-item.component';
 import { TopNavComponent } from './theme/top-nav/top-nav.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { AttendanceComponent } from './attendance/attendance.component';
 import { PagesRoutingModule }  from './pages-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LogoutPopupComponent } from './components/logout-popup/logout-popup.component';

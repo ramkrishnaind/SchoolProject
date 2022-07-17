@@ -10,12 +10,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 
+
 @Component({
-  selector: 'app-examtimetable',
-  templateUrl: './examtimetable.component.html',
-  styleUrls: ['./examtimetable.component.scss']
+  selector: 'app-attendance-list',
+  templateUrl: './attendance-list.component.html',
+  styleUrls: ['./attendance-list.component.scss']
 })
-export class ExamtimetableComponent implements OnInit {
+export class AttendanceListComponent implements OnInit {
+
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -72,13 +74,13 @@ export class ExamtimetableComponent implements OnInit {
         });
      }
  
-     addExamTimeTable(){
-    this.router.navigate(['./add-examtimetable'],{relativeTo:this.route});
+  addAttendance(){
+    this.router.navigate(['./add-attendance'],{relativeTo:this.route});
     }
 
-    editExamTimetable(studentName: any):void {
+    editStudent(studentName: any):void {
      console.log("Student Name",studentName);
-      this.router.navigate(['./add-examtimetable'],
+      this.router.navigate(['./add-attendance'],
       {
         queryParams:{"id":studentName.idStudent
           // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
@@ -122,5 +124,4 @@ export class ExamtimetableComponent implements OnInit {
     back(){
       this.router.navigate(['../../dashboard'],{relativeTo:this.route});
     }
-
 }

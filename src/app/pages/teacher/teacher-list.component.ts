@@ -22,7 +22,7 @@ export class TeacherListComponent implements OnInit {
   
   teacherData:any;
   dataSource:any;
-  displayedColumns: string[] = ['name','education','contact' ,'whatsappno','email','edit','delete'];
+  displayedColumns: string[] = ['name','education','contact' ,'whatsappno','email','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   

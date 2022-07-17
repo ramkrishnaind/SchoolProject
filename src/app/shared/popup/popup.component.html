@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   {{data.message}}
 </div>
-<div mat-dialog-actions>
-  <button mat-button  (click)="onNoClick()" cdkFocusInitial>No</button>
-  <button mat-button (click)="onYesClick()">Yes</button>
+<div mat-dialog-actions class="action-popup-button" >
+  <button mat-button color='primary'  (click)="onNoClick()" cdkFocusInitial>No</button>
+  <button mat-button color='accent' (click)="onYesClick()">Yes</button>
 </div>

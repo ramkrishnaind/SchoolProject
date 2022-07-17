@@ -11,11 +11,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-examtimetable',
-  templateUrl: './examtimetable.component.html',
-  styleUrls: ['./examtimetable.component.scss']
+  selector: 'app-homework-list',
+  templateUrl: './homework-list.component.html',
+  styleUrls: ['./homework-list.component.scss']
 })
-export class ExamtimetableComponent implements OnInit {
+export class HomeworkListComponent implements OnInit {
+
+  
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -24,6 +26,7 @@ export class ExamtimetableComponent implements OnInit {
   studentData;
   standardData;
   divisionData;
+  subjectData;
   dataSource:any;
   displayedColumns: string[] = ['name','standardName','divisionName','date','present','reason','action'];
   idSchoolDetail:number = 1;
@@ -37,6 +40,7 @@ export class ExamtimetableComponent implements OnInit {
     this.form = new FormGroup({
       idStandard:new FormControl(null, [Validators.required]),
       idDivision:new FormControl(null, [Validators.required]),
+      idSubject:new FormControl(null, [Validators.required]),
     });
     this.studentInfoSerive.getStandard({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
       this.standardData = res.data;
@@ -60,6 +64,9 @@ export class ExamtimetableComponent implements OnInit {
       const idStandard = this.form.get('idStandard').value;
       this.getAllStudentData(idStandard,idDivision);
      }
+     onChangeSubject(event){
+
+     }
 
      getAllStudentData(idStandard,idDivision){
       this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
@@ -72,13 +79,13 @@ export class ExamtimetableComponent implements OnInit {
         });
      }
  
-     addExamTimeTable(){
-    this.router.navigate(['./add-examtimetable'],{relativeTo:this.route});
+     addHomework(){
+    this.router.navigate(['./add-homework'],{relativeTo:this.route});
     }
 
-    editExamTimetable(studentName: any):void {
+    editHomeWork(studentName: any):void {
      console.log("Student Name",studentName);
-      this.router.navigate(['./add-examtimetable'],
+      this.router.navigate(['./add-homework'],
       {
         queryParams:{"id":studentName.idStudent
           // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision

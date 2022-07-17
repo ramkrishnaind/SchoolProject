@@ -30,10 +30,12 @@ export class StudentInfoComponent implements OnInit {
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   studentImageDataUploadToS3;
   idSchool:number=1;
+  idToNavigate;
+  studentEditData;
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
     private router:Router,private route:ActivatedRoute) {
       const currentYear = new Date().getFullYear();
-      this.maxDate = new Date(currentYear+1,0,1)
+      this.maxDate = new Date()
      }
 
   ngOnInit() {
@@ -70,6 +72,7 @@ export class StudentInfoComponent implements OnInit {
    this.getNationalityData();
    this.getCountryData();
   }
+
 
   getStandardData(){
     this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
