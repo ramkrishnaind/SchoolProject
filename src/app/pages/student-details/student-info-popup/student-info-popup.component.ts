@@ -1,4 +1,4 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
 import {Router,ActivatedRoute} from '@angular/router';
@@ -12,6 +12,8 @@ import * as moment from 'moment';
   styleUrls: ['./student-info-popup.component.scss']
 })
 export class StudentInfoPopupComponent implements OnInit {
+
+  @ViewChild('inputImage') inputImage: ElementRef;
   form: FormGroup;
   fileName;
   selectedFiles: FileList;
@@ -56,7 +58,36 @@ export class StudentInfoPopupComponent implements OnInit {
   profileurl:string;
   gen;
   studentImageDataUploadToS3;
+  loading:boolean=false;
   // byDefaultStandardSelect;
+  fileUpload:boolean=false;
+
+  attributeData=
+  {
+   name:'name',
+   profileurl:'businessLogoUrl',
+   standardId:'idStandard',
+   divisionId:"idDivision",
+   rollno:'rollno',
+   gen:'gender',
+   age:'age',
+   dob:'dob',
+   email:'email',
+   semail:'semail',
+   pmobileno:'pmobileno',
+   smobileno:'smobileno',
+   address:'address',
+   address2:'address2',
+   academicyear:'academicyear',
+   parentId:'idParent',
+   bloodgroup:'bloodgrp',
+   emergancyConntact:'emergancyConntact',
+   nationalityId:'nationality',
+   countryId:'country',
+   stateId:'state',
+   cityId:'city',
+   subjects:'subjects',
+}
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
     private activatedRoute:ActivatedRoute,private router:Router,private fb: FormBuilder) {
       
@@ -99,8 +130,8 @@ export class StudentInfoPopupComponent implements OnInit {
     ngOnInit() {
       this.form = this.fb.group({
         name:new FormControl(this.name, [Validators.required,Validators.pattern("[A-Za-z ]*")]),
-        businessLogo: new FormControl(null, [Validators.required]),
-        businessLogoUrl: new FormControl(null, [Validators.required]),
+        businessLogo: new FormControl(null),
+        businessLogoUrl: new FormControl(this.profileurl, [Validators.required]),
         idStandard:new FormControl(this.standardId, [Validators.required]),
         idDivision:new FormControl(this.divisionId, [Validators.required]),
         rollno:new FormControl(this.rollno, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10)]),
@@ -244,20 +275,38 @@ export class StudentInfoPopupComponent implements OnInit {
   addLogo(): void {
     document.getElementById('file').click();
   }
+  checkValidFile(file){
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+    
+      return fileTypes.includes(file[0].type) && file.length === 1;
+  }
+
   handleFileInput(event) {
-    if (event.target.files[0]) {
+  if (this.checkValidFile(event.target.files)) {
       this.form.get('businessLogo').setValue(event.target.files[0]); 
       this.logoError = false;           
       const reader = new FileReader();
       reader.onload = () => {
-        this.form.get('businessLogoUrl').setValue(reader.result as string);        
+        this.form.get('businessLogoUrl').setValue(reader.result as string);
+        this.upload(event.target.files[0]);         
       }
       reader.readAsDataURL(this.form.get('businessLogo').value);
       event.value = null;
     }
+    else{
+      this.inputImage.nativeElement.value = '';
+    }
   }
-  upload() {
-    const file = this.selectedFiles.item(0);
+  upload(file) {
+    // const file = this.selectedFiles.item(0);
+    this.fileUpload = true;
     this.studentInfoSerive.uploadFile(file);
     this.fileName = file.name;
     console.log("::::::::::::::::::",this.fileName)
@@ -267,6 +316,7 @@ export class StudentInfoPopupComponent implements OnInit {
         // this.CommonService.hideSppiner();
         console.log(uploadingData);
         this.studentImageDataUploadToS3 =uploadingData.data;
+        this.fileUpload = false;
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
         } else {
@@ -279,9 +329,6 @@ export class StudentInfoPopupComponent implements OnInit {
     },0);
   }
   
-     selectFile(event) {
-    this.selectedFiles = event.target.files;
-    }
       makeBody(){
         const body ={
           idStudent:this.idStudent,
@@ -320,20 +367,59 @@ export class StudentInfoPopupComponent implements OnInit {
         const age = now.diff(moment(e),'year');
         this.form.get('age').setValue(age);
       }
+
+      buttonSecond(){
+        this.submit();
+      }
       
       submit(){
-        if(this.form.valid){
+        if(this.form.valid && this.checkChangeInValueForUpdate()){
         const body = this.makeBody();
+        this.loading = true;
         this.studentInfoSerive.studentInformation(body).subscribe(res =>{
-        this.commonService.openSnackbar('Student Information Updated Succesfully','Done');
-        this.router.navigate(['../../student-details'],{relativeTo:this.activatedRoute});
+          if(res){
+            this.commonService.openSnackbar('Student Information Updated Successfully','Done');
+            this.back();
+          }
+          else{
+            this.commonService.openSnackbar('Some error occured in update process','Done');
+          }
+          this.loading = false
         });
       }
       else{
-       this.commonService.openSnackbar('Please Fill All Filed','Warning');
+       this.commonService.openSnackbar('Please,Make changes to Update','Warning');
       }
        
       }
+
+      checkChangeInValueForUpdate(){
+        let flag = false;
+        const keys = Object.keys(this.attributeData)
+        
+      
+        for (const key in this.attributeData) {
+          if(key === 'dob'){
+            if(!moment(moment(this[key]).format('YYYY-MM-DD')).isSame(moment(this.form.get(this.attributeData[key]).value).format('YYYY-MM-DD'))){
+              // console.log(`${key}: ${courses[key]}`);
+              flag = true;
+              break;
+            }
+          }
+          else{
+          if(this[key] != this.form.get(this.attributeData[key]).value){
+            // console.log(`${key}: ${courses[key]}`);
+            flag = true;
+            break;
+    
+          }
+        }
+        };
+    
+        return flag;
+       }
+
+      
       
       back(){
         this.router.navigate(['../../student-details'],{relativeTo:this.activatedRoute});

@@ -124,3 +124,41 @@
 .display-none {
     display: none;
 }
+.circle{
+    position: fixed;
+    inset:0;
+    background-color:hsla(0,0%,100%,0.85);
+    z-index:998
+}
+
+.circle .mat-spinner{
+    position: fixed;
+    z-index: 999;
+    inset: 0px;
+    margin: auto;
+}
+
+.file-div {
+    border: 1px solid #8892A0;
+    border-radius: 2px;
+    height: 90px;
+    width: 300px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+.excel-upload{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.company-excel-name{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.upload-btn-excel {
+    height: 38px;
+    margin-left: 10px;
+}

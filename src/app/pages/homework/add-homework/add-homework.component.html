@@ -14,30 +14,34 @@
         </div>
     </div>
 
-    <div class="div-1" style="margin-top: 60px;">
-        <div class="business-details">
-            <div class="bus-width set-item-width">
-                <mat-label class="labelfont">Upload Homework File Here</mat-label>
-            </div>
-            <div class="bus-width set-item-width">
-                <input #inputFile  accept="*" type="file" id="file" class="display-none" (change)="onFileChange($event)">
-                <div  class="cursor-pointer w-100">
-                    <div class="add-logo flex center">
-                        <div class="add-file">
-                            <div class="company-logo-text" (click)="addLogo()">+Add File</div>
-                            <button type="button" mat-button color="accent" class="upload-btn" (click)="upload()" [disabled]="!fileClick">Upload</button>
-                            <div *ngIf="fileClick && selectedFile">{{process}}</div>
-                                <!-- <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
+    <div class="div-1"  [ngStyle]="{'margin-top.px':20,'display':'flex','justify-content':'center','align-items':'center'}">
+
+
+        <div class="file-div" (click)="clickToAddFile()" >
+            <input #inputFile accept="*"  type="file" id="file" class="display-none" (change)="onFileChange($event)" >
+            <div *ngIf="!fileUpload"  class="cursor-pointer w-100">
+                <div class="add-logo excel-upload">
+                    <mat-icon svgIcon="excel" [ngStyle]="{'margin-right.px':10}"></mat-icon>
+                        <div class="company-logo-text"  *ngIf="fileAdded=== 'fileblank' ">
+                            Add your file here 
                         </div>
-                       
-                    </div>
-                    <!-- <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error> -->
+                        <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileupload' ">
+                            <span>{{selectedFile.name}}</span>
+                            <span>File uploaded Successfully </span>
+                        </div>
+                        <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileerror' ">
+                            <span>{{selectedFile.name}}</span>
+                            <span>Error occur while uploading </span>
+                        </div>  
                 </div>
             </div>
-
-
-
+  
+            <div *ngIf="fileUpload" style="width: 100%; text-align: center;" >
+                <span [ngStyle]="{'font-weight':600}">Uploading...</span>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
         </div>
+        <button *ngIf="editedHomeworkData" type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Attachment</button>
     </div>
 
     <form [formGroup]="form">
@@ -135,7 +139,9 @@
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
-                    <button type="button" mat-raised-button color="primary" class="btn_sub" (click)=" homeworkInformation()">Submit HomeWork</button>
+                        <button *ngIf="!form.valid" type="submit"   mat-raised-button color="primary" class="btn_sub" (click)="homeworkInformation()" >Submit HomeWork</button>
+                        <button *ngIf="form.valid" type="button"  mat-raised-button color="primary" [class.spinner]="loading" [disabled]="loading"   class="btn_sub" (click)="buttonSecond()" >Submit HomeWork</button>
+
                 </div>
 
             </div>

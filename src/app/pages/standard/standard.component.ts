@@ -48,7 +48,6 @@ export class StandardComponent implements OnInit {
 
   onUpdate(e){
     e.edit = false;
-   console.log(e);
    const body ={
       "idStandard": e.idStandard,
       "name": this.changeInStandardValue,
@@ -66,7 +65,6 @@ export class StandardComponent implements OnInit {
   }
 
   onDelete(data){
-    console.log(data);
     const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Standard?');
     dialogRef.afterClosed().subscribe(result => {
       if(result){
@@ -76,14 +74,14 @@ export class StandardComponent implements OnInit {
           "idSchoolDetails": data.idSchoolDetails
        }
        this.studentInfoSerive.delete('standard',body).subscribe((res:any) =>{
-        this.commonService.openSnackbar('Standard Deleted Successfully','Done');
-        const index = this.dataSource.data.findIndex(data => data.idStandard === res.idStandard);
-        if( index != -1){
-          this.dataSource.data.splice(index, 1);
-          this.paginator.length = this.dataSource.data.length;
-          this.dataSource.paginator = this.paginator
-          this.table.renderRows();
-        }
+         const index = this.dataSource.data.findIndex(data => data.idStandard === res.data.idStandard);
+         if( index != -1){
+           this.dataSource.data.splice(index, 1);
+           this.paginator.length = this.dataSource.data.length;
+           this.dataSource.paginator = this.paginator
+           this.table.renderRows();
+          }
+          this.commonService.openSnackbar('Standard Deleted Successfully','Done');
       });
       }
     });

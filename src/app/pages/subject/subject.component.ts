@@ -79,7 +79,7 @@ export class SubjectComponent implements OnInit {
       "idStandard": e.idStandard,
       "idSchoolDetails": e.idSchoolDetails
    }
-   this.studentInfoSerive.subject(body).subscribe(res =>{
+   this.studentInfoSerive.updateSubject([body]).subscribe(res =>{
     e.name = this.changeInSubjectValue;
     this.commonService.openSnackbar('Subject Updated Successfully','Done');
   });
@@ -94,15 +94,17 @@ export class SubjectComponent implements OnInit {
         const body ={
           ...data
        }
-       this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        this.commonService.openSnackbar('Subject Deleted Successfully','Done');
-        const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        if( index != -1){
-          this.dataSource.data.splice(index, 1);
-          this.paginator.length = this.dataSource.data.length;
-          this.dataSource.paginator = this.paginator
-          this.table.renderRows();
-        }
+       this.studentInfoSerive.delete('subject/',body).subscribe((res:any) =>{
+        if(!res.error){
+          const index = this.dataSource.data.findIndex(data => data.idSubject === res.data.idSubject);
+          if( index != -1){
+            this.dataSource.data.splice(index, 1);
+            this.paginator.length = this.dataSource.data.length;
+            this.dataSource.paginator = this.paginator
+            this.table.renderRows();
+          }
+          this.commonService.openSnackbar('Subject Deleted Successfully','Done');
+      }
       });
       }
     });
@@ -122,7 +124,7 @@ export class SubjectComponent implements OnInit {
     if(this.form.valid){
       const body = this.makeBody();
       this.studentInfoSerive.subject(body).subscribe((res:any) =>{
-        if(this.idStandardForSubjectView === res.idStandard){
+        if(this.idStandardForSubjectView === res.data.idStandard){
           this.dataSource.data.push(res);
           this.table.renderRows();
           this.paginator.length = this.dataSource.data.length;

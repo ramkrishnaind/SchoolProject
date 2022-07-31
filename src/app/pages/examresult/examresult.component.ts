@@ -1,10 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../services/student-info.service';
-import * as XLSX from 'xlsx';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -21,11 +19,12 @@ export class ExamresultComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   
   form: FormGroup;
-  studentData;
+  examResultData;
+  dateToDisplayInTable=[];
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','standardName','divisionName','date','present','reason','action'];
+  displayedColumns: string[] = ['studentName','subjectName','testType','maxMark','minMark','obtain','remark','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -53,21 +52,41 @@ export class ExamresultComponent implements OnInit {
       this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
         this.divisionData = res.data;
         this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
-        this.getAllStudentData(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
+        this.getListOfExamResult(this.form.get('idStandard').value,this.form.get('idDivision').value)   
       });
      }
      onChangeDivision(idDivision){
       const idStandard = this.form.get('idStandard').value;
-      this.getAllStudentData(idStandard,idDivision);
+      this.getListOfExamResult(idStandard,idDivision.value);
      }
 
-     getAllStudentData(idStandard,idDivision){
-      this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
-        this.studentData = res.data;
-        this.dataSource = new MatTableDataSource(this.studentData);
+     getListOfExamResult(idStandard,idDivision){
+      this.studentInfoSerive.getListOfExamResult(idStandard,idDivision).subscribe((res:any) =>{
+        if(res.data.length){
+        this.examResultData = res.data;
+        this.dateToDisplayInTable=[];
+        this.examResultData.forEach((data:any) => {
+            this.dateToDisplayInTable.push({
+              idResult:data.result.idResult,//idResult
+              studentName:data.student.name,
+              subjectName:data.subject.name,
+              testType:data.testtype.name,
+              maxMark:data.result.max,
+              minMark:data.result.min,
+              obtain:data.result.obtain,
+              remark:data.result.remark,
+            })
+        });
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-       // this.dataSource = new MatTableDataSource(this.studentName);
+      }
+      else{
+        this.dateToDisplayInTable=[];
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
       
         });
      }
@@ -76,47 +95,43 @@ export class ExamresultComponent implements OnInit {
     this.router.navigate(['./add-result'],{relativeTo:this.route});
     }
 
-    editResult(studentName: any):void {
-     console.log("Student Name",studentName);
-      this.router.navigate(['./add-result'],
-      {
-        queryParams:{"id":studentName.idStudent
-          // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
-        // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
-        // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
-        //  "emergancyConntact":studentName.emergancyConntact,"email":studentName.email,"semail":studentName.semail,
-        //   "subjects":studentName.subjects,"academicyear":studentName.academicyear,"address":studentName.address,
-        //   "address2":studentName.address2,"idParent":studentName.idParent,"idStandard":studentName.idStandard,"idDivision":studentName.idDivision,
-        //   "gender":studentName.gender,"idNationality":studentName.nationality
-        //  },
-      },
-         relativeTo :this.route
-       }
-       
-       );
+    editResult(examResult: any):void {
+     const examResultData =this.getDataToUpdate(examResult.idResult);
+      this.router.navigate(['./add-result'],{ state:examResultData, relativeTo :this.route});
       
     }
 
+
     onDelete(data){
-      const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Student Details?');
+      const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Exam Result?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-        //   const body ={
-        //     ...data
-        //  }
-        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
-        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        //   if( index != -1){
-        //     this.dataSource.data.splice(index, 1);
-        //     this.paginator.length = this.dataSource.data.length;
-        //     this.dataSource.paginator = this.paginator
-        //     this.table.renderRows();
-        //   }
-        // });
+          const examResultData =this.getDataToUpdate(data.idResult);
+          const body ={  ...examResultData }
+         this.studentInfoSerive.delete('result',body).subscribe((res:any) =>{
+           const index = this.dataSource.data.findIndex(data => data.idResult === res.data.idResult);
+           if( index != -1){
+             this.dataSource.data.splice(index, 1);
+             this.paginator.length = this.dataSource.data.length;
+             this.dataSource.paginator = this.paginator
+             this.table.renderRows();
+            }
+          this.commonService.openSnackbar('Exam Result Data Deleted Successfully','Done');
+        });
 
         }
       });
+    }
+
+    getDataToUpdate(idExamResult){//needToverify
+      let examResultData;
+        this.examResultData.forEach(data => {
+          if(data.result.idResult === idExamResult){
+            examResultData = data.result;
+          }
+        });
+      
+        return examResultData;
     }
       
     back(){

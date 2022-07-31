@@ -21,11 +21,13 @@ export class ParentMeetingListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   
   form: FormGroup;
+  parentMeetingListData;
+  dateToDisplayInTable=[];
   studentData;
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','standardName','divisionName','date','present','reason','action'];
+  displayedColumns: string[] = ['date','teacherName','meetingTopics','meetingDetails','startTime','endTime','slotTime','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -53,22 +55,33 @@ export class ParentMeetingListComponent implements OnInit {
       this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
         this.divisionData = res.data;
         this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
-        this.getAllStudentData(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
+        this.getAllParentMeetingList(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
       });
      }
      onChangeDivision(idDivision){
       const idStandard = this.form.get('idStandard').value;
-      this.getAllStudentData(idStandard,idDivision);
+      this.getAllParentMeetingList(idStandard,idDivision);
      }
 
-     getAllStudentData(idStandard,idDivision){
-      this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
-        this.studentData = res.data;
-        this.dataSource = new MatTableDataSource(this.studentData);
+     getAllParentMeetingList(idStandard,idDivision){
+      this.studentInfoSerive.getExamTimeTable(idStandard,idDivision).subscribe((res:any) =>{
+        this.parentMeetingListData = res.data;
+        this.parentMeetingListData.forEach((data:any) => {
+            this.dateToDisplayInTable.push({//need to verify
+              idUnitTest:data.examTimetable.idUnitTest,//idParentMeetingList
+              date:data.examTimetable.date,
+              teacherName:data.subject.name,
+              meetingTopics:data.testType.name,
+              meetingDetails:data.testType.name,
+              startTime:data.examTimetable.time.split('-')[0],
+              endTime:data.examTimetable.time.split('-')[1],
+              slotTime:data.testType.name,
+            })
+        });
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
        // this.dataSource = new MatTableDataSource(this.studentName);
-      
         });
      }
  
@@ -76,11 +89,13 @@ export class ParentMeetingListComponent implements OnInit {
     this.router.navigate(['./add-parent-meet'],{relativeTo:this.route});
     }
 
-    editParentMeeting(studentName: any):void {
-     console.log("Student Name",studentName);
+    editParentMeeting(parentMeeting: any):void {
+     console.log("Student Name",parentMeeting);
+     const parentMeetingData=this.getDataToUpdate(parentMeeting.idMeeting);
       this.router.navigate(['./add-parent-meet'],
       {
-        queryParams:{"id":studentName.idStudent
+        state:parentMeetingData,
+        //queryParams:{"id":studentName.idStudent
           // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
         // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
         // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
@@ -89,31 +104,40 @@ export class ParentMeetingListComponent implements OnInit {
         //   "address2":studentName.address2,"idParent":studentName.idParent,"idStandard":studentName.idStandard,"idDivision":studentName.idDivision,
         //   "gender":studentName.gender,"idNationality":studentName.nationality
         //  },
-      },
+      //},
          relativeTo :this.route
        }
-       
        );
       
+    }
+
+    getDataToUpdate(meetingId){//need to verify
+      let parentMeetingData;
+        this.parentMeetingListData.forEach(data => {
+          if(data.examTimetable.idUnitTest === meetingId){
+            parentMeetingData = data.examTimetable;
+          }
+        });
+      
+        return parentMeetingData;
     }
 
     onDelete(data){
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Parent Meeting Schedule?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-        //   const body ={
-        //     ...data
-        //  }
-        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
-        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        //   if( index != -1){
-        //     this.dataSource.data.splice(index, 1);
-        //     this.paginator.length = this.dataSource.data.length;
-        //     this.dataSource.paginator = this.paginator
-        //     this.table.renderRows();
-        //   }
-        // });
+          const parentMeetingData =this.getDataToUpdate(data.meetingId);//need to Verify
+          const body ={ ...parentMeetingData }
+         this.studentInfoSerive.delete('meeting',body).subscribe((res:any) =>{
+           const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
+           if( index != -1){
+             this.dataSource.data.splice(index, 1);
+             this.paginator.length = this.dataSource.data.length;
+             this.dataSource.paginator = this.paginator
+             this.table.renderRows();
+            }
+            this.commonService.openSnackbar('Parent Meeting Deleted Successfully','Done');
+        });
 
         }
       });

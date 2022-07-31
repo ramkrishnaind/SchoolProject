@@ -1,9 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component,OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import {CommonService} from '../../shared/common.service';
-import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -21,10 +20,12 @@ export class TimetableListComponent implements OnInit {
   
   form: FormGroup;
   studentData;
+  timeTableData;
+  dateToDisplayInTable=[];
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','standardName','divisionName','date','present','reason','action'];
+  displayedColumns: string[] = ['subjectName','weekDay','startTime','endTime','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -52,22 +53,38 @@ export class TimetableListComponent implements OnInit {
       this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
         this.divisionData = res.data;
         this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
-        this.getAllStudentData(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
+        this.getTimeTableList(this.form.get('idStandard').value,this.form.get('idDivision').value)   
       });
      }
      onChangeDivision(idDivision){
       const idStandard = this.form.get('idStandard').value;
-      this.getAllStudentData(idStandard,idDivision);
+      this.getTimeTableList(idStandard,idDivision.value);
      }
 
-     getAllStudentData(idStandard,idDivision){
-      this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
-        this.studentData = res.data;
-        this.dataSource = new MatTableDataSource(this.studentData);
+     getTimeTableList(idStandard,idDivision){
+      this.studentInfoSerive.getListOfSchoolTimeTable(idStandard,idDivision).subscribe((res:any) =>{//need to Verify
+        if(res.data.length){
+        this.timeTableData = res.data;
+        this.dateToDisplayInTable=[];
+        this.timeTableData.forEach((data:any) => {
+            this.dateToDisplayInTable.push({
+              idTimetable:data.timetable.idTimetable,//idTimeTable
+              subjectName:data.subject.name,
+              weekDay:data.timetable.day,
+              startTime:data.timetable.time.split('-')[0],
+              endTime:data.timetable.time.split('-')[1],
+            })
+        });
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-       // this.dataSource = new MatTableDataSource(this.studentName);
-      
+      }
+      else{
+        this.dateToDisplayInTable=[];
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
         });
      }
  
@@ -75,20 +92,11 @@ export class TimetableListComponent implements OnInit {
     this.router.navigate(['./add-timetable'],{relativeTo:this.route});
     }
 
-    editTimeTable(studentName: any):void {
-     console.log("Student Name",studentName);
+    editTimeTable(timeTableList: any):void {
+     const editTimeTableData =this.getDataToUpdate(timeTableList.idTimetable);
       this.router.navigate(['./add-timetable'],
       {
-        queryParams:{"id":studentName.idStudent
-          // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
-        // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
-        // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
-        //  "emergancyConntact":studentName.emergancyConntact,"email":studentName.email,"semail":studentName.semail,
-        //   "subjects":studentName.subjects,"academicyear":studentName.academicyear,"address":studentName.address,
-        //   "address2":studentName.address2,"idParent":studentName.idParent,"idStandard":studentName.idStandard,"idDivision":studentName.idDivision,
-        //   "gender":studentName.gender,"idNationality":studentName.nationality
-        //  },
-      },
+        state:editTimeTableData,
          relativeTo :this.route
        }
        
@@ -96,23 +104,35 @@ export class TimetableListComponent implements OnInit {
       
     }
 
+    getDataToUpdate(idTimetable){
+      let timeTableData;
+        this.timeTableData.forEach(data => {
+          if(data.timetable.idTimetable === idTimetable){
+            timeTableData = data.timetable;
+          }
+        });
+      
+        return timeTableData;
+    }
+
     onDelete(data){
+      const timetableData =this.getDataToUpdate(data.idTimetable);
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Timetable?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-        //   const body ={
-        //     ...data
-        //  }
-        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
-        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        //   if( index != -1){
-        //     this.dataSource.data.splice(index, 1);
-        //     this.paginator.length = this.dataSource.data.length;
-        //     this.dataSource.paginator = this.paginator
-        //     this.table.renderRows();
-        //   }
-        // });
+          const body ={ ...timetableData }
+          this.studentInfoSerive.delete('timetable',body).subscribe((res:any) =>{
+            if(res){
+            const index = this.dataSource.data.findIndex(data => data.idTimetable === res.data.idTimetable);
+            if( index != -1){
+              this.dataSource.data.splice(index, 1);
+              this.paginator.length = this.dataSource.data.length;
+              this.dataSource.paginator = this.paginator
+              this.table.renderRows();
+            }
+            this.commonService.openSnackbar('Timetable Data Deleted Successfully','Done');
+          }
+        });
 
         }
       });

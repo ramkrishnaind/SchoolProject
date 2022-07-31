@@ -64,7 +64,8 @@
                 </div>
                 <div class="business-details">
                     <div class="bus-width set-item-width">
-                        <button  type="button" mat-raised-button color="primary" class="btn_sub" (click)="submit()">Submit Teacher Details</button>
+                        <button *ngIf="!form.valid" type="submit"   mat-raised-button color="primary" class="btn_sub" (click)="submit()" >Submit Teacher Details</button>
+                        <button *ngIf="form.valid" type="button"  mat-raised-button color="primary" [class.spinner]="loading" [disabled]="loading"   class="btn_sub" (click)="buttonSecond()" >Submit Teacher Details</button>
                     </div>
                 </div>
             </div>

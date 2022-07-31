@@ -20,10 +20,28 @@ export class AddExamtimetableComponent implements OnInit {
   minDate:Date;
   maxDate:Date;
   minForEndTime;
+  editedExamTimeTableData
   disableEndTime:boolean=true;
   idSchool:number=1;
+  attributeData=
+    {
+      idStandard:'idStandard',
+      idDivision:'idDivision',
+      idSubject:'idSubject',
+      idtestType:'idtestType',
+      date:'date',
+      startTime:'startTime',
+      endTime:'endTime',
+}
+loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute) {
+
+      if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.editedExamTimeTableData =this.router.getCurrentNavigation().extras.state;
+        // this.getSpecificHomeworkData();
+        
+      }
       const currentYear = new Date().getFullYear();
       const m = new Date().getMonth();
       if(m==0 || m==1 || m==2){
@@ -55,6 +73,9 @@ export class AddExamtimetableComponent implements OnInit {
   getAllStandardData(){
     this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
+      if(this.editedExamTimeTableData){
+        this.getDivisionData({value:this.editedExamTimeTableData.idStandard},'update');
+      }
     });
   }
 
@@ -64,20 +85,36 @@ export class AddExamtimetableComponent implements OnInit {
     });
   }
   onChangeStandard(idStandard){
-    this.getDivisionData(idStandard);
-    this.getAllSubjectData(idStandard);
+    this.getDivisionData(idStandard,'normal');
    }
 
-   getDivisionData(idStandard){
+   getDivisionData(idStandard,callFor){
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) =>{
       this.divisionData = res.data;
+      this.getAllSubjectData(idStandard,callFor);
     });
    }
-   getAllSubjectData(idStandard){
+   getAllSubjectData(idStandard,callFor){
     this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
       this.subjectData = res.data;
+      if(callFor === 'update'){
+        this.updateValue();
+      }
      })
    }
+
+   updateValue(){
+   const timeData =this.editedExamTimeTableData.time.split('-');
+    this.form.get('idStandard').setValue(this.editedExamTimeTableData.idStandard);
+    this.form.get('idDivision').setValue(this.editedExamTimeTableData.idDivision);
+    this.form.get('idSubject').setValue(this.editedExamTimeTableData.idSubject);
+    this.form.get('idtestType').setValue(this.editedExamTimeTableData.idtestType);
+    this.form.get('date').setValue(moment(this.editedExamTimeTableData.date).format('YYYY-MM-DD')); 
+    this.form.get('startTime').setValue(timeData[0].trim()); 
+    this.form.get('endTime').setValue(timeData[1].trim()); 
+    // this.teacherImageDataUploadToS3 = this.editedExamTimeTableData.profileurl;
+    // this.form.get('parentName').setValue(this.parentData.name);
+  }
    makeBody(){
     const body ={
       idStandard:this.form.get('idStandard').value,
@@ -88,6 +125,10 @@ export class AddExamtimetableComponent implements OnInit {
       time:this.getTime(),
       idSchoolDetails:this.idSchool
 };
+
+if(this.editedExamTimeTableData){
+  body['idUnitTest'] = this.editedExamTimeTableData.idUnitTest;
+ }
 return body;
    }
 
@@ -96,20 +137,84 @@ return body;
     const endTime = this.form.get('endTime').value
     return startTime + "-" + endTime
    }
+
+   buttonSecond(){
+    this.submit();
+   }
+
    submit(){
-     if(this.form.valid){
+    const data = this.checkDataForUpdate();
+     if(data.valid){
+       this.loading = true;
     const body = this.makeBody();
-    this.studentInfoSerive.examTimetable(body).subscribe(res =>{
-     this.commonService.openSnackbar('Exam Timetable Submitted Successfully','Done');
-     this.form.reset();
+    this.studentInfoSerive.examTimetable(body).subscribe((res:any) =>{
+      if(res){
+        this.loading = false;
+        if(this.editedExamTimeTableData){
+          this.commonService.openSnackbar('Exam Timetable Updated Successfully','Done');
+          this.back();
+        }
+        else{
+          this.commonService.openSnackbar('Exam Timetable Added Successfully','Done');
+          this.form.reset();
+        }
+      }
      
     });
   }
   else{
-    this.commonService.openSnackbar('Please Fill All Field','Warning');
+    this.commonService.openSnackbar(data.msg,'Warning');
   }
    
   }
+
+  checkDataForUpdate(){
+    if(this.editedExamTimeTableData){
+      return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
+    }
+    else{
+      return {msg:'Please Fill All Field', valid:this.form.valid }
+    }
+   }
+
+   checkChangeInValueForUpdate(){
+    let flag = false;
+    const keys = Object.keys(this.attributeData)
+    
+  
+    for (const key in this.attributeData) {
+      if(key === 'date'){
+        if(!moment(moment(this.editedExamTimeTableData[key]).format('YYYY-MM-DD')).isSame(moment(this.form.get(this.attributeData[key]).value).format('YYYY-MM-DD'))){
+          flag = true;
+          break;
+        }
+      }
+      else if (key === 'startTime'){
+        if(this.editedExamTimeTableData.time.split('-')[0] != this.form.get(this.attributeData[key]).value){
+          flag = true;
+          break;
+  
+        }
+      }
+      else if(key === 'endTime'){
+        if(this.editedExamTimeTableData.time.split('-')[1] != this.form.get(this.attributeData[key]).value){
+          flag = true;
+          break;
+  
+        }
+      }
+      else{
+      if(this.editedExamTimeTableData[key] != this.form.get(this.attributeData[key]).value){
+        flag = true;
+        break;
+
+      }
+    }
+    };
+
+    return flag;
+   }
+
 
   setLimitOfEndTimeBasedOnStartTime(data){
     this.minForEndTime=data;

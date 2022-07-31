@@ -25,8 +25,30 @@ export class AddParentMeetComponent implements OnInit {
   minForEndTime;
   disableEndTime:boolean=true;
   idSchool:number=1;
+  editParentMeetingData;
+  firstTime=true;
+  attributeData=
+  {
+      date:'date',
+      idTeacher:'idteacher',
+      idStandard:'idStandard',
+      idDivision:'idDivision',
+      meetingTopics:'meetingTopics',
+      meetingDescription:'meetingDescription',
+      startTime:'startTime',
+      endTime:'endTime',
+      slotTime:'slotTime'
+}
   constructor(private router:Router,private studentInfoSerive: StudentInfoService, private commonService: CommonService,
     private route :ActivatedRoute) { 
+
+      if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.editParentMeetingData =this.router.getCurrentNavigation().extras.state;
+        // this.getSpecificHomeworkData();
+        console.log(this.editParentMeetingData);
+        
+      }
+
       const currentYear = new Date().getFullYear();
       const m = new Date().getMonth();
       if(m==0 || m==1 || m==2){
@@ -52,33 +74,63 @@ export class AddParentMeetComponent implements OnInit {
       slotTime: new FormControl(null, [Validators.required]),
     });
     
-    this.getStandardData();
     this.getAllTeacher();
 
-  }
-
-  getStandardData(){
-    this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
-      this.standardData = res.data;
-    });
   }
 
   getAllTeacher(){
     this.studentInfoSerive.getAllTeacher().subscribe((res:any) => {
       this.teacherData = res.data;
+      this.getStandardData();
     });
   }
+
+  getStandardData(){
+    this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
+      this.standardData = res.data;
+      if(this.editParentMeetingData){
+        this.getDivisionData({value:this.editParentMeetingData.idStandard});
+      }
+    });
+  }
+
+  onChangeStandard(idStandard) {
+   this.getDivisionData(idStandard);
+  }
+
+  getDivisionData(idStandard){
+    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) => {
+      this.divisionData = res.data;
+      if(this.editParentMeetingData && this.firstTime){
+        this.firstTime =false;
+        this.updateValue();
+      }
+    });
+  }
+
+  updateValue(){
+    const timeData =this.editParentMeetingData.time.split('-');
+    this.form.get('date').setValue(moment(this.editParentMeetingData.date).format('YYYY-MM-DD')); 
+    this.form.get('idteacher').setValue(this.editParentMeetingData.idteacher);
+     this.form.get('idStandard').setValue(this.editParentMeetingData.idStandard);
+     this.form.get('idDivision').setValue(this.editParentMeetingData.idDivision);
+     this.form.get('idSubject').setValue(this.editParentMeetingData.idSubject);
+     this.form.get('meetingTopics').setValue(this.editParentMeetingData.meetingTopics);
+     this.form.get('meetingDescription').setValue(this.editParentMeetingData.meetingDescription);
+     this.form.get('startTime').setValue(timeData[0].trim()); 
+     this.form.get('endTime').setValue(timeData[1].trim()); 
+     this.form.get('slotTime').setValue(this.editParentMeetingData.slotTime);
+     // this.teacherImageDataUploadToS3 = this.editParentMeetingData.profileurl;
+     // this.form.get('parentName').setValue(this.parentData.name);
+   }
+
+
+ 
   back(){
     this.router.navigate(['../../parentMeet'],{relativeTo:this.route});
   }
 
 
-  onChangeStandard(idStandard) {
-    this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) => {
-      this.divisionData = res.data;
-
-    });
-  }
   // onChangeDivision(idStandard) {
   //   this.studentInfoSerive.getAllSubject(idStandard).subscribe((res:any) => {
   //     this.subjectData = res;
@@ -104,11 +156,18 @@ export class AddParentMeetComponent implements OnInit {
       endTime: this.form.get('endTime').value,
       slotTime:  this.form.get('slotTime').value
     };
+
+    if(this.editParentMeetingData){//need to verify
+      body['idMeeting'] = this.editParentMeetingData.idMeeting;
+     }
     return body;
   }
+
+
   submit() {
     console.log(this.form);
-    if (this.form.valid) {
+    const data = this.checkDataForUpdate();
+    if (data.valid) {
       const body = this.makeBody();
       this.studentInfoSerive.meetingDetails(body).subscribe((res:any) => {
         if(res.data === 'saved'){
@@ -118,8 +177,59 @@ export class AddParentMeetComponent implements OnInit {
       });
     }
     else {
-      this.commonService.openSnackbar('Please Fill All Field', 'Warning');
+      this.commonService.openSnackbar(data.msg, 'Warning');
     }
   }
+
+  checkDataForUpdate(){
+    if(this.editParentMeetingData){
+      return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
+    }
+    else{
+      return {msg:'Please Fill All Field and Upload File also', valid:this.form.valid }
+    }
+   }
+
+   checkChangeInValueForUpdate(){
+    let flag = false;
+    const keys = Object.keys(this.attributeData)
+    
+  
+    for (const key in this.attributeData) {
+      if(key === 'date'){
+        if(!moment(moment(this.editParentMeetingData[key]).format('YYYY-MM-DD')).isSame(moment(this.form.get(this.attributeData[key]).value).format('YYYY-MM-DD'))){
+          // console.log(`${key}: ${courses[key]}`);
+          flag = true;
+          break;
+        }
+      }
+      else if (key === 'startTime'){
+        if(this.editParentMeetingData.time.split('-')[0] != this.form.get(this.attributeData[key]).value){
+          // console.log(`${key}: ${courses[key]}`);
+          flag = true;
+          break;
+  
+        }
+      }
+      else if(key === 'endTime'){
+        if(this.editParentMeetingData.time.split('-')[1] != this.form.get(this.attributeData[key]).value){
+          // console.log(`${key}: ${courses[key]}`);
+          flag = true;
+          break;
+  
+        }
+      }
+      else{
+      if(this.editParentMeetingData[key] != this.form.get(this.attributeData[key]).value){
+        // console.log(`${key}: ${courses[key]}`);
+        flag = true;
+        break;
+
+      }
+    }
+    };
+
+    return flag;
+   }
 
 }

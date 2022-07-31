@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
 import {CommonService} from './../../../shared/common.service';
@@ -11,6 +11,8 @@ import * as moment from 'moment';
   styleUrls: ['./student-info.component.scss']
 })
 export class StudentInfoComponent implements OnInit {
+  
+  @ViewChild('inputImage') inputImage: ElementRef;
   form: FormGroup;
   fileName;
   selectedFiles: FileList;
@@ -30,8 +32,10 @@ export class StudentInfoComponent implements OnInit {
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   studentImageDataUploadToS3;
   idSchool:number=1;
+  fileUpload:boolean=false;
   idToNavigate;
   studentEditData;
+  loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
     private router:Router,private route:ActivatedRoute) {
       const currentYear = new Date().getFullYear();
@@ -41,7 +45,7 @@ export class StudentInfoComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       name:new FormControl(null, [Validators.required,Validators.pattern("[A-Za-z ]*")]),
-      businessLogo: new FormControl(null, [Validators.required]),
+      businessLogo: new FormControl(null),
       businessLogoUrl: new FormControl(null, [Validators.required]),
       idStandard:new FormControl(null, [Validators.required]),
       idDivision:new FormControl(null, [Validators.required]),
@@ -136,7 +140,6 @@ export class StudentInfoComponent implements OnInit {
     })
   }
   onChangeStandard(idStandard){
-    console.log(this.form)
     this.getDivisionData(idStandard);
     this.getAllSubject();
   }
@@ -183,29 +186,47 @@ export class StudentInfoComponent implements OnInit {
   addLogo(): void {
     document.getElementById('file').click();
   }
+
+  checkValidFile(file){
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+    
+      return fileTypes.includes(file[0].type) && file.length === 1;
+  }
+
   handleFileInput(event) {
-    if (event.target.files[0]) {
+   if (this.checkValidFile(event.target.files)) {
       this.form.get('businessLogo').setValue(event.target.files[0]); 
       this.logoError = false;           
       const reader = new FileReader();
       reader.onload = () => {
-        this.form.get('businessLogoUrl').setValue(reader.result as string);        
+        this.form.get('businessLogoUrl').setValue(reader.result as string); 
+        this.upload(event.target.files[0]);        
       }
       reader.readAsDataURL(this.form.get('businessLogo').value);
       event.value = null;
     }
+    else{
+      this.inputImage.nativeElement.value = '';
+    }
   }
-  upload() {
-    const file = this.selectedFiles.item(0);
+  upload(file) {
+    // const file = this.selectedFiles.item(0);
+    this.fileUpload = true;
     this.studentInfoSerive.uploadFile(file);
     this.fileName = file.name;
-    console.log("::::::::::::::::::",this.fileName)
     setTimeout(() => {
 
       this.studentInfoSerive.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
-        console.log(uploadingData);
         this.studentImageDataUploadToS3 =uploadingData.data;
+        this.fileUpload = false;
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
         } else {
@@ -217,10 +238,7 @@ export class StudentInfoComponent implements OnInit {
 
     },0);
   }
-  
-     selectFile(event) {
-    this.selectedFiles = event.target.files;
-    }
+
     makeBody(){
       const body ={
         name:this.form.get('name').value,
@@ -269,12 +287,23 @@ export class StudentInfoComponent implements OnInit {
         return arrOfSubjectId.toString();
       
     }
+    buttonSecond(){
+      this.submit();
+    }
+
     submit(){
-      console.log(this.form);
       if(this.form.valid){
       const body = this.makeBody();
-      this.studentInfoSerive.studentInformation(body).subscribe(res =>{
-      this.commonService.openSnackbar('Student Information Submitted Succesfully','Done');
+      this.loading = true;
+      this.studentInfoSerive.studentInformation(body).subscribe((res:any) =>{
+        if(res){
+          this.commonService.openSnackbar('Student Information Submitted Succesfully','Done');
+          this.form.reset();
+        }
+        else{
+          this.commonService.openSnackbar('Some error has occured in data saving','Done');
+        }
+        this.loading = false;
       });
     }
     else{

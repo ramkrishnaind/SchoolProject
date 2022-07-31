@@ -11,8 +11,21 @@ import { StudentInfoService } from '../../services/student-info.service';
 })
 export class AddTeacherLinkComponent implements OnInit {
 
+  editTeacherDetails;
+  attributeData=
+  {
+    idStandard:'idStandard',
+    idDivision:'idDivision',
+    idSubject:'idSubject',
+    idTeacher:'idTeacher',
+}
+loading:boolean=false;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
-    private route:ActivatedRoute) { }
+    private route:ActivatedRoute) {
+      if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.editTeacherDetails =this.router.getCurrentNavigation().extras.state;
+      }
+     }
 
   form: FormGroup;
   standardData;
@@ -39,6 +52,9 @@ export class AddTeacherLinkComponent implements OnInit {
   getStandardData(){
     this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) => {
       this.standardData = res.data;
+      if(this.editTeacherDetails){
+        this.getDivisionData({value:this.editTeacherDetails.idStandard});
+      }
     });
   }
 
@@ -52,21 +68,34 @@ export class AddTeacherLinkComponent implements OnInit {
 
   onChangeStandard(idStandard) {
     this.getDivisionData(idStandard);
-    this.getAllSubjectData(idStandard);
 
-  }
-
-  getAllSubjectData(idStandard) {
-    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) => {
-      this.subjectData = res.data;
-    });
   }
 
   getDivisionData(idStandard){
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) => {
       this.divisionData = res.data;
+      this.getAllSubjectData(idStandard);
     });
   }
+
+  getAllSubjectData(idStandard) {
+    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) => {
+      this.subjectData = res.data;
+      if(this.editTeacherDetails){
+        this.updateValue();
+      }
+    });
+  }
+
+  updateValue(){
+     this.form.get('idStandard').setValue(this.editTeacherDetails.idStandard);
+     this.form.get('idDivision').setValue(this.editTeacherDetails.idDivision);
+     this.form.get('idSubject').setValue(this.editTeacherDetails.idSubject);
+     this.form.get('idTeacher').setValue(this.editTeacherDetails.idTeacher);
+     // this.teacherImageDataUploadToS3 = this.editTeacherDetails.profileurl;
+     // this.form.get('parentName').setValue(this.parentData.name);
+   }
+
 
   makeBody() {
     const body = [{
@@ -76,20 +105,65 @@ export class AddTeacherLinkComponent implements OnInit {
       idTeacher:this.form.get('idTeacher').value,
 
     }];
+
+    if(this.editTeacherDetails){
+      body[0]['idteacherDetail'] = this.editTeacherDetails.idteacherDetail;
+     }
     return body;
   }
+
+  buttonSecond(){
+    this.submit();
+   }
+
   submit() {
-    if (this.form.valid) {
+    const data = this.checkDataForUpdate();
+    if (data.valid) {
+      this.loading = true;
       const body = this.makeBody();
       this.studentInfoSerive.teacherDetails(body).subscribe(res => {
-        this.commonService.openSnackbar('Teacher Details Submitted Successfully', 'Done');
-        this.form.reset();
+        if(res){
+          this.loading = false;
+          if(this.editTeacherDetails){
+            this.commonService.openSnackbar('Teacher Details Updated Successfully','Done');
+            this.back();
+          }
+          else{
+            this.commonService.openSnackbar('Teacher Details Added Successfully','Done');
+            this.form.reset();
+          }
+        }
       });
     }
     else {
-      this.commonService.openSnackbar('Please Fill All Field', 'Warning');
+      this.commonService.openSnackbar(data.msg, 'Warning');
     }
   }
+
+  checkDataForUpdate(){
+    if(this.editTeacherDetails){
+      return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
+    }
+    else{
+      return {msg:'Please Fill All Field', valid:this.form.valid }
+    }
+   }
+
+   checkChangeInValueForUpdate(){
+    let flag = false;
+    const keys = Object.keys(this.attributeData)
+    
+  
+    for (const key in this.attributeData) {
+      if(this.editTeacherDetails[key] != this.form.get(this.attributeData[key]).value){
+        flag = true;
+        break;
+
+      }
+    };
+
+    return flag;
+   }
 
   back() {
     this.router.navigate(['../teacher-list'],{relativeTo:this.route});

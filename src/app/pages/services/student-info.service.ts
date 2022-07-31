@@ -76,6 +76,30 @@ export class StudentInfoService {
    attendanceInformation(body){
      return this.http.post(`${this.baseurl}Attendance/ByNameBulk`,body);
    }
+
+   getAllAttendance(idStandard,idDivision,date){
+    return this.http.get(`${this.baseurl}Attendance/getbyStandard/?idStandard=${idStandard}&idDivision=${idDivision}&date=${date}`);
+   }
+
+   getListOfHomeWork(idStandard,idDivision,idSubject){
+    return this.http.get(`${this.baseurl}homework/getby?idStandard=${idStandard}&idDivision=${idDivision}&idSubject=${idSubject}`);
+   }
+   getListOfExamResult(idStandard,idDivision){
+    return this.http.get(`${this.baseurl}result/getbyStandard?idStandard=${idStandard}&idDivision=${idDivision}`);
+   }
+   getListOfSchoolTimeTable(idStandard,idDivision){
+    return this.http.get(`${this.baseurl}timetable/getbyStandard?idStandard=${idStandard}&idDivision=${idDivision}`);
+   }
+  //  getListOfHomeWork(idStandard,idDivision,idSubject){
+  //   return this.http.get(`${this.baseurl}homework/getby?idStandard=${idStandard}&idDivision=${idDivision}&idSubject=${idSubject}`);
+  //  }
+
+   getTeacherDetails(idStandard,idDivision){
+    return this.http.get(`${this.baseurl}teacher/getby/?idStandard=${idStandard}&idDivision=${idDivision}`);
+   }
+   getExamTimeTable(idStandard,idDivision){
+    return this.http.get(`${this.baseurl}examtimetable/getby/?idStandard=${idStandard}&idDivision=${idDivision}`);
+   }
    homeworkDetails(body){
      return this.http.post(`${this.baseurl}homework`,body);
    }
@@ -129,6 +153,9 @@ export class StudentInfoService {
    }
    subject(body){
     return this.http.post(`${this.baseurl}subject/ByNameBulk`,body);
+   }
+   updateSubject(body){
+    return this.http.post(`${this.baseurl}subject/`,body);
    }
    getFeesType(){
      return this.http.get(`${this.baseurl}/feestype/`);

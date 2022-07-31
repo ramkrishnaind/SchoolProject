@@ -1,10 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
-import * as XLSX from 'xlsx';
 import { CommonService } from 'src/app/shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -24,11 +22,13 @@ export class TeacherLinkListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   
   form: FormGroup;
+  teacherDetailData
+  dateToDisplayInTable=[];
   studentData;
   standardData;
   divisionData;
   dataSource:any;
-  displayedColumns: string[] = ['name','standardName','divisionName','date','present','reason','action'];
+  displayedColumns: string[] = ['name','subjectName','action'];
   idSchoolDetail:number = 1;
   selectedValue=11;
   
@@ -56,34 +56,61 @@ export class TeacherLinkListComponent implements OnInit {
       this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
         this.divisionData = res.data;
         this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
-        this.getAllStudentData(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
+        this.getListOfTeacherDetails(this.form.get('idStandard').value,this.form.get('idDivision').value)   
       });
      }
      onChangeDivision(idDivision){
       const idStandard = this.form.get('idStandard').value;
-      this.getAllStudentData(idStandard,idDivision);
+      this.getListOfTeacherDetails(idStandard,idDivision.value);
      }
 
-     getAllStudentData(idStandard,idDivision){
-      this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
-        this.studentData = res.data;
-        this.dataSource = new MatTableDataSource(this.studentData);
+     getListOfTeacherDetails(idStandard,idDivision){
+      this.studentInfoSerive.getTeacherDetails(idStandard,idDivision).subscribe((res:any) =>{
+        if(res.data.length){
+        this.teacherDetailData = res.data;
+        this.dateToDisplayInTable=[];
+        this.teacherDetailData.forEach((data:any) => {
+            this.dateToDisplayInTable.push({
+              idteacherDetail:data.teacherdetails.idteacherDetail,//idteacherDetail
+              name:data.teacher.name,
+              subjectName:data.subject.name,
+            })
+        });
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-       // this.dataSource = new MatTableDataSource(this.studentName);
-      
+      }
+      else{
+        this.dateToDisplayInTable=[];
+        this.dataSource = new MatTableDataSource(this.dateToDisplayInTable);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
+      }
         });
      }
+
+    //  getAllStudentData(idStandard,idDivision){
+    //   this.studentInfoSerive.getAllStudent(idStandard,idDivision).subscribe((res:any) =>{
+    //     this.studentData = res.data;
+    //     this.dataSource = new MatTableDataSource(this.studentData);
+    //     this.dataSource.paginator = this.paginator;
+    //     this.dataSource.sort = this.sort;
+    //    // this.dataSource = new MatTableDataSource(this.studentName);
+      
+    //     });
+    //  }
  
      addTeacherLink(){
     this.router.navigate(['../add-teacher-link'],{relativeTo:this.route});
     }
 
-    editTeacherLink(studentName: any):void {
-     console.log("Student Name",studentName);
+    editTeacherLink(teacherList: any):void {
+     const teacherDetailData =this.getDataToUpdate(teacherList.idteacherDetail);
       this.router.navigate(['../add-teacher-link'],
       {
-        queryParams:{"id":studentName.idStudent
+        state:teacherDetailData,
+        //queryParams:{"id":studentName.idStudent
           // "id":studentName.idStudent,'std':studentName.idStandard,'div':studentName.idDivision
         // queryParams:{"idStudent":studentName.idStudent,"name":studentName.name,"rollno":studentName.rollno,"dob":studentName.dob,
         // "age":studentName.age,"bloodgrp":studentName.bloodgrp,"pmobileno":studentName.pmobileno,"smobileno":studentName.smobileno,
@@ -92,7 +119,7 @@ export class TeacherLinkListComponent implements OnInit {
         //   "address2":studentName.address2,"idParent":studentName.idParent,"idStandard":studentName.idStandard,"idDivision":studentName.idDivision,
         //   "gender":studentName.gender,"idNationality":studentName.nationality
         //  },
-      },
+      //},
          relativeTo :this.route
        }
        
@@ -100,23 +127,34 @@ export class TeacherLinkListComponent implements OnInit {
       
     }
 
+    getDataToUpdate(idteacherDetail){
+      let teacherDetail;
+        this.teacherDetailData.forEach(data => {
+          if(data.teacherdetails.idteacherDetail === idteacherDetail){
+            teacherDetail = data.teacherdetails;
+          }
+        });
+      
+        return teacherDetail;
+    }
+
+
     onDelete(data){
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Teacher Link?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-        //   const body ={
-        //     ...data
-        //  }
-        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
-        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        //   if( index != -1){
-        //     this.dataSource.data.splice(index, 1);
-        //     this.paginator.length = this.dataSource.data.length;
-        //     this.dataSource.paginator = this.paginator
-        //     this.table.renderRows();
-        //   }
-        // });
+          const teacherDetailData =this.getDataToUpdate(data.idteacherDetail);
+          const body ={ ...teacherDetailData }
+         this.studentInfoSerive.delete('teacher/saveTeacherDetails',body).subscribe((res:any) =>{
+           const index = this.dataSource.data.findIndex(data => data.idteacherDetail === res.idteacherDetail);//need to verify
+           if( index != -1){
+             this.dataSource.data.splice(index, 1);
+             this.paginator.length = this.dataSource.data.length;
+             this.dataSource.paginator = this.paginator
+             this.table.renderRows();
+            }
+            this.commonService.openSnackbar('Teacher Successfully Remove from class','Done');
+        });
 
         }
       });

@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {ParentService} from './parent.service';
+import { Component,OnInit, ViewChild } from '@angular/core';
 import {CommonService} from '../../shared/common.service';
 import { StudentInfoService } from '../services/student-info.service';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -67,19 +65,17 @@ export class ParentListComponent implements OnInit {
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Parent Details?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-        //   const body ={
-        //     ...data
-        //  }
-        //  this.studentInfoSerive.delete('subject',body).subscribe((res:any) =>{
-        //   this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
-        //   const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
-        //   if( index != -1){
-        //     this.dataSource.data.splice(index, 1);
-        //     this.paginator.length = this.dataSource.data.length;
-        //     this.dataSource.paginator = this.paginator
-        //     this.table.renderRows();
-        //   }
-        // });
+          const body ={ ...data }
+         this.studentInfoSerive.delete('parent',body).subscribe((res:any) =>{
+          this.commonService.openSnackbar('Parent Data Deleted Successfully','Done');
+          const index = this.dataSource.data.findIndex(data => data.idSubject === res.idDivision);
+          if( index != -1){
+            this.dataSource.data.splice(index, 1);
+            this.paginator.length = this.dataSource.data.length;
+            this.dataSource.paginator = this.paginator
+            this.table.renderRows();
+          }
+        });
 
         }
       });

@@ -66,3 +66,14 @@ table {
     vertical-align: middle;
     text-align: center;
 }
+.excel-upload{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.company-excel-name{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

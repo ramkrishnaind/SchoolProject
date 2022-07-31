@@ -99,14 +99,16 @@ export class DivisionComponent implements OnInit {
           "idSchoolDetails": data.idSchoolDetails
        }
        this.studentInfoSerive.delete('division',body).subscribe((res:any) =>{
-        this.commonService.openSnackbar('Division Deleted Successfully','Done');
-        const index = this.dataSource.data.findIndex(data => data.idDivision === res.idDivision);
-        if( index != -1){
-          this.dataSource.data.splice(index, 1);
-          this.paginator.length = this.dataSource.data.length;
-          this.dataSource.paginator = this.paginator
-          this.table.renderRows();
-        }
+        if(!res.error){
+          const index = this.dataSource.data.findIndex(data => data.idDivision === res.data.idDivision);
+          if( index != -1){
+            this.dataSource.data.splice(index, 1);
+            this.paginator.length = this.dataSource.data.length;
+            this.dataSource.paginator = this.paginator
+            this.table.renderRows();
+          }
+          this.commonService.openSnackbar('Division Deleted Successfully','Done');
+      }
       });
       }
     });

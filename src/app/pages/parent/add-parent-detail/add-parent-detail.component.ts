@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { ParentService } from '../parent.service';
 })
 export class AddParentDetailComponent implements OnInit {
 
+  @ViewChild('inputImage') inputImage: ElementRef;
   @Input() newItemEvent: string;
   logoError: boolean;
   form: FormGroup;
@@ -29,6 +30,27 @@ export class AddParentDetailComponent implements OnInit {
   idSchool:number=1;
   idToNavigate;
   parentEditData;
+  fileUpload=false;
+  loading:boolean=false;
+  attributeData=
+  {
+   name:'parentName',
+   profilepicUrl:'businessLogoUrl',
+   address1:'address1',
+   address2:'address2',
+   pmobile_no:'mobilenumber',
+   smobileno:'secMobilnumber',
+   emergencyNo:'emgMobilenumber',
+   pemail:'email',
+   semail:'secEmail',
+   gender:'gender',
+   idRole:'role',
+   idNationality:'nationality',
+   idCountry:'country',
+   idState:'state',
+   idCity:'city',
+   zipcode:'postelCode'
+}
   constructor(private parentService:ParentService,private commonService:CommonService,
     private studentInfoSerive:StudentInfoService,
     private router:Router,private dialog: MatDialog,
@@ -42,7 +64,7 @@ export class AddParentDetailComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       parentName:new FormControl(null, [Validators.required,Validators.pattern("[A-Za-z ]*")]),
-      businessLogo: new FormControl(null, [Validators.required]),
+      businessLogo: new FormControl(null),
       businessLogoUrl: new FormControl(null, [Validators.required]),
       address1:new FormControl(null, [Validators.required]),
       address2:new FormControl(null,[Validators.required]),
@@ -97,6 +119,7 @@ export class AddParentDetailComponent implements OnInit {
     this.form.get('city').setValue(this.parentEditData.idCity);
 
     this.form.get('postelCode').setValue(this.parentEditData.zipcode);
+    this.form.get('businessLogoUrl').setValue(this.parentEditData.profilepicUrl);   
     // this.form.get('parentName').setValue(this.parentData.name);
   }
 
@@ -152,20 +175,39 @@ export class AddParentDetailComponent implements OnInit {
   addLogo(): void {
     document.getElementById('file').click();
   }
+
+  checkValidFile(file){
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+    
+      return fileTypes.includes(file[0].type) && file.length === 1;
+  }
+
   handleFileInput(event) {
-    if (event.target.files[0]) {
+    if (this.checkValidFile(event.target.files)) {
       this.form.get('businessLogo').setValue(event.target.files[0]); 
       this.logoError = false;           
       const reader = new FileReader();
       reader.onload = () => {
-        this.form.get('businessLogoUrl').setValue(reader.result as string);        
+        this.form.get('businessLogoUrl').setValue(reader.result as string);
+        this.upload(event.target.files[0]);        
       }
       reader.readAsDataURL(this.form.get('businessLogo').value);
       event.value = null;
     }
+    else{
+      this.inputImage.nativeElement.value = '';
+    }
   }
-  upload() {
-    const file = this.selectedFiles.item(0);
+  upload(file) {
+    // const file = this.selectedFiles.item(0);
+    this.fileUpload = true;
     this.parentService.uploadFile(file);
     this.fileName = file.name;
     console.log("::::::::::",this.fileName);
@@ -174,8 +216,9 @@ export class AddParentDetailComponent implements OnInit {
       this.parentService.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
         console.log(uploadingData);
-        this.parentImageDataUploadToS3 =uploadingData.data;
+        this.parentImageDataUploadToS3 =uploadingData.data.Location;
         console.log(this.parentImageDataUploadToS3);
+        this.fileUpload = false;
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
         } else {
@@ -187,9 +230,8 @@ export class AddParentDetailComponent implements OnInit {
 
     },1);
   }
-     selectFile(event) {
-    this.selectedFiles = event.target.files;
-    }
+
+
    makeBody(){
      const body = {
       "name":this.form.get('parentName').value,
@@ -207,22 +249,73 @@ export class AddParentDetailComponent implements OnInit {
       "idState":this.form.get('state').value,
       "idCity":this.form.get('city').value,
       "zipcode":this.form.get('postelCode').value,
-      "profilepicUrl":this.parentImageDataUploadToS3.Location,
+      "profilepicUrl":this.parentImageDataUploadToS3,
       "idSchoolDetails":this.idSchool
      };
+
+     if(this.idToNavigate != 0){
+      body['idparent'] = this.idToNavigate;
+     }
      return body;
    }
+
+   buttonSecond(){
+    this.submit();
+  }
+  
    submit(){
-     if(this.form.valid){
+    const data = this.checkDataForUpdate();
+     if(data.valid){
      const body = this.makeBody();
-     this.parentService.parentDetails([body]).subscribe(res =>{
-      console.log(res);
-      this.commonService.openSnackbar("Parent Details Submitted Suceesfully",'Done');
+     this.loading = true;
+     this.parentService.parentDetails([body]).subscribe((res:any) =>{
+      if(!res.error){
+        this.loading = false;
+        if(this.idToNavigate){
+          this.commonService.openSnackbar('Parent Details Updated Successfully','Done');
+          this.back();
+        }
+        else{
+          this.commonService.openSnackbar('Parent Details Submitted Successfully','Done');
+          this.form.reset();
+        }
+      }
+      else{
+        this.loading = false;
+        this.commonService.openSnackbar('Parent Details are incorrect or format', 'Warning');
+      }
      });
     }
     else{
-       this.commonService.openSnackbar('Please Fill All Field','Warning');
+       this.commonService.openSnackbar(data.msg,'Warning');
     }
+   }
+
+
+   checkDataForUpdate(){
+    if(this.idToNavigate === 0){
+      return {msg:'Please Fill All Field and Upload File also', valid:this.form.valid }
+    }
+    else{
+      return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
+    }
+   }
+
+   checkChangeInValueForUpdate(){
+    let flag = false;
+    const keys = Object.keys(this.attributeData)
+    
+  
+    for (const key in this.attributeData) {
+      if(this.parentEditData[key] != this.form.get(this.attributeData[key]).value){
+        // console.log(`${key}: ${courses[key]}`);
+        flag = true;
+        break;
+
+      }
+    };
+
+    return flag;
    }
 
    back(){

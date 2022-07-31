@@ -17,8 +17,8 @@
         <div class="div-1">
             <div class="main-div">
                 <div class="img-div add-logo-div">
-                    <input accept="image/*" type="file" id="file" class="display-none" (change)="selectFile($event)" (input)="handleFileInput($event)">
-                    <div *ngIf="!form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer w-100">
+                    <input #inputImage accept="image/*" type="file" id="file" class="display-none"  (input)="handleFileInput($event)">
+                    <div *ngIf="!fileUpload && !form.get('businessLogoUrl').value" (click)="addLogo()" class="cursor-pointer image-class">
                         <div class="add-logo flex center">
                             <div>
                                 <div class="company-logo-text">+Add Photo</div>
@@ -28,15 +28,18 @@
 
                         <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error>
                     </div>
-                    <div *ngIf="form.get('businessLogoUrl').value" class="image-preview">
+                    <div *ngIf="!fileUpload && form.get('businessLogoUrl').value" class="image-preview" (click)="addLogo()">
                         <img [src]="form.get('businessLogoUrl').value">
 
                         <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
                             Change Logo
                         </div> -->
                     </div>
+                    <div *ngIf="fileUpload" style="width: 100%;" >
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                      </div>
                 </div>
-                <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button>
+                <!-- <button type="button" mat-button color="primary" class="upload-btn" (click)="upload()">Upload Image</button> -->
                 <div class="form-div">
                     <div class="w-100">
                         <div class="width-calc">
@@ -232,7 +235,12 @@
 
 
             </div>
-            <button mat-raised-button color="primary" class="form-btn" (click)="submit()">Submit</button>
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+            <button *ngIf="!form.valid" type="submit"   mat-raised-button color="primary" class="btn_sub" (click)="submit()" >Submit ExamTimeTable</button>
+            <button *ngIf="form.valid" type="button"  mat-raised-button color="primary" [class.spinner]="loading" [disabled]="loading"   class="btn_sub" (click)="buttonSecond()" >Submit ExamTimeTable</button>
+            </div>
+            </div>
         </div>
     </form>
 </div>

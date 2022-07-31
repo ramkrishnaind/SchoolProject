@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/common.service';
 import * as XLSX from 'xlsx';
@@ -15,9 +16,12 @@ export class AddTeacherRecordComponent implements OnInit {
 
   
   @ViewChild('inputFile') inputFile: ElementRef;
+  @ViewChild('inputImage') inputImage: ElementRef;
+  
+
   form: FormGroup;
   fileName;
-  selectedFiles: FileList;
+  selectedFiles: File;
   logoError: boolean;
   standardData;
   divisionData;
@@ -29,8 +33,23 @@ export class AddTeacherRecordComponent implements OnInit {
   idSchool:number=1;
   idToNavigate;
   teacherEditData;
+  fileUpload=false;
+  loading:boolean=false;
+  attributeData=
+    {
+     name:'teacher',
+     email:'email',
+     education:'education',
+     contact:'phoneNumber',
+     whatsappno:'whatsappNumber',
+     profileurl:'businessLogoUrl'
+}
+fileAdded:string='fileblank';
+  selectedFile:File;
+  excelFileUpload:boolean=false;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
-    private route:ActivatedRoute) {
+    private route:ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer) {
+      iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
       this.idToNavigate = +this.route.snapshot.queryParams['id'] || 0;
       if(this.idToNavigate != 0){
         this.getSpecificTeacherData();
@@ -41,7 +60,7 @@ export class AddTeacherRecordComponent implements OnInit {
 
 
     this.form = new FormGroup({
-      businessLogo: new FormControl(null, [Validators.required]),
+      businessLogo: new FormControl(null),
       businessLogoUrl: new FormControl(null, [Validators.required]),
       // idteacher: new FormControl(null, [Validators.required]),
       teacher: new FormControl(null, [Validators.required]),
@@ -78,6 +97,8 @@ export class AddTeacherRecordComponent implements OnInit {
     this.form.get('education').setValue(this.teacherEditData.education);
     this.form.get('whatsappNumber').setValue(this.teacherEditData.whatsappno);
     this.form.get('phoneNumber').setValue(this.teacherEditData.contact);
+    this.form.get('businessLogoUrl').setValue(this.teacherEditData.profileurl); 
+    this.teacherImageDataUploadToS3 = this.teacherEditData.profileurl;
     // this.form.get('parentName').setValue(this.parentData.name);
   }
 
@@ -122,25 +143,45 @@ export class AddTeacherRecordComponent implements OnInit {
   addLogo(){
     document.getElementById('file').click();
   }
-  selectFile(event){
-    this.selectedFiles = event.target.files;
+
+  checkValidFile(file){
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+    
+      return fileTypes.includes(file[0].type) && file.length === 1;
   }
 
   handleFileInput(event){
-    if (event.target.files[0]) {
+    console.log(event);
+    if (this.checkValidFile(event.target.files)) {
       this.form.get('businessLogo').setValue(event.target.files[0]); 
       this.logoError = false;           
       const reader = new FileReader();
       reader.onload = () => {
-        this.form.get('businessLogoUrl').setValue(reader.result as string);        
+        this.form.get('businessLogoUrl').setValue(reader.result as string); 
+        // this.selectedFiles = event.target.files; 
+        this.uploadTeacherImage(event.target.files[0]);
+        console.log(this.form.get('businessLogo'));
+      console.log(this.selectedFiles)      
       }
       reader.readAsDataURL(this.form.get('businessLogo').value);
       event.value = null;
     }
+    else{
+      this.inputImage.nativeElement.value = '';
+    }
   }
 
-  upload(){
-    const file = this.selectedFiles.item(0);
+  uploadTeacherImage(file){
+    // const file = this.selectedFiles[0];
+    console.log(file);
+    this.fileUpload = true;
     this.studentInfoSerive.uploadFile(file);
     this.fileName = file.name;
     console.log("::::::::::::::::::",this.fileName)
@@ -148,7 +189,8 @@ export class AddTeacherRecordComponent implements OnInit {
       this.studentInfoSerive.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
         console.log(uploadingData);
-        this.teacherImageDataUploadToS3 =uploadingData.data;
+        this.teacherImageDataUploadToS3 =uploadingData.data.Location;
+        this.fileUpload = false;
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);
         } else {
@@ -165,55 +207,129 @@ export class AddTeacherRecordComponent implements OnInit {
   // }
 
   makeBody() {
-    const body = [{
+    let body = [{
       name: this.form.get('teacher').value,
       email: this.form.get('email').value,
       education: this.form.get('education').value,
       contact:this.form.get('phoneNumber').value,
       whatsappno: this.form.get('whatsappNumber').value,
-      profileurl:this.teacherImageDataUploadToS3.Location,
+      profileurl:this.teacherImageDataUploadToS3,
       idSchoolDetails:this.idSchool
 
     }];
+
+    if(this.idToNavigate != 0){
+      body[0]['idTeacher'] = this.idToNavigate;
+     }
+
     return body;
   }
+
+  buttonSecond(){
+    this.submit();
+  }
   submit() {
-    if (this.form.valid) {
+    console.log(this.form);
+    console.log(this.teacherEditData);
+    const data = this.checkDataForUpdate();
+    if (data.valid) {
       const body = this.makeBody();
-      this.studentInfoSerive.saveTeacherData(body).subscribe(res => {
-        this.commonService.openSnackbar('Teacher Details Submitted Successfully', 'Done');
+      this.loading = true;
+      this.studentInfoSerive.saveTeacherData(body).subscribe((res:any) => {
+        if(!res.error){
+          this.loading = false;
+          if(this.idToNavigate){
+            this.commonService.openSnackbar('Teacher Data Updated Successfully','Done');
+            this.back();
+          }
+          else{
+            this.commonService.openSnackbar('Teacher Data Added Successfully','Done');
+            this.form.reset();
+          }
+        }
+        else{
+          this.loading = false;
+          this.commonService.openSnackbar('Teacher Details are incorrect or format', 'Warning');
+        }
       });
     }
     else {
-      this.commonService.openSnackbar('Please Fill All Field', 'Warning');
+      this.commonService.openSnackbar(data.msg, 'Warning');
     }
   }
 
-  onFileChange(event){
-    console.log(event);
+   checkDataForUpdate(){
+    if(this.idToNavigate === 0){
+      return {msg:'Please Fill All Field and Upload File also', valid:this.form.valid }
+    }
+    else{
+      return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
+    }
+   }
+
+   checkChangeInValueForUpdate(){
+    let flag = false;
+    const keys = Object.keys(this.attributeData)
+    
+  
+    for (const key in this.attributeData) {
+      if(this.teacherEditData[key] != this.form.get(this.attributeData[key]).value){
+        // console.log(`${key}: ${courses[key]}`);
+        flag = true;
+        break;
+
+      }
+    };
+
+    return flag;
+   }
+ 
+   clickToAddFile(){
+    document.getElementById('fileExcel').click();
+   }
+
+
+   onFileChange(event) {
     const isExcelFile = !!event.target.files[0].name.match(/(.xls|.xlsx)/);
     if (event.target.files.length > 1 || !isExcelFile) {
       this.inputFile.nativeElement.value = '';
+      this.fileAdded = 'fileblank';
     }
-    if(isExcelFile){
-    let workBook = null;
-    let jsonData = null;
-    const reader = new FileReader();
-    const file = event.target.files[0];
-    reader.onload = (event) => {
-      const data = reader.result;
-      workBook = XLSX.read(data, { type: 'binary' });
-      workBook.SheetNames.forEach(element => {
-        jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[element])
-        console.log("upload ExcelDATa:::::::::::",element);
-        this.studentInfoSerive.saveTeacherData(jsonData).subscribe(res =>{
-          console.log("upload Excel:::::::::::",res);
-          this.commonService.openSnackbar('Upload Result Excel File Successfully','Done');
-        })
-         });      
- }
-    reader.readAsBinaryString(file);
-}
+    else{
+      this.selectedFile = event.target.files[0];
+      this.upload();
+      console.log(this.selectedFile);
+    }
+  
+  }
+
+  upload(){
+      this.excelFileUpload = true;
+      let workBook = null;
+      let jsonData = null;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const data = reader.result;
+        workBook = XLSX.read(data, { type: 'binary' });
+        workBook.SheetNames.forEach(element => {
+  
+          jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[element]);
+          setTimeout(() =>{
+            this.studentInfoSerive.saveTeacherData(jsonData).subscribe(res =>{
+              if(res){
+              this.fileAdded = 'fileupload';
+              this.excelFileUpload = false;
+              this.commonService.openSnackbar('Teacher Data Uploaded Successfully','Done');
+              }
+            });
+          },5000);
+           }); 
+   }
+      reader.readAsBinaryString(this.selectedFile);
+  }
+
+  downloadFormat(){
+
   }
 
   back(){

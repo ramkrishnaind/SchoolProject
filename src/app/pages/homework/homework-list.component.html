@@ -56,30 +56,35 @@
             <table mat-table [dataSource]="dataSource">
 
 
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                <ng-container matColumnDef="teacherName">
+                    <th mat-header-cell *matHeaderCellDef>Teacher Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.teacherName}} </td>
                 </ng-container>
 
 
-                <ng-container matColumnDef="standardName">
-                    <th mat-header-cell *matHeaderCellDef>Standard Name</th>
-                    <td mat-cell *matCellDef="let element"> {{element.standardName}} </td>
+                <ng-container matColumnDef="homeworkName">
+                    <th mat-header-cell *matHeaderCellDef>Homework Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.homeworkName}} </td>
                 </ng-container>
 
 
-                <ng-container matColumnDef="divisionName">
-                    <th mat-header-cell *matHeaderCellDef>Division Name</th>
-                    <td mat-cell *matCellDef="let element"> {{element.divisionName}} </td>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
                 </ng-container>
 
 
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Date</th>
-                    <td mat-cell *matCellDef="let element"> {{element.date | date:'mediumDate'}} </td>
+                <ng-container matColumnDef="assignDate">
+                    <th mat-header-cell *matHeaderCellDef>Assign Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.assignDate | date:'mediumDate'}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="present">
+                <ng-container matColumnDef="dueDate">
+                    <th mat-header-cell *matHeaderCellDef>Due Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.dueDate | date:'mediumDate'}} </td>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="present">
                     <th mat-header-cell *matHeaderCellDef>Attendance</th>
                     <td mat-cell *matCellDef="let element"> {{element.present}} </td>
                 </ng-container>
@@ -88,7 +93,7 @@
                 <ng-container matColumnDef="reason">
                     <th mat-header-cell *matHeaderCellDef>Reason</th>
                     <td mat-cell *matCellDef="let element"> {{element.reason}} </td>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef>Edit </th>

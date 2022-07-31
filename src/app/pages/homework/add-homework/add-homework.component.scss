@@ -268,6 +268,32 @@
       opacity: 0;
     }
   }
+
+
+  .file-div {
+    border: 1px solid #8892A0;
+    border-radius: 2px;
+    height: 90px;
+    width: 300px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+.excel-upload{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.company-excel-name{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.upload-btn-excel {
+    height: 38px;
+    margin-left: 10px;
+}
   
 
   
