@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 
@@ -90,9 +90,9 @@ export class StudentInfoService {
    getListOfSchoolTimeTable(idStandard,idDivision){
     return this.http.get(`${this.baseurl}timetable/getbyStandard?idStandard=${idStandard}&idDivision=${idDivision}`);
    }
-  //  getListOfHomeWork(idStandard,idDivision,idSubject){
-  //   return this.http.get(`${this.baseurl}homework/getby?idStandard=${idStandard}&idDivision=${idDivision}&idSubject=${idSubject}`);
-  //  }
+   getListOfParentMeet(date){
+    return this.http.get(`${this.baseurl}parentmeeting/getbydate?date=${date}`);
+   }
 
    getTeacherDetails(idStandard,idDivision){
     return this.http.get(`${this.baseurl}teacher/getby/?idStandard=${idStandard}&idDivision=${idDivision}`);

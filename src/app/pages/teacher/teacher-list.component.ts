@@ -44,7 +44,6 @@ export class TeacherListComponent implements OnInit {
      
 
   editTeacher(teacherData: any):void {
-      console.log(teacherData);
       this.router.navigate(['./add-teacher'],
       {
         queryParams:{"id":teacherData.idTeacher
@@ -64,7 +63,6 @@ export class TeacherListComponent implements OnInit {
     }
 
     onDelete(data){
-      console.log(data);
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Teacher Details?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){

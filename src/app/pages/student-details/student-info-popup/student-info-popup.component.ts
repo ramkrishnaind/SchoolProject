@@ -95,7 +95,6 @@ export class StudentInfoPopupComponent implements OnInit {
       this.maxDate = new Date();
 
       this.activatedRoute.queryParams.subscribe(params =>{
-        console.log(params);
   this.name = params['name'];
   this.rollno = params['rollno'];
   this.dob = params['dob'];
@@ -180,7 +179,6 @@ export class StudentInfoPopupComponent implements OnInit {
       // this.form.controls['academicyear'].patchValue(this.academicyear);
       // this.form.controls['address'].patchValue(this.address);
       // this.form.controls['address2'].patchValue(this.address2);
-      // console.log("idStudent:::",this.idStudent);
   }
 
     getStandardData(){
@@ -266,7 +264,6 @@ export class StudentInfoPopupComponent implements OnInit {
     //   const file = this.selectedFiles.item(0);
     //   this.studentInfoSerive.uploadFile(file);
     //   this.fileName = file.name;
-    //   console.log("::::::::::::::::::",this.fileName)
     // }
     //    selectFile(event) {
     //   this.selectedFiles = event.target.files;
@@ -309,12 +306,10 @@ export class StudentInfoPopupComponent implements OnInit {
     this.fileUpload = true;
     this.studentInfoSerive.uploadFile(file);
     this.fileName = file.name;
-    console.log("::::::::::::::::::",this.fileName)
     setTimeout(() => {
 
       this.studentInfoSerive.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
-        console.log(uploadingData);
         this.studentImageDataUploadToS3 =uploadingData.data;
         this.fileUpload = false;
         if (uploadingData.status == "error") {

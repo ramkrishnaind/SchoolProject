@@ -30,7 +30,6 @@ export class ForgetPasswordComponent implements OnInit {
 
   getOTP(){
     this.router.navigate(['./otp']);
-    console.log(this.form);
   //   if(this.form.valid){
   //     const body = this.makeBody();
   //   // this.studentInfoSerive.studentInformation(body).subscribe(res =>{

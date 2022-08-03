@@ -84,7 +84,6 @@ fileAdded:string='fileblank';
       res.data.forEach(data => {
         if(data.idTeacher === this.idToNavigate){
           this.teacherEditData = data;
-          console.log(this.teacherEditData);
           this.updateValue();
         }
       });
@@ -158,7 +157,6 @@ fileAdded:string='fileblank';
   }
 
   handleFileInput(event){
-    console.log(event);
     if (this.checkValidFile(event.target.files)) {
       this.form.get('businessLogo').setValue(event.target.files[0]); 
       this.logoError = false;           
@@ -166,9 +164,7 @@ fileAdded:string='fileblank';
       reader.onload = () => {
         this.form.get('businessLogoUrl').setValue(reader.result as string); 
         // this.selectedFiles = event.target.files; 
-        this.uploadTeacherImage(event.target.files[0]);
-        console.log(this.form.get('businessLogo'));
-      console.log(this.selectedFiles)      
+        this.uploadTeacherImage(event.target.files[0]); 
       }
       reader.readAsDataURL(this.form.get('businessLogo').value);
       event.value = null;
@@ -180,15 +176,12 @@ fileAdded:string='fileblank';
 
   uploadTeacherImage(file){
     // const file = this.selectedFiles[0];
-    console.log(file);
     this.fileUpload = true;
     this.studentInfoSerive.uploadFile(file);
     this.fileName = file.name;
-    console.log("::::::::::::::::::",this.fileName)
     setTimeout(() => {
       this.studentInfoSerive.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
-        console.log(uploadingData);
         this.teacherImageDataUploadToS3 =uploadingData.data.Location;
         this.fileUpload = false;
         if (uploadingData.status == "error") {
@@ -229,8 +222,6 @@ fileAdded:string='fileblank';
     this.submit();
   }
   submit() {
-    console.log(this.form);
-    console.log(this.teacherEditData);
     const data = this.checkDataForUpdate();
     if (data.valid) {
       const body = this.makeBody();
@@ -274,7 +265,6 @@ fileAdded:string='fileblank';
   
     for (const key in this.attributeData) {
       if(this.teacherEditData[key] != this.form.get(this.attributeData[key]).value){
-        // console.log(`${key}: ${courses[key]}`);
         flag = true;
         break;
 
@@ -298,7 +288,6 @@ fileAdded:string='fileblank';
     else{
       this.selectedFile = event.target.files[0];
       this.upload();
-      console.log(this.selectedFile);
     }
   
   }

@@ -91,7 +91,6 @@ export class AddParentDetailComponent implements OnInit {
       res.forEach(data => {
         if(data.idparent === this.idToNavigate){
           this.parentEditData = data;
-          console.log(this.parentEditData);
           this.updateValue();
         }
       });
@@ -210,14 +209,13 @@ export class AddParentDetailComponent implements OnInit {
     this.fileUpload = true;
     this.parentService.uploadFile(file);
     this.fileName = file.name;
-    console.log("::::::::::",this.fileName);
+    
     setTimeout(() => {
 
       this.parentService.getFile().subscribe((uploadingData) => {
         // this.CommonService.hideSppiner();
-        console.log(uploadingData);
         this.parentImageDataUploadToS3 =uploadingData.data.Location;
-        console.log(this.parentImageDataUploadToS3);
+        
         this.fileUpload = false;
         if (uploadingData.status == "error") {
           this.commonService.openSnackbar(uploadingData.message,uploadingData.status);

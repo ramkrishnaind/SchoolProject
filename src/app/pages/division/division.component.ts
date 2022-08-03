@@ -73,7 +73,6 @@ export class DivisionComponent implements OnInit {
 
   onUpdate(e){
     e.edit = false;
-   console.log(e);
    const body ={
       "idDivision":e.idDivision,
       "idStandard": e.idStandard,
@@ -88,7 +87,6 @@ export class DivisionComponent implements OnInit {
   }
 
   onDelete(data){
-    console.log(data);
     const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Division?');
     dialogRef.afterClosed().subscribe(result => {
       if(result){

@@ -25,8 +25,7 @@ export class DashboardComponent implements OnInit  {
   }
   
   ngOnInit(){
-    console.log(this.router);
-    console.log(this.route);
+   
   }
 
  

@@ -39,13 +39,13 @@ export class AddParentMeetComponent implements OnInit {
       endTime:'endTime',
       slotTime:'slotTime'
 }
+loading:boolean=false;
   constructor(private router:Router,private studentInfoSerive: StudentInfoService, private commonService: CommonService,
     private route :ActivatedRoute) { 
 
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editParentMeetingData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();
-        console.log(this.editParentMeetingData);
         
       }
 
@@ -109,16 +109,14 @@ export class AddParentMeetComponent implements OnInit {
   }
 
   updateValue(){
-    const timeData =this.editParentMeetingData.time.split('-');
     this.form.get('date').setValue(moment(this.editParentMeetingData.date).format('YYYY-MM-DD')); 
-    this.form.get('idteacher').setValue(this.editParentMeetingData.idteacher);
+    this.form.get('idteacher').setValue(this.editParentMeetingData.idTeacher);
      this.form.get('idStandard').setValue(this.editParentMeetingData.idStandard);
      this.form.get('idDivision').setValue(this.editParentMeetingData.idDivision);
-     this.form.get('idSubject').setValue(this.editParentMeetingData.idSubject);
      this.form.get('meetingTopics').setValue(this.editParentMeetingData.meetingTopics);
      this.form.get('meetingDescription').setValue(this.editParentMeetingData.meetingDescription);
-     this.form.get('startTime').setValue(timeData[0].trim()); 
-     this.form.get('endTime').setValue(timeData[1].trim()); 
+     this.form.get('startTime').setValue(this.editParentMeetingData.startTime); 
+     this.form.get('endTime').setValue(this.editParentMeetingData.endTime); 
      this.form.get('slotTime').setValue(this.editParentMeetingData.slotTime);
      // this.teacherImageDataUploadToS3 = this.editParentMeetingData.profileurl;
      // this.form.get('parentName').setValue(this.parentData.name);
@@ -130,14 +128,6 @@ export class AddParentMeetComponent implements OnInit {
     this.router.navigate(['../../parentMeet'],{relativeTo:this.route});
   }
 
-
-  // onChangeDivision(idStandard) {
-  //   this.studentInfoSerive.getAllSubject(idStandard).subscribe((res:any) => {
-  //     this.subjectData = res;
-  //     this.subjectName = this.studentData.data;
-  //     this.dataSource = new MatTableDataSource(this.subjectName);
-  //   });
-  // }
   startClick(e){
     this.minForEndTime=e;
     this.disableEndTime=false;
@@ -163,30 +153,43 @@ export class AddParentMeetComponent implements OnInit {
     return body;
   }
 
+  buttonSecond(){
+    this.submit();
+   }
 
   submit() {
-    console.log(this.form);
     const data = this.checkDataForUpdate();
     if (data.valid) {
+      this.loading = true;
       const body = this.makeBody();
-      this.studentInfoSerive.meetingDetails(body).subscribe((res:any) => {
-        if(res.data === 'saved'){
-          this.commonService.openSnackbar('Meeting Details Submitted Successfully', 'Done');
-          this.form.reset();
+      this.studentInfoSerive.meetingDetails(body).subscribe((res:any) =>{
+        if(res){
+          this.loading = false;
+          if(this.editParentMeetingData){
+            this.commonService.openSnackbar('Meeting Details Submitted Successfully','Done');
+            this.back();
+          }
+          else{
+            this.commonService.openSnackbar('Student Attendance added Successfully','Done');
+            this.form.reset();
+          }
         }
+        
       });
     }
-    else {
-      this.commonService.openSnackbar(data.msg, 'Warning');
+    else{
+      this.commonService.openSnackbar(data.msg,'Warning');
     }
   }
+
+  
 
   checkDataForUpdate(){
     if(this.editParentMeetingData){
       return {msg:'Please,Make changes to Update' ,valid:this.form.valid && this.checkChangeInValueForUpdate()}
     }
     else{
-      return {msg:'Please Fill All Field and Upload File also', valid:this.form.valid }
+      return {msg:'Please Fill All Field', valid:this.form.valid }
     }
    }
 
@@ -198,30 +201,12 @@ export class AddParentMeetComponent implements OnInit {
     for (const key in this.attributeData) {
       if(key === 'date'){
         if(!moment(moment(this.editParentMeetingData[key]).format('YYYY-MM-DD')).isSame(moment(this.form.get(this.attributeData[key]).value).format('YYYY-MM-DD'))){
-          // console.log(`${key}: ${courses[key]}`);
           flag = true;
           break;
-        }
-      }
-      else if (key === 'startTime'){
-        if(this.editParentMeetingData.time.split('-')[0] != this.form.get(this.attributeData[key]).value){
-          // console.log(`${key}: ${courses[key]}`);
-          flag = true;
-          break;
-  
-        }
-      }
-      else if(key === 'endTime'){
-        if(this.editParentMeetingData.time.split('-')[1] != this.form.get(this.attributeData[key]).value){
-          // console.log(`${key}: ${courses[key]}`);
-          flag = true;
-          break;
-  
         }
       }
       else{
       if(this.editParentMeetingData[key] != this.form.get(this.attributeData[key]).value){
-        // console.log(`${key}: ${courses[key]}`);
         flag = true;
         break;
 

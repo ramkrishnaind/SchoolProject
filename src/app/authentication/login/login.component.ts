@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
 
   onLogin(){
     this.router.navigate(['pages/dashboard']);
-    console.log(this.form);
     if(this.form.valid){
       const body = this.makeBody();
     // this.studentInfoSerive.studentInformation(body).subscribe(res =>{

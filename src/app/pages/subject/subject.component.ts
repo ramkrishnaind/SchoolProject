@@ -67,12 +67,10 @@ export class SubjectComponent implements OnInit {
 
   changeSubject(event){
     this.changeInSubjectValue = event.target.value
-    console.log(this.changeInSubjectValue);
   }
 
   onUpdate(e){
     e.edit = false;
-   console.log(e);
    const body ={
       "idSubject": e.idSubject,
       "name": this.changeInSubjectValue,
@@ -87,7 +85,6 @@ export class SubjectComponent implements OnInit {
   }
 
   onDelete(data){
-    console.log(data);
     const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Subject?');
     dialogRef.afterClosed().subscribe(result => {
       if(result){

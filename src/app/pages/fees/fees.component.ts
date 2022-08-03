@@ -50,7 +50,6 @@ export class FeesComponent implements OnInit {
      this.feeType = res;
      });
      this.studentInfoSerive.getPaymentType().subscribe(res =>{
-       console.log("Paymeny Type::::::",res);
      })
   }
 //   date: "2020-06-01T00:00:00.000+0000"

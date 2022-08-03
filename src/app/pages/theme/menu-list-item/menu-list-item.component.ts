@@ -20,7 +20,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class MenuListItemComponent implements OnInit {
   expanded: boolean;
-  @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
+  @HostBinding('attr.aria-expanded') ariaExpanded;
   @Input() item: NavItem;
   @Input() depth: number;
 
@@ -42,7 +42,7 @@ export class MenuListItemComponent implements OnInit {
   }
 
   onItemSelected(item: NavItem) {
-    console.log('child', item)
+    // console.log('child', item)
     if (!item.children || !item.children.length) {
      
       this.router.navigate([item.route],{relativeTo:this.route});

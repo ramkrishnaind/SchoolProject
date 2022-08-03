@@ -225,7 +225,6 @@ return body;
     else{
       this.selectedFile = event.target.files[0];
       this.upload();
-      console.log(this.selectedFile);
     }
   
   }

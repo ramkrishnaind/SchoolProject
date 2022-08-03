@@ -76,7 +76,6 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
     }
 
     editStudent(studentName: any):void {
-     console.log("Student Name",studentName);
       this.router.navigate(['./StudentInfoPopup'],
       {
         queryParams:{...studentName

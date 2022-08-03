@@ -41,7 +41,6 @@ export class ParentListComponent implements OnInit {
   }
 
     editParent(parentData: any):void {
-      console.log(parentData);
       this.router.navigate(['./add-parent'],
       {
         queryParams:{"idParent":parentData.idparent
@@ -61,7 +60,6 @@ export class ParentListComponent implements OnInit {
     }
 
     onDelete(data){
-      console.log(data);
       const dialogRef =  this.commonService.openDialog('Delete Confirmation','Are you sure that you want to delete Parent Details?');
       dialogRef.afterClosed().subscribe(result => {
         if(result){
