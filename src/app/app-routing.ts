@@ -4,12 +4,11 @@ import { LoginComponent } from './authentication/login/login.component';
 import { ForgetPasswordComponent } from './authentication/forget-password/forget-password.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
-import { PagesComponent } from './pages/pages.component';
 import { OtpVerifyComponent } from './authentication/otp-verify/otp-verify.component';
 
 
 
-export const AppRoutes: Routes = [
+const AppRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path :'pages',
     loadChildren: () => import('src/app/pages/pages.module').then(m => m.PagesModule),
@@ -37,5 +36,17 @@ export const AppRoutes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: '**', component: NotFoundComponent }
 ];
+
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(AppRoutes)
+  ],
+  exports:[
+    RouterModule
+  ]
+})
+
+export class AppRoutingModule { }
 
 
