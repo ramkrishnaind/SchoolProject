@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ViewChildren, QueryList, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
 import { NavItem } from './theme/nav-item';
 import { NavService } from './theme/nav.service';
 
@@ -26,32 +26,32 @@ export class PagesComponent implements AfterViewInit {
         {
           displayName: 'Parent',
           route: '/pages/master/parent',
-          iconClass: 'ic-vertical'
+          iconClass: 'ic-cust-app-tra'
         },
         {
           displayName: 'Standard',
           route: '/pages/master/standard',
-          iconClass: 'ic-category-man'
+          iconClass: 'ic-support-request'
         },
         {
           displayName: 'Division',
           route: '/pages/master/division',
-          iconClass: 'ic-category-man'
+          iconClass: 'ic-user-mana'
         },
         {
           displayName: 'Subject',
           route: '/pages/master/subject',
-          iconClass: 'ic-category-man'
+          iconClass: 'ic-business-reports'
         },
-        {
-          displayName: 'Location',
-          route: '/pages/master/location',
-          iconClass: 'ic-category-man'
-        },
+        // {
+        //   displayName: 'Location',
+        //   route: '/pages/master/location',
+        //   iconClass: 'ic-sub-category'
+        // },
         {
           displayName: 'Teacher',
           route: '/pages/master/teacher',
-          iconClass: 'ic-category-man'
+          iconClass: 'ic-cust-app-tra'
         },
       
       ]
