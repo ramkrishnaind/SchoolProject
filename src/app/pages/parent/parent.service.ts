@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Subject } from 'rxjs/Subject';
+import { HttpClient} from "@angular/common/http";
+import { Subject } from 'rxjs';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 @Injectable({
