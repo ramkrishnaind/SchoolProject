@@ -4,11 +4,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../services/student-info.service';
-import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticationService } from '../../service/authentication.service';
+import { division, standard } from '../models/commonmodel';
 
 
 @Component({
@@ -24,72 +24,72 @@ export class ParentMeetingListComponent implements OnInit {
   form: FormGroup;
   parentMeetingListData;
   dateToDisplayInTable=[];
-  studentData;
-  standardData;
-  divisionData;
+  standardData:standard;
+  divisionData:division;
   dataSource:any;
-  displayedColumns: string[] = ['date','standardName','divisionName','teacherName','meetingTopics','meetingDetails','startTime','endTime','slotTime','action'];
+  displayedColumns: string[] = ['date','teacherName','meetingTopics','meetingDetails','startTime','endTime','slotTime','action'];
   idSchoolDetail:number;
-  minDate:Date;
-  maxDate:Date;
+  // minDate:Date;
+  // maxDate:Date;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
     private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
       this.idSchoolDetail = this.authservice.idSchool;
-      const currentYear = new Date().getFullYear();
-      const m = new Date().getMonth();
-      if(m==0 || m==1 || m==2){
-        this.minDate = new Date(currentYear-1, 3, 1);
-        this.maxDate = new Date(currentYear, 2, 31);
-      }
-      else{
-        this.minDate = new Date(currentYear, 3, 1);
-        this.maxDate = new Date(currentYear + 1, 2, 31);
-      }
+      // const currentYear = new Date().getFullYear();
+      // const m = new Date().getMonth();
+      // if(m==0 || m==1 || m==2){
+      //   this.minDate = new Date(currentYear-1, 3, 1);
+      //   this.maxDate = new Date(currentYear, 2, 31);
+      // }
+      // else{
+      //   this.minDate = new Date(currentYear, 3, 1);
+      //   this.maxDate = new Date(currentYear + 1, 2, 31);
+      // }
     
   }
   ngOnInit(): void {
     this.form = new FormGroup({
-      date: new FormControl(new Date(),[Validators.required]),
-      // idStandard:new FormControl(null, [Validators.required]),
-      // idDivision:new FormControl(null, [Validators.required]),
+      // date: new FormControl(new Date(),[Validators.required]),
+      idStandard:new FormControl(null, [Validators.required]),
+      idDivision:new FormControl(null, [Validators.required]),
     });
 
-    this.getAllParentMeetingList(moment(this.form.get('date').value).format('YYYY/MM/DD'));
+    // this.getAllParentMeetingList(moment(this.form.get('date').value).format('YYYY/MM/DD'));
 
-    // this.studentInfoSerive.getStandard({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
-    //   this.standardData = res.data;
-    //   this.form.get('idStandard').setValue(this.standardData[0].idStandard);
-    //   this.getDivisionData({value:this.form.get('idStandard').value})
+    this.studentInfoSerive.getStandard({idSchool:this.idSchoolDetail}).subscribe((res:any) =>{
+      this.standardData = res.data;
+      this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+      this.getDivisionData({value:this.form.get('idStandard').value})
         
-    // });
+    });
 
      } 
-    //  onChangeStandard(idStandard){
-    //   this.getDivisionData(idStandard);
-    //  }
 
-    //  getDivisionData(idStandard){
-    //   this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
-    //     this.divisionData = res.data;
-    //     this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
-    //     this.getAllParentMeetingList(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
-    //   });
-    //  }
-    //  onChangeDivision(idDivision){
-    //   const idStandard = this.form.get('idStandard').value;
-    //   this.getAllParentMeetingList(idStandard,idDivision);
-    //  }
+     onChangeStandard(idStandard){
+      this.getDivisionData(idStandard);
+     }
 
-     getAllParentMeetingList(date){
-      this.studentInfoSerive.getListOfParentMeet(date).subscribe((res:any) =>{
+     getDivisionData(idStandard){
+      this.studentInfoSerive.getDivision(idStandard,this.idSchoolDetail).subscribe((res:any) =>{
+        this.divisionData = res.data;
+        this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
+        this.getAllParentMeetingList(this.form.get('idStandard').value,{value:this.form.get('idDivision').value})   
+      });
+     }
+     onChangeDivision(idDivision){
+      const idStandard = this.form.get('idStandard').value;
+      this.getAllParentMeetingList(idStandard,idDivision);
+     }
+
+     getAllParentMeetingList(idStandard,idDivision){
+      this.studentInfoSerive.getListOfParentMeet(idStandard,idDivision.value).subscribe((res:any) =>{
         if(res.data){
         this.parentMeetingListData = res.data;
         this.parentMeetingListData.forEach((data:any) => {
             this.dateToDisplayInTable.push({//need to verify
               idMeeting:data.meeting.idMeeting,//idParentMeetingList
               date:data.meeting.date,
-              // teacherName:data.subject.name,
+              teacherName:data.teacher.name,
               // standardName:data.subject.name,
               // divisionName:data.subject.name,
               meetingTopics:data.meeting.meetingTopics,
@@ -107,9 +107,9 @@ export class ParentMeetingListComponent implements OnInit {
         });
      }
 
-     dobClick(date){
-      this.getAllParentMeetingList(moment(this.form.get('date').value).format('YYYY/MM/DD'));
-    }
+    //  dobClick(date){
+    //   this.getAllParentMeetingList(moment(this.form.get('date').value).format('YYYY/MM/DD'));
+    // }
  
      addParentMeeting(){
     this.router.navigate(['./add-parent-meet'],{relativeTo:this.route});

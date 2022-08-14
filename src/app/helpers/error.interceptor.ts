@@ -16,7 +16,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(catchError(err => {
-      if (err.status === 401) {
+      if (err.status === 200) {
           // auto logout if 401 response returned from api
           this.authservice.logout();
           location.reload();

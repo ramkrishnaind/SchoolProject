@@ -30,9 +30,16 @@ export class AuthenticationService {
       return this.http.get<any>(`${this.baseurl}/login/log?username=${username}&password=${password}`, )
           .pipe(map(res => {
               // store user details and jwt token in local storage to keep user logged in between page refreshes
+              if(res){
+              if(!res.error){
               localStorage.setItem('currentUser', JSON.stringify(res.data[0].user));
               this.currentUserSubject.next(res.data[0].user);
-              return res.data[0].user;
+              return {user:res.data[0].user,error:res.error};
+              }
+              else{
+                return {user:res.data,error:res.error};
+              }
+            }
           }));
   }
 

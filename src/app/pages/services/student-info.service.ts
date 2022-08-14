@@ -90,8 +90,8 @@ export class StudentInfoService {
    getListOfSchoolTimeTable(idStandard,idDivision){
     return this.http.get(`${this.baseurl}timetable/getbyStandard?idStandard=${idStandard}&idDivision=${idDivision}`);
    }
-   getListOfParentMeet(date){
-    return this.http.get(`${this.baseurl}parentmeeting/getbydate?date=${date}`);
+   getListOfParentMeet(idStandard,idDivision){
+    return this.http.get(`${this.baseurl}meeting/getbyStandard?idStandard=${idStandard}&idDivision=${idDivision}`);
    }
 
    getTeacherDetails(idStandard,idDivision){
