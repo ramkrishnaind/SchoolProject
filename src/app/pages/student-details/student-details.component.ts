@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import { MatSort } from '@angular/material/sort';
 import { CommonService } from '../../shared/common.service';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-student-details',
@@ -25,12 +26,11 @@ export class StudentDetailsComponent implements AfterViewInit,OnInit {
   divisionData;
   dataSource:any;
   displayedColumns: string[] = ['name','rollno','gender','age','dob','email','pmobileno','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
-    
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchoolDetail = this.authservice.idSchool;
   }
   ngOnInit(): void {
     this.form = new FormGroup({

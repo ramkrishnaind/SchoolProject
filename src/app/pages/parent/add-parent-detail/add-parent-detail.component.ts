@@ -2,9 +2,11 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../../../service/authentication.service';
 import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../../services/student-info.service';
 import { ParentService } from '../parent.service';
+import { city, country, gender, nationality, parent, state } from '../../models/commonmodel';
 
 @Component({
   selector: 'app-add-parent-detail',
@@ -18,19 +20,19 @@ export class AddParentDetailComponent implements OnInit {
   logoError: boolean;
   form: FormGroup;
   fileName;
-  gender = [{ name: 'Male', value: 'male'}, { name: 'Female', value:'female' }, { name: 'Others', value: 'others' }];
+  gender:gender[] = [{ name: 'Male', value: 'male'}, { name: 'Female', value:'female' }, { name: 'Others', value: 'others' }];
   role = [{ name: "Admin", value: 3 },{ name: "Teacher", value: 2 }, { name: "Parent", value: 1 },];
-  nationality = [];
-  country = [];
-  state =  [];
-  city =  [];
+  nationality:nationality[] = [];
+  country:country[] = [];
+  state:state[] =  [];
+  city:city[] =  [];
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   selectedFiles: FileList;
   parentImageDataUploadToS3;
-  idSchool:number=1;
+  idSchool:number;
   idToNavigate;
-  parentEditData;
-  fileUpload=false;
+  parentEditData:parent;
+  fileUpload:boolean=false;
   loading:boolean=false;
   attributeData=
   {
@@ -54,7 +56,8 @@ export class AddParentDetailComponent implements OnInit {
   constructor(private parentService:ParentService,private commonService:CommonService,
     private studentInfoSerive:StudentInfoService,
     private router:Router,private dialog: MatDialog,
-    private route:ActivatedRoute) { 
+    private route:ActivatedRoute,private authservice:AuthenticationService) { 
+      this.idSchool = this.authservice.idSchool;
       this.idToNavigate = +this.route.snapshot.queryParams['idParent'] || 0;
       if(this.idToNavigate != 0){
         this.getSpecificParentData();

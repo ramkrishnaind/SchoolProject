@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../service/authentication.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,10 +11,12 @@ export class LoginComponent implements OnInit {
 
 
   form: FormGroup;
-  hide: boolean;
+  hide: boolean=true;
   constructor(
-    private formBuilder: FormBuilder,private router:Router,) {
-    this.hide = true;
+    private formBuilder: FormBuilder,private router:Router,private authservice:AuthenticationService) {
+      if (this.authservice.currentUserValue) { 
+        this.router.navigate(['pages/dashboard']);
+    }
   }
 
   ngOnInit(): void {
@@ -35,16 +38,18 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(){
-    this.router.navigate(['pages/dashboard']);
-    if(this.form.valid){
+    // if(this.form.valid){
       const body = this.makeBody();
-    // this.studentInfoSerive.studentInformation(body).subscribe(res =>{
+      this.authservice.login(body.email,body.password).subscribe(res =>{
+        console.log(res);
+        this.authservice.idSchool = res.idSchool;
+        this.router.navigate(['pages/dashboard']);
     // this.commonService.openSnackbar('Student Information Submitted Succesfully','Done');
-    // });
-  }
-  else{
+    });
+  // }
+  // else{
   //  this.commonService.openSnackbar('Please Fill All Filed','Warning');
-  }
+  // }
    
   }
 

@@ -5,6 +5,12 @@ import { CommonService } from 'src/app/shared/common.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { AuthenticationService } from '../../service/authentication.service';
+import { division, standard } from '../models/commonmodel';
+
+class divisionExtended extends division{
+  edit:boolean;
+}
 
 @Component({
   selector: 'app-division',
@@ -18,14 +24,16 @@ export class DivisionComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name','action'];
-  standardData: any;
-  divisionData=[];
+  standardData: standard[];
+  divisionData:divisionExtended[];
   dataSource:any;
   idStandardForDataView:number;
-  idSchool:number=1
+  idSchool:number;
   changeInDivisionValue:string;
-  selectedStandard;
-  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
+  selectedStandard:number;
+  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchool = this.authservice.idSchool;
+   }
 
 
   ngOnInit(): void {
@@ -136,7 +144,6 @@ export class DivisionComponent implements OnInit {
 
         }
         this.commonService.openSnackbar('Division Submitted Successfully','Done');
-        this.form.reset();
       });
     }
     else{

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../../../service/authentication.service';
 import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../../services/student-info.service';
 
@@ -21,8 +22,9 @@ export class AddTeacherLinkComponent implements OnInit {
 }
 loading:boolean=false;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
-    private route:ActivatedRoute) {
+    private route:ActivatedRoute,private authservice:AuthenticationService) {
       if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.idSchool = this.authservice.idSchool;
         this.editTeacherDetails =this.router.getCurrentNavigation().extras.state;
       }
      }
@@ -33,7 +35,7 @@ loading:boolean=false;
   studentData;
   subjectData;
   teacherData;
-  idSchool:number=1;
+  idSchool:number;
 
   ngOnInit(): void {
 

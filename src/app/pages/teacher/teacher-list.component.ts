@@ -6,6 +6,7 @@ import { StudentInfoService } from '../services/student-info.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from '../../service/authentication.service';
 @Component({
   selector: 'app-teacher-list',
   templateUrl: './teacher-list.component.html',
@@ -21,12 +22,11 @@ export class TeacherListComponent implements OnInit {
   teacherData:any;
   dataSource:any;
   displayedColumns: string[] = ['name','education','contact' ,'whatsappno','email','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
-    
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchoolDetail = this.authservice.idSchool;
   }
   ngOnInit(): void {
     this.getTeacherData();

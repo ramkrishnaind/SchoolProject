@@ -4,6 +4,7 @@ import { StudentInfoService } from '../../services/student-info.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import {CommonService} from './../../../shared/common.service';
 import * as moment from 'moment';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 
 @Component({
@@ -47,7 +48,7 @@ export class StudentInfoPopupComponent implements OnInit {
   maxDate:Date;
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   BloodGroup =  [{name:"A+",value:'A+'},{name:"B+",value:'B+'}];
-  idSchool:number=1;
+  idSchool:number;
   standardId;
   divisionId;
   nationalityId;
@@ -89,8 +90,8 @@ export class StudentInfoPopupComponent implements OnInit {
    subjects:'subjects',
 }
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
-    private activatedRoute:ActivatedRoute,private router:Router,private fb: FormBuilder) {
-      
+    private activatedRoute:ActivatedRoute,private router:Router,private fb: FormBuilder,private authservice:AuthenticationService) {
+      this.idSchool = this.authservice.idSchool;
       const currentYear = new Date().getFullYear();
       this.maxDate = new Date();
 

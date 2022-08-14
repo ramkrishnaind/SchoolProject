@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-add-homework',
@@ -26,7 +27,7 @@ export class AddHomeworkComponent implements OnInit {
   teacherData;
   minDate:Date;
   maxDate:Date;
-  idSchool:number=1
+  idSchool:number;
   process='';
   fileUploadUrl;
   editedHomeworkData:any;
@@ -47,11 +48,12 @@ fileAdded:string='fileblank';
   fileUpload:boolean=false;
   loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
-    private route :ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer) { 
+    private route :ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService) { 
       // this.idToNavigate = +this.route.snapshot.queryParams['id'] || 0;
       // if(this.idToNavigate != 0){
       //   this.getSpecificTeacherData();
       // }
+      this.idSchool = this.authservice.idSchool;
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/file.svg'));
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editedHomeworkData =this.router.getCurrentNavigation().extras.state;

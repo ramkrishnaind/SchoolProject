@@ -5,6 +5,12 @@ import { CommonService } from 'src/app/shared/common.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { AuthenticationService } from '../../service/authentication.service';
+import { standard, subject } from '../models/commonmodel';
+
+class subjectExtended extends subject{
+  edit:boolean;
+}
 
 @Component({
   selector: 'app-subject',
@@ -12,19 +18,22 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./subject.component.scss']
 })
 export class SubjectComponent implements OnInit {
+  
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name','action'];
-  standardData: any;
-  subjectData;
+  standardData: standard[];
+  subjectData:subjectExtended[];
   dataSource:any;
   idStandardForSubjectView:number;
-  idSchool:number=1
+  idSchool:number;
   changeInSubjectValue:string;
-  selectedStandard;
-  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
+  selectedStandard: number;
+  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private authservice:AuthenticationService) { 
+    this.idSchool = this.authservice.idSchool;
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -48,7 +57,7 @@ export class SubjectComponent implements OnInit {
   getAllSubjectData(){
     this.studentInfoSerive.getAllSubject(this.idStandardForSubjectView,this.idSchool).subscribe( (res:any) =>{
       this.subjectData = res.data
-      this.standardData.forEach((data)=>{
+      this.subjectData.forEach((data)=>{
         data.edit = false;
       });
       this.dataSource = new MatTableDataSource(this.subjectData);
@@ -89,7 +98,10 @@ export class SubjectComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         const body ={
-          ...data
+          "idSubject": data.idSubject,
+          "name": data.name,
+          "idStandard": data.idStandard,
+          "idSchoolDetails": data.idSchoolDetails
        }
        this.studentInfoSerive.delete('subject/',body).subscribe((res:any) =>{
         if(!res.error){
@@ -117,6 +129,7 @@ export class SubjectComponent implements OnInit {
      }];
     return body;
   }
+
   addSubject(){
     if(this.form.valid){
       const body = this.makeBody();
@@ -128,7 +141,6 @@ export class SubjectComponent implements OnInit {
           this.dataSource.paginator = this.paginator
           
         }
-        this.form.reset()
         this.commonService.openSnackbar('Subject Submitted Successfully','Done');
       });
     }

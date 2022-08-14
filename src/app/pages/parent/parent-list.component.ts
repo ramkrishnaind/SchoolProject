@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { AuthenticationService } from '../../service/authentication.service';
+import { parent } from '../models/commonmodel';
 @Component({
   selector: 'app-parent-list',
   templateUrl: './parent-list.component.html',
@@ -17,22 +19,21 @@ export class ParentListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   
- parentData:any;
+ parentData:parent[]=[];
   dataSource:any;
   displayedColumns: string[] = ['name','address1','address2' ,'gender','pemail','pmobile_no','smobileno','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
-    
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchoolDetail = this.authservice.idSchool;
   }
   ngOnInit(): void {
     this.getParentData();
   } 
      
   getParentData(){
-    this.studentInfoSerive.parentDetails().subscribe(res =>{
+    this.studentInfoSerive.parentDetails().subscribe((res:parent[]) =>{
       this.parentData = res;
       this.dataSource = new MatTableDataSource(this.parentData);
       this.dataSource.paginator = this.paginator;

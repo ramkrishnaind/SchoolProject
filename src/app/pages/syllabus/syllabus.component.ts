@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../services/student-info.service';
 import {CommonService} from '../../shared/common.service';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-syllabus',
@@ -20,7 +21,7 @@ export class SyllabusComponent implements OnInit {
   testTypeData;
   testTypeName;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,
-    private router:Router,private route:ActivatedRoute) { }
+    private router:Router,private route:ActivatedRoute,private authservice:AuthenticationService) { }
  
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -31,11 +32,11 @@ export class SyllabusComponent implements OnInit {
       marks:new FormControl(null,[Validators.required]),
       chapters:new FormControl(null,[Validators.required])
       });
-    this.studentInfoSerive.getStandard({idSchool:1}).subscribe(res =>{
+    this.studentInfoSerive.getStandard({idSchool:this.authservice.idSchool}).subscribe(res =>{
       this.standardData = res;
       this.standardName = this.standardData.data;
     });
-    this.studentInfoSerive.getTestType({idSchool:1}).subscribe(res =>{
+    this.studentInfoSerive.getTestType({idSchool:this.authservice.idSchool}).subscribe(res =>{
       this.testTypeData = res;
       this.testTypeName = this.testTypeData.data;
     });

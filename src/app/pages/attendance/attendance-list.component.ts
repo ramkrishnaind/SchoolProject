@@ -8,6 +8,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from '../../service/authentication.service';
 
 
 @Component({
@@ -30,11 +31,12 @@ export class AttendanceListComponent implements OnInit {
   maxDate:Date;
   dataSource:any;
   displayedColumns: string[] = ['studentName','present','reason','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+
+      this.idSchoolDetail = this.authservice.idSchool;
       const currentYear = new Date().getFullYear();
       const m = new Date().getMonth();
       if(m==0 || m==1 || m==2){

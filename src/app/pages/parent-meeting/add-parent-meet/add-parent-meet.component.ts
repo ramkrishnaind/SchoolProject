@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/shared/common.service';
 import { StudentInfoService } from '../../services/student-info.service';
 import * as moment from 'moment';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-add-parent-meet',
@@ -24,7 +25,7 @@ export class AddParentMeetComponent implements OnInit {
   maxDate:Date;
   minForEndTime;
   disableEndTime:boolean=true;
-  idSchool:number=1;
+  idSchool:number;
   editParentMeetingData;
   firstTime=true;
   attributeData=
@@ -41,8 +42,8 @@ export class AddParentMeetComponent implements OnInit {
 }
 loading:boolean=false;
   constructor(private router:Router,private studentInfoSerive: StudentInfoService, private commonService: CommonService,
-    private route :ActivatedRoute) { 
-
+    private route :ActivatedRoute,private authservice:AuthenticationService) { 
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editParentMeetingData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();

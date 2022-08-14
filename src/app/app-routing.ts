@@ -5,6 +5,7 @@ import { ForgetPasswordComponent } from './authentication/forget-password/forget
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { OtpVerifyComponent } from './authentication/otp-verify/otp-verify.component';
+import { AuthGuard} from './helpers/auth.guard';
 
 
 
@@ -12,7 +13,8 @@ const AppRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path :'pages',
     loadChildren: () => import('src/app/pages/pages.module').then(m => m.PagesModule),
-    data: { title: 'pages' }
+    data: { title: 'pages' },
+    canActivate: [AuthGuard]
   },
   // {
   //   path: '',

@@ -5,7 +5,12 @@ import { CommonService } from 'src/app/shared/common.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { elementAt } from 'rxjs-compat/operator/elementAt';
+import { AuthenticationService } from '../../service/authentication.service';
+import {standard} from '../models/commonmodel'
+
+class standardExtended extends standard{
+  edit:boolean;
+}
 
 @Component({
   selector: 'app-standard',
@@ -20,11 +25,13 @@ export class StandardComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
   displayedColumns: string[] = ['name','action'];
-  standardData=[];
+  standardData:standardExtended[]=[];
   dataSource:any;
-  idSchool:number=1
+  idSchool:number;
   changeInStandardValue:string;
-  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService) { }
+  constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchool = this.authservice.idSchool;
+   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -109,7 +116,6 @@ export class StandardComponent implements OnInit {
         this.dataSource.paginator = this.paginator
         this.table.renderRows();
         this.commonService.openSnackbar('Standard Submitted Successfully','Done');
-        this.form.reset();
       });
     }
     else{

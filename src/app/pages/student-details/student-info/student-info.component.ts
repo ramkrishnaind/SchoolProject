@@ -4,6 +4,7 @@ import { StudentInfoService } from '../../services/student-info.service';
 import {CommonService} from './../../../shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-student-info',
@@ -31,13 +32,14 @@ export class StudentInfoComponent implements OnInit {
   maxDate:Date;
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   studentImageDataUploadToS3;
-  idSchool:number=1;
+  idSchool:number;
   fileUpload:boolean=false;
   idToNavigate;
   studentEditData;
   loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService, private commonService:CommonService,
-    private router:Router,private route:ActivatedRoute) {
+    private router:Router,private route:ActivatedRoute,private authservice:AuthenticationService) {
+      this.idSchool = this.authservice.idSchool;
       const currentYear = new Date().getFullYear();
       this.maxDate = new Date()
      }

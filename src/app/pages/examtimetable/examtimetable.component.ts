@@ -7,6 +7,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-examtimetable',
@@ -25,12 +26,11 @@ export class ExamtimetableComponent implements OnInit {
   divisionData;
   dataSource:any;
   displayedColumns: string[] = ['subjectName','testType','examDate','startTime','endTime','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
-    
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+    this.idSchoolDetail = this.authservice.idSchool;
   }
   ngOnInit(): void {
     this.form = new FormGroup({

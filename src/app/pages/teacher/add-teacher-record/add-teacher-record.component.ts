@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../../../service/authentication.service';
 import { CommonService } from 'src/app/shared/common.service';
 import * as XLSX from 'xlsx';
 import { StudentInfoService } from '../../services/student-info.service';
@@ -30,7 +31,7 @@ export class AddTeacherRecordComponent implements OnInit {
   dataSource;
   EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$";
   teacherImageDataUploadToS3;
-  idSchool:number=1;
+  idSchool:number;
   idToNavigate;
   teacherEditData;
   fileUpload=false;
@@ -48,8 +49,9 @@ fileAdded:string='fileblank';
   selectedFile:File;
   excelFileUpload:boolean=false;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
-    private route:ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer) {
+    private route:ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService) {
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
+      this.idSchool = this.authservice.idSchool;
       this.idToNavigate = +this.route.snapshot.queryParams['id'] || 0;
       if(this.idToNavigate != 0){
         this.getSpecificTeacherData();

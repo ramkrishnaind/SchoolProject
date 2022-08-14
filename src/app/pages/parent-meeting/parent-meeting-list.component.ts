@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from '../../service/authentication.service';
 
 
 @Component({
@@ -28,13 +29,13 @@ export class ParentMeetingListComponent implements OnInit {
   divisionData;
   dataSource:any;
   displayedColumns: string[] = ['date','standardName','divisionName','teacherName','meetingTopics','meetingDetails','startTime','endTime','slotTime','action'];
-  idSchoolDetail:number = 1;
-  selectedValue=11;
+  idSchoolDetail:number;
   minDate:Date;
   maxDate:Date;
   
   constructor(private router:Router,private studentInfoSerive:StudentInfoService,private dialog: MatDialog,
-    private route:ActivatedRoute,private commonService:CommonService) {
+    private route:ActivatedRoute,private commonService:CommonService,private authservice:AuthenticationService) {
+      this.idSchoolDetail = this.authservice.idSchool;
       const currentYear = new Date().getFullYear();
       const m = new Date().getMonth();
       if(m==0 || m==1 || m==2){

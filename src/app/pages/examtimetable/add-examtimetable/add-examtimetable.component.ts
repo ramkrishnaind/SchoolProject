@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StudentInfoService } from '../../services/student-info.service';
 import {CommonService} from '../../../shared/common.service';
 import * as moment from 'moment';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-add-examtimetable',
@@ -22,7 +23,7 @@ export class AddExamtimetableComponent implements OnInit {
   minForEndTime;
   editedExamTimeTableData
   disableEndTime:boolean=true;
-  idSchool:number=1;
+  idSchool:number;
   attributeData=
     {
       idStandard:'idStandard',
@@ -35,9 +36,10 @@ export class AddExamtimetableComponent implements OnInit {
 }
 loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
-    private route :ActivatedRoute) {
+    private route :ActivatedRoute,private authservice:AuthenticationService) {
 
       if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.idSchool = this.authservice.idSchool;
         this.editedExamTimeTableData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();
         

@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-upload-attendance',
@@ -24,7 +25,7 @@ export class UploadAttendanceComponent implements OnInit {
   minDate:Date;
   maxDate:Date;
   presentStatus =[{name:"Present",value:'P'},{name:"Absent",value:'A'},{name:"Leave",value:'L'}];
-  idSchool:number=1;
+  idSchool:number;
   isExcelFile:boolean =false;
 fileAdded:string='fileblank';
   selectedFile:File;
@@ -41,10 +42,11 @@ fileAdded:string='fileblank';
 }
 loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
-    private route:ActivatedRoute,private fb: FormBuilder,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer ) {
+    private route:ActivatedRoute,private fb: FormBuilder,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService ) {
       
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
       if(this.router.getCurrentNavigation().extras.state != undefined){
+        this.idSchool = this.authservice.idSchool;
         this.editAttendanceData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();
         

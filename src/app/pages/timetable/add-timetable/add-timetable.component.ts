@@ -6,6 +6,7 @@ import {CommonService} from '../../../shared/common.service';
 import * as XLSX from 'xlsx';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   selector: 'app-add-timetable',
@@ -22,7 +23,7 @@ export class AddTimetableComponent implements OnInit {
   subjectData;
   minForEndTime;
   disableEndTime:boolean=true;
-  idSchool:number=1;
+  idSchool:number;
   editTimeTableData
   daysDropDown=[
     {value:'Monday',text:'Monday'},
@@ -47,8 +48,9 @@ fileAdded:string='fileblank';
   fileUpload:boolean=false;
   loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
-    private route:ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer ) {
+    private route:ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService ) {
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editTimeTableData =this.router.getCurrentNavigation().extras.state;  
       }
