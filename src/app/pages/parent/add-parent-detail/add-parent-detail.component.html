@@ -73,13 +73,18 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Mobile Number</mat-label>
-                        <input formControlName="mobilenumber" matInput>
+                        <input formControlName="mobilenumber" matInput (ngModelChange)="updateMobileNumber($event)">
+                            <mat-error *ngIf="form.get('mobilenumber').touched && form.get('mobilenumber').invalid && form.get('mobilenumber').errors?.required">Please enter mobile number</mat-error>
+                            <mat-error *ngIf="form.get('mobilenumber').touched && form.get('mobilenumber').invalid && form.get('mobilenumber').errors?.pattern">Mobile number is not 10 digit</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Secondary Mobile Number</mat-label>
                         <input formControlName="secMobilnumber" matInput>
+                        <mat-error *ngIf="form.get('secMobilnumber').errors && (form.get('secMobilnumber').invalid || form.get('secMobilnumber').touched) && form.get('secMobilnumber').errors.required">Please enter mobile number</mat-error>
+                            <mat-error *ngIf="form.get('secMobilnumber').errors && (form.get('secMobilnumber').invalid || form.get('secMobilnumber').touched) && form.get('secMobilnumber').errors.pattern">Mobile number is not 10 digit</mat-error>
+                            <mat-error *ngIf="form.get('secMobilnumber').errors && (form.get('secMobilnumber').invalid || form.get('secMobilnumber').touched) && form.get('secMobilnumber').errors.phoneNumberInvalid">Mobile number is same as Previous number</mat-error>
                     </mat-form-field>
                 </div>
 
@@ -90,18 +95,25 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Parent Emergency Mobile Number</mat-label>
                         <input formControlName="emgMobilenumber" matInput>
+                            <!-- <mat-error *ngIf="form.get('emgMobilenumber').touched && form.get('emgMobilenumber').invalid && form.get('emgMobilenumber').errors.pattern">Mobile number is not 10 digit</mat-error> -->
+                            <mat-error *ngIf="form.get('emgMobilenumber').touched && form.get('emgMobilenumber').invalid && form.get('emgMobilenumber').errors?.required">Please enter mobile number</mat-error>
+                            <mat-error *ngIf="form.get('emgMobilenumber').touched && form.get('emgMobilenumber').invalid && form.get('emgMobilenumber').errors?.pattern">Mobile number is not 10 digit</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Parent E-Mail</mat-label>
                         <input formControlName="email" matInput>
+                        <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.pattern">Please enter a valid email address.</mat-error>
+                        <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.required">Email is required.</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> Secondary E-Mail</mat-label>
                         <input formControlName="secEmail" matInput>
+                        <mat-error *ngIf="form.get('secEmail').errors && (form.get('secEmail').invalid || form.get('secEmail').touched) && form.get('secEmail').errors.pattern">Please enter a valid email address.</mat-error>
+                        <mat-error *ngIf="form.get('secEmail').errors && (form.get('secEmail').invalid || form.get('secEmail').touched) && form.get('secEmail').errors.required">Email is required.</mat-error>
                     </mat-form-field>
                 </div>
 

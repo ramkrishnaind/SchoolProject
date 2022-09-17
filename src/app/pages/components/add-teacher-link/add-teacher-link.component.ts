@@ -23,8 +23,8 @@ export class AddTeacherLinkComponent implements OnInit {
 loading:boolean=false;
   constructor(private studentInfoSerive: StudentInfoService, private commonService: CommonService, private router: Router,
     private route:ActivatedRoute,private authservice:AuthenticationService) {
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
-        this.idSchool = this.authservice.idSchool;
         this.editTeacherDetails =this.router.getCurrentNavigation().extras.state;
       }
      }

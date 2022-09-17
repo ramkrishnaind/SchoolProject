@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../service/authentication.service';
@@ -8,11 +8,21 @@ import { StudentInfoService } from '../../services/student-info.service';
 import { ParentService } from '../parent.service';
 import { city, country, gender, nationality, parent, state } from '../../models/commonmodel';
 
+function ValidatePhone(mobilenumber){
+return function(control: AbstractControl): {[key: string]: any} | null  {
+  if (control.value && control.value === mobilenumber) {
+    return { 'phoneNumberInvalid': true };
+  }
+  return null;
+}
+}
+
 @Component({
   selector: 'app-add-parent-detail',
   templateUrl: './add-parent-detail.component.html',
   styleUrls: ['./add-parent-detail.component.scss']
 })
+
 export class AddParentDetailComponent implements OnInit {
 
   @ViewChild('inputImage') inputImage: ElementRef;
@@ -71,9 +81,9 @@ export class AddParentDetailComponent implements OnInit {
       businessLogoUrl: new FormControl(null, [Validators.required]),
       address1:new FormControl(null, [Validators.required]),
       address2:new FormControl(null,[Validators.required]),
-      mobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-      secMobilnumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-      emgMobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+      mobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
+      secMobilnumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
+      emgMobilenumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
       email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       secEmail:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       gender:new FormControl(null, [Validators.required]),
@@ -98,6 +108,13 @@ export class AddParentDetailComponent implements OnInit {
         }
       });
      });
+  }
+
+  updateMobileNumber(data){
+    if(data.length === 10){
+    this.form.get('secMobilnumber').setValidators([Validators.required,Validators.pattern("^[0-9]{10}$"),ValidatePhone(data)]);
+    this.form.get('secMobilnumber').updateValueAndValidity();
+    }
   }
 
   updateValue(){
@@ -144,6 +161,7 @@ export class AddParentDetailComponent implements OnInit {
       this.country.forEach((data:any)=>{
         if(data.name === 'INDIA'){
          this.form.get('country').setValue(data.idCountry);
+         this.getStateData();
         }
    });
   }
@@ -157,6 +175,8 @@ export class AddParentDetailComponent implements OnInit {
       res.forEach(dt => {
         if(dt.idCountry === this.form.get('country').value){
           this.state.push(dt);
+          this.form.get('state').setValue(dt.idState);
+          this.getCityData();
         }
       });
     })
@@ -168,6 +188,7 @@ export class AddParentDetailComponent implements OnInit {
     this.studentInfoSerive.getCity().subscribe((res:any) =>{
       res.forEach(dt => {
         if(dt.idState === this.form.get('state').value){
+          this.form.get('city').setValue(dt.idCity);
           this.city.push(dt);
         }
       });

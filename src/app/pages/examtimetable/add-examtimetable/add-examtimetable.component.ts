@@ -38,8 +38,8 @@ loading:boolean=false;
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute,private authservice:AuthenticationService) {
 
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
-        this.idSchool = this.authservice.idSchool;
         this.editedExamTimeTableData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();
         

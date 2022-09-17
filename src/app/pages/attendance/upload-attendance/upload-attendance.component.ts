@@ -45,8 +45,8 @@ loading:boolean=false;
     private route:ActivatedRoute,private fb: FormBuilder,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService ) {
       
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
-        this.idSchool = this.authservice.idSchool;
         this.editAttendanceData =this.router.getCurrentNavigation().extras.state;
         // this.getSpecificHomeworkData();
         

@@ -45,8 +45,8 @@ fileAdded:string='fileblank';
   constructor(private studentInfoSerive:StudentInfoService,private commonService:CommonService,private router:Router,
     private route :ActivatedRoute,private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer,private authservice:AuthenticationService ) { 
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
+      this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
-        this.idSchool = this.authservice.idSchool;
         this.editExamResultData =this.router.getCurrentNavigation().extras.state;
       }
     }
