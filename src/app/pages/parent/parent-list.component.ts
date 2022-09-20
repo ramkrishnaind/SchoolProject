@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AuthenticationService } from '../../service/authentication.service';
 import { parent } from '../models/commonmodel';
+import { AddParentDetailComponent } from './add-parent-detail/add-parent-detail.component';
 @Component({
   selector: 'app-parent-list',
   templateUrl: './parent-list.component.html',

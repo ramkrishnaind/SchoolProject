@@ -74,6 +74,8 @@
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Email ID</mat-label>
                   <input formControlName="email" matInput />
+                  <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.pattern">Please enter a valid email address.</mat-error>
+                  <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.required">Email is required.</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -89,13 +91,18 @@
           <div class="bus-width set-item-width">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Whatsapp Number</mat-label>
-              <input formControlName="whatsappNumber" matInput />
+              <input formControlName="whatsappNumber" matInput (ngModelChange)="updateMobileNumber($event)" />
+              <mat-error *ngIf="form.get('whatsappNumber').touched && form.get('whatsappNumber').invalid && form.get('whatsappNumber').errors?.required">Please enter mobile number</mat-error>
+              <mat-error *ngIf="form.get('whatsappNumber').touched && form.get('whatsappNumber').invalid && form.get('whatsappNumber').errors?.pattern">Mobile number is not 10 digit</mat-error>
             </mat-form-field>
           </div>
           <div class="bus-width set-item-width">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label> Phone Number</mat-label>
               <input formControlName="phoneNumber" matInput />
+              <mat-error *ngIf="form.get('phoneNumber').errors && (form.get('phoneNumber').invalid || form.get('phoneNumber').touched) && form.get('phoneNumber').errors.required">Please enter mobile number</mat-error>
+              <mat-error *ngIf="form.get('phoneNumber').errors && (form.get('phoneNumber').invalid || form.get('phoneNumber').touched) && form.get('phoneNumber').errors.pattern">Mobile number is not 10 digit</mat-error>
+              <mat-error *ngIf="form.get('phoneNumber').errors && (form.get('phoneNumber').invalid || form.get('phoneNumber').touched) && form.get('phoneNumber').errors.phoneNumberInvalid">Mobile number is same as Previous number</mat-error>
             </mat-form-field>
           </div>
         </div>

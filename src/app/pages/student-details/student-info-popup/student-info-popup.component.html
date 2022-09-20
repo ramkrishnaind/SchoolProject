@@ -128,13 +128,18 @@
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> Primary Mobile Number</mat-label>
-                        <input formControlName="pmobileno" matInput>
+                        <input formControlName="pmobileno" matInput (ngModelChange)="updateMobileNumber($event)">
+                        <mat-error *ngIf="form.get('pmobileno').touched && form.get('pmobileno').invalid && form.get('pmobileno').errors?.required">Please enter mobile number</mat-error>
+                        <mat-error *ngIf="form.get('pmobileno').touched && form.get('pmobileno').invalid && form.get('pmobileno').errors?.pattern">Mobile number is not 10 digit</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> Secondary Mobile Number</mat-label>
                         <input formControlName="smobileno" matInput>
+                        <mat-error *ngIf="form.get('smobileno').errors && (form.get('smobileno').invalid || form.get('smobileno').touched) && form.get('smobileno').errors.required">Please enter mobile number</mat-error>
+                        <mat-error *ngIf="form.get('smobileno').errors && (form.get('smobileno').invalid || form.get('smobileno').touched) && form.get('smobileno').errors.pattern">Mobile number is not 10 digit</mat-error>
+                        <mat-error *ngIf="form.get('smobileno').errors && (form.get('smobileno').invalid || form.get('smobileno').touched) && form.get('smobileno').errors.phoneNumberInvalid">Mobile number is same as Previous number</mat-error>
                     </mat-form-field>
                 </div>
 
@@ -151,12 +156,16 @@
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Student Email ID</mat-label>
                         <input formControlName="email" matInput>
+                        <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.pattern">Please enter a valid email address.</mat-error>
+                        <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.required">Email is required.</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="bus-width set-item-width">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label> Student Secondary Email ID</mat-label>
                         <input formControlName="semail" matInput>
+                        <mat-error *ngIf="form.get('semail').errors && (form.get('semail').invalid || form.get('semail').touched) && form.get('semail').errors.pattern">Please enter a valid email address.</mat-error>
+                        <mat-error *ngIf="form.get('semail').errors && (form.get('semail').invalid || form.get('semail').touched) && form.get('semail').errors.required">Email is required.</mat-error>
                     </mat-form-field>
                 </div>
 

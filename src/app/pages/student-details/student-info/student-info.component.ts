@@ -1,10 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
 import {CommonService} from './../../../shared/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { AuthenticationService } from '../../../service/authentication.service';
+
+function ValidatePhone(mobilenumber){
+  return function(control: AbstractControl): {[key: string]: any} | null  {
+    if (control.value && control.value === mobilenumber) {
+      return { 'phoneNumberInvalid': true };
+    }
+    return null;
+  }
+  }
 
 @Component({
   selector: 'app-student-info',
@@ -56,8 +65,8 @@ export class StudentInfoComponent implements OnInit {
       age:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$")]),
       dob:new FormControl(null, [Validators.required]),
       email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
-      pmobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-      smobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+      pmobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
+      smobileno:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
       address:new FormControl(null, [Validators.required]),
       subjects:new FormControl(null, [Validators.required]),
       academicyear:new FormControl(null, [Validators.required]),
@@ -65,7 +74,7 @@ export class StudentInfoComponent implements OnInit {
       bloodgrp:new FormControl(null, [Validators.required]),
       semail:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       address2:new FormControl(null, [Validators.required]),
-      emergancyConntact:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+      emergancyConntact:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
       nationality:new FormControl(null, [Validators.required]),
       country:new FormControl(null, [Validators.required]),
       state:new FormControl(null, [Validators.required]),
@@ -77,6 +86,13 @@ export class StudentInfoComponent implements OnInit {
    this.getBloodGroupData();
    this.getNationalityData();
    this.getCountryData();
+  }
+
+  updateMobileNumber(data){
+    if(data.length === 10){
+    this.form.get('smobileno').setValidators([Validators.required,Validators.pattern("^[0-9]{10}$"),ValidatePhone(data)]);
+    this.form.get('smobileno').updateValueAndValidity();
+    }
   }
 
 
@@ -113,6 +129,7 @@ export class StudentInfoComponent implements OnInit {
       this.country.forEach((data:any)=>{
         if(data.name === 'INDIA'){
          this.form.get('country').setValue(data.idCountry);
+         this.getStateData();
         }
    });
     })
@@ -125,6 +142,8 @@ export class StudentInfoComponent implements OnInit {
       res.forEach(dt => {
         if(dt.idCountry === this.form.get('country').value){
           this.state.push(dt);
+          this.form.get('state').setValue(dt.idState);
+          this.getCityData();
         }
       });
     })
@@ -136,6 +155,7 @@ export class StudentInfoComponent implements OnInit {
     this.studentInfoSerive.getCity().subscribe((res:any) =>{
       res.forEach(dt => {
         if(dt.idState === this.form.get('state').value){
+          this.form.get('city').setValue(dt.idCity);
           this.city.push(dt);
         }
       });

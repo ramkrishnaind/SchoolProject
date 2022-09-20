@@ -1,10 +1,19 @@
 import { Component, OnInit,ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StudentInfoService } from '../../services/student-info.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import {CommonService} from './../../../shared/common.service';
 import * as moment from 'moment';
 import { AuthenticationService } from '../../../service/authentication.service';
+
+function ValidatePhone(mobilenumber){
+  return function(control: AbstractControl): {[key: string]: any} | null  {
+    if (control.value && control.value === mobilenumber) {
+      return { 'phoneNumberInvalid': true };
+    }
+    return null;
+  }
+  }
 
 
 @Component({
@@ -139,8 +148,8 @@ export class StudentInfoPopupComponent implements OnInit {
         age:new FormControl(this.age, [Validators.required,Validators.pattern("^[0-9]*$")]),
         dob:new FormControl(moment(this.dob).format('YYYY-MM-DD'), [Validators.required]),
         email:new FormControl(this.email, [Validators.required,Validators.pattern(this.EMAIL)]),
-        pmobileno:new FormControl(this.pmobileno, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-        smobileno:new FormControl(this.smobileno, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+        pmobileno:new FormControl(this.pmobileno, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
+        smobileno:new FormControl(this.smobileno, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
         address:new FormControl(this.address, [Validators.required]),
         subjects:new FormControl(this.subjects, [Validators.required]),
         academicyear:new FormControl(this.academicyear, [Validators.required]),
@@ -148,7 +157,7 @@ export class StudentInfoPopupComponent implements OnInit {
         bloodgrp:new FormControl(this.bloodgroup, [Validators.required]),
         semail:new FormControl(this.semail, [Validators.required,Validators.pattern(this.EMAIL)]),
         address2:new FormControl(this.address2, [Validators.required]),
-        emergancyConntact:new FormControl(this.emergancyConntact, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
+        emergancyConntact:new FormControl(this.emergancyConntact, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
         nationality:new FormControl(this.nationalityId, [Validators.required]),
         country:new FormControl(this.countryId, [Validators.required]),
         state:new FormControl(this.stateId, [Validators.required]),
@@ -180,6 +189,13 @@ export class StudentInfoPopupComponent implements OnInit {
       // this.form.controls['academicyear'].patchValue(this.academicyear);
       // this.form.controls['address'].patchValue(this.address);
       // this.form.controls['address2'].patchValue(this.address2);
+  }
+
+  updateMobileNumber(data){
+    if(data.length === 10){
+    this.form.get('smobileno').setValidators([Validators.required,Validators.pattern("^[0-9]{10}$"),ValidatePhone(data)]);
+    this.form.get('smobileno').updateValueAndValidity();
+    }
   }
 
     getStandardData(){

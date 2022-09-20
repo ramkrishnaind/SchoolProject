@@ -20,6 +20,8 @@
                         <mat-form-field appearance="fill">
                             <mat-label>Enter Your Email ID</mat-label>
                             <input formControlName="email" matInput>
+                            <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.pattern">Please enter a valid email address.</mat-error>
+                            <mat-error *ngIf="form.get('email').errors && (form.get('email').invalid || form.get('email').touched) && form.get('email').errors.required">Email is required.</mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="fill">
                             <mat-label>Enter your password</mat-label>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,15 @@ import { AuthenticationService } from '../../../service/authentication.service';
 import { CommonService } from 'src/app/shared/common.service';
 import * as XLSX from 'xlsx';
 import { StudentInfoService } from '../../services/student-info.service';
+
+function ValidatePhone(mobilenumber){
+  return function(control: AbstractControl): {[key: string]: any} | null  {
+    if (control.value && control.value === mobilenumber) {
+      return { 'phoneNumberInvalid': true };
+    }
+    return null;
+  }
+  }
 
 @Component({
   selector: 'app-add-teacher-record',
@@ -71,8 +80,8 @@ fileAdded:string='fileblank';
       // idSubject: new FormControl(null, [Validators.required]),
       email:new FormControl(null, [Validators.required,Validators.pattern(this.EMAIL)]),
       education:new FormControl(null, [Validators.required]),
-      whatsappNumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),Validators.minLength(10)]),
-      phoneNumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]*$"),Validators.maxLength(10),,Validators.minLength(10)]),
+      whatsappNumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),Validators.minLength(10)]),
+      phoneNumber:new FormControl(null, [Validators.required,Validators.pattern("^[0-9]{10}$"),Validators.maxLength(10),,Validators.minLength(10)]),
 
     });
     
@@ -90,6 +99,13 @@ fileAdded:string='fileblank';
         }
       });
      });
+  }
+
+  updateMobileNumber(data){
+    if(data.length === 10){
+    this.form.get('phoneNumber').setValidators([Validators.required,Validators.pattern("^[0-9]{10}$"),ValidatePhone(data)]);
+    this.form.get('phoneNumber').updateValueAndValidity();
+    }
   }
 
   updateValue(){

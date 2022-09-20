@@ -97,9 +97,13 @@
 
             <ng-container matColumnDef="action">
                 <th class="action" mat-header-cell *matHeaderCellDef> Actions </th>
-                <td [style.width.px]="220" [style.height.px]="60" mat-cell *matCellDef="let element">
-                    <button   type="button" mat-button color="primary" (click)="editStudent(element)">Edit</button>
-                    <button   [ngStyle]="{'margin-left.px': 10}"  type="button" mat-button color="accent" (click)="onDelete(element)">Delete</button>
+                <td [style.width.px]="220" [style.height.px]="60" style="text-align: center" mat-cell *matCellDef="let element">
+                    <button   type="button" mat-icon-button color="primary" (click)="editStudent(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button   [ngStyle]="{'margin-left.px': 10}"  type="button" mat-icon-button color="accent" (click)="onDelete(element)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                    
                 </td>
             </ng-container>

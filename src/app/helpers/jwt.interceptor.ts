@@ -5,15 +5,19 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
+
+import { LoadingService } from '../service/loading.service';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private loader: LoadingService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
+    this.loader.show();
     // let currentUser = this.authenticationService.currentUserValue;
     // if (currentUser && currentUser.token) {
     //     request = request.clone({
@@ -23,6 +27,10 @@ export class JwtInterceptor implements HttpInterceptor {
     //     });
     // }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      finalize(() => {
+        this.loader.hide();
+      })
+    );
   }
 }
