@@ -99,6 +99,9 @@ export class StudentInfoComponent implements OnInit {
   getStandardData(){
     this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
+      this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+      this.getDivisionData(this.form.get('idStandard'));
+      this.getAllSubject();
     });
   }
 

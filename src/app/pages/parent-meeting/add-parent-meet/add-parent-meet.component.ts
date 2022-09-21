@@ -92,6 +92,10 @@ loading:boolean=false;
       if(this.editParentMeetingData){
         this.getDivisionData({value:this.editParentMeetingData.idStandard});
       }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getDivisionData(this.form.get('idStandard'));
+      }
     });
   }
 

@@ -57,6 +57,11 @@ loading:boolean=false;
       if(this.editTeacherDetails){
         this.getDivisionData({value:this.editTeacherDetails.idStandard});
       }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getDivisionData(this.form.get('idStandard'));
+        this.getAllSubjectData(this.form.get('idStandard'));
+      }
     });
   }
 
