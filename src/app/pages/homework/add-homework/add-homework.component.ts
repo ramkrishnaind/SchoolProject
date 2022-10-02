@@ -17,6 +17,7 @@ export class AddHomeworkComponent implements OnInit {
 
   
   @ViewChild('inputFile') inputFile: ElementRef;
+  header:string='Homework Details';
   logoError: boolean;
   form: FormGroup;
   fileName;
@@ -57,6 +58,7 @@ fileAdded:string='fileblank';
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/file.svg'));
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editedHomeworkData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit Homework Details';
         // this.getSpecificHomeworkData();
         
       }
@@ -92,6 +94,10 @@ fileAdded:string='fileblank';
       this.standardData = res.data;
       if(this.editedHomeworkData){
         this.getAllDivisionBasedOnStandard({value:this.editedHomeworkData.idStandard},'update');
+      }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getAllDivisionBasedOnStandard(this.form.get('idStandard'),'normal');
       }
     });
     this.studentInfoSerive.getAllTeacher().subscribe((res:any) =>{
@@ -285,15 +291,16 @@ fileAdded:string='fileblank';
     }
 
     downloadFormat(){
-      let link = document.createElement('a');
-      link.setAttribute('target', '_blank');
-      link.setAttribute('download', 'download.jpg');
-      link.setAttribute('type', 'hidden');
-      link.href = this.editedHomeworkData.attachment;
-      // link.download = path;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      // let link = document.createElement('a');
+      // link.target = '_self';
+      // link.download = 'HomeWork_File.jpg'
+      // // link.setAttribute('download', 'homework.jpg');
+      // // link.setAttribute('type', 'hidden');
+      // link.href = this.editedHomeworkData.attachment;
+      // // link.download = path;
+      // document.body.appendChild(link);
+      // link.click();
+      // link.remove();
     }
 
 

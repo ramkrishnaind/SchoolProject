@@ -28,7 +28,7 @@ export class AddTeacherRecordComponent implements OnInit {
   @ViewChild('inputFile') inputFile: ElementRef;
   @ViewChild('inputImage') inputImage: ElementRef;
   
-
+  header = 'Teacher Details';
   form: FormGroup;
   fileName;
   selectedFiles: File;
@@ -64,6 +64,7 @@ fileAdded:string='fileblank';
       this.idToNavigate = +this.route.snapshot.queryParams['id'] || 0;
       if(this.idToNavigate != 0){
         this.getSpecificTeacherData();
+        // this.header = 'Edit Teacher Details';
       }
      }
 

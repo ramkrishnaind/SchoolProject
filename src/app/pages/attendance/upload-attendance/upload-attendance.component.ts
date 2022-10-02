@@ -17,6 +17,7 @@ import { AuthenticationService } from '../../../service/authentication.service';
 export class UploadAttendanceComponent implements OnInit {
 
   @ViewChild('inputFile') inputFile: ElementRef;
+  header:string='Attendance Details';
   willDownload = false;
   form: FormGroup;
   studentName;
@@ -48,6 +49,7 @@ loading:boolean=false;
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editAttendanceData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit Attendance Details';
         // this.getSpecificHomeworkData();
         
       }
@@ -82,6 +84,10 @@ loading:boolean=false;
       if(this.editAttendanceData){
         this.getDivisionData({value:this.editAttendanceData.standard.idStandard},'update')
       }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getDivisionData(this.form.get('idStandard'),'normal');
+      }
     });
   }
   onChangeStandard(idStandard){
@@ -89,10 +95,18 @@ loading:boolean=false;
    }
 
    getDivisionData(idStandard,callFor){
+    let idDivision;
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) =>{
       if(res.data){
       this.divisionData = res.data;
-      this.getAllStudent(this.editAttendanceData.standard.idStandard,{value:this.editAttendanceData.division.idDivision},callFor);
+      if(this.editAttendanceData){
+       idDivision = this.editAttendanceData.division.idDivision;
+      }
+      else{
+       this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
+       idDivision = this.form.get('idDivision').value;
+      }
+      this.getAllStudent(idStandard.value,{value:idDivision},callFor);
       }
      
     });
@@ -264,7 +278,29 @@ loading:boolean=false;
   }
 
   downloadFormat(){
-
+    // const json=[
+    //   {
+    //     id:null,
+    //     name:null,
+    //     rollNumber:null
+    //   }
+    // ]
+    // const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    // console.log('worksheet',worksheet);
+    // const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const data: Blob = new Blob([excelBuffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    // });
+    // var link = document.createElement("a");
+    // if (link.download !== undefined) {
+    //   var url = URL.createObjectURL(data);
+    //   link.setAttribute("href", url);
+    //   link.setAttribute("download", 'sameer.xlsx');
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    // }
   }
 
   back(){

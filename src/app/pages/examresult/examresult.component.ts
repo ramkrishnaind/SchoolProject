@@ -41,7 +41,6 @@ export class ExamresultComponent implements OnInit {
       this.standardData = res.data;
       this.form.get('idStandard').setValue(this.standardData[0].idStandard);
       this.getDivisionData({value:this.form.get('idStandard').value})
-        
     });
      } 
      onChangeStandard(idStandard){

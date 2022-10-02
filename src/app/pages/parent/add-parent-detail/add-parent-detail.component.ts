@@ -26,6 +26,7 @@ return function(control: AbstractControl): {[key: string]: any} | null  {
 export class AddParentDetailComponent implements OnInit {
 
   @ViewChild('inputImage') inputImage: ElementRef;
+  header = 'Parent Details';
   @Input() newItemEvent: string;
   logoError: boolean;
   form: FormGroup;
@@ -71,6 +72,7 @@ export class AddParentDetailComponent implements OnInit {
       this.idToNavigate = +this.route.snapshot.queryParams['idParent'] || 0;
       if(this.idToNavigate != 0){
         this.getSpecificParentData();
+        // this.header = 'Edit Parent Details';
       }
   }
 

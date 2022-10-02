@@ -53,6 +53,11 @@ export class PagesComponent implements AfterViewInit {
           route: '/pages/master/teacher',
           iconClass: 'ic-cust-app-tra'
         },
+        {
+          displayName: 'Bulk Upload',
+          route: '/pages/master/upload',
+          iconClass: 'ic-cust-app-tra'
+        },
       
       ]
     },

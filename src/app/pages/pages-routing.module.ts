@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { TeacherLinkListComponent } from './components/teacher-link/teacher-link-list.component';
 import { AddTeacherLinkComponent } from './components/add-teacher-link/add-teacher-link.component';
+import { DataUploadComponent } from './components/data-upload/data-upload.component';
 
 
 const routes: Routes = [
@@ -110,6 +111,11 @@ const routes: Routes = [
         {
           path: 'master/location',
           loadChildren:() => import('src/app/pages/location/location.module').then(m => m.LocationModule),
+          data:{ title: 'Master'}
+        },
+        {
+          path: 'master/upload',
+          component:DataUploadComponent,
           data:{ title: 'Master'}
         },
         {

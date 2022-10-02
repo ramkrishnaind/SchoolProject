@@ -18,6 +18,7 @@ export class AddExamresultComponent implements OnInit {
   
   @ViewChild('inputFile') inputFile: ElementRef;
   
+  header = 'ExamResult Details';
   form: FormGroup;
   editExamResultData
   standardData;
@@ -48,6 +49,7 @@ fileAdded:string='fileblank';
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editExamResultData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit ExamResult Details';
       }
     }
  
@@ -71,8 +73,13 @@ fileAdded:string='fileblank';
     this.studentInfoSerive.getStandard({idSchool:this.idSchool}).subscribe((res:any) =>{
       this.standardData = res.data;
       if(this.editExamResultData){
-        this.getDivisionData({value:this.editExamResultData.idStandard},'update');
         this.getAllSubjectData({value:this.editExamResultData.idStandard});
+        this.getDivisionData({value:this.editExamResultData.idStandard},'update');
+      }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getAllSubjectData(this.form.get('idStandard'));
+        this.getDivisionData(this.form.get('idStandard'),'normal');
       }
     });
   }
@@ -88,9 +95,17 @@ fileAdded:string='fileblank';
    }
 
    getDivisionData(idStandard,callFor){
+    let idDivision;
     this.studentInfoSerive.getDivision(idStandard,this.idSchool).subscribe((res:any) =>{
       this.divisionData = res.data;
-      this.getAllStudent(this.editExamResultData.idStandard,{value:this.editExamResultData.idDivision},callFor)
+      if(this.editExamResultData){
+        idDivision = this.editExamResultData.idDivision;
+      }
+      else{
+        this.form.get('idDivision').setValue(this.divisionData[0].idDivision);
+        idDivision = this.form.get('idDivision').value;
+      }
+      this.getAllStudent(idStandard.value,{value:idDivision},callFor)
     });
    }
    onChangeDivision(idDivision){
@@ -105,7 +120,12 @@ fileAdded:string='fileblank';
         this.updateValue();
       }
      });
+   }
 
+   getAllSubjectData(idStandard){
+    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
+      this.subjectData = res.data;
+     })
    }
 
    updateValue(){
@@ -120,14 +140,6 @@ fileAdded:string='fileblank';
      this.form.get('remark').setValue(this.editExamResultData.remark);
      // this.teacherImageDataUploadToS3 = this.editExamResultData.profileurl;
      // this.form.get('parentName').setValue(this.parentData.name);
-   }
-
-
-
-   getAllSubjectData(idStandard){
-    this.studentInfoSerive.getAllSubject(idStandard.value,this.idSchool).subscribe((res:any) =>{
-      this.subjectData = res.data;
-     })
    }
 
    setLimitBasedOnMaxValue(event){

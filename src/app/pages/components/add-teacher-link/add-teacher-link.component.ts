@@ -12,6 +12,7 @@ import { StudentInfoService } from '../../services/student-info.service';
 })
 export class AddTeacherLinkComponent implements OnInit {
 
+  header = 'Link Teacher To Standard';
   editTeacherDetails;
   attributeData=
   {
@@ -26,6 +27,7 @@ loading:boolean=false;
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editTeacherDetails =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit Link Teacher To Standard';
       }
      }
 
@@ -60,7 +62,7 @@ loading:boolean=false;
       else{
         this.form.get('idStandard').setValue(this.standardData[0].idStandard);
         this.getDivisionData(this.form.get('idStandard'));
-        this.getAllSubjectData(this.form.get('idStandard'));
+        // this.getAllSubjectData(this.form.get('idStandard'));
       }
     });
   }

@@ -17,6 +17,7 @@ export class AddTimetableComponent implements OnInit {
 
   @ViewChild('inputFile') inputFile: ElementRef;
   
+  header = 'School Timetable Details';
   form: FormGroup;
   standardData;
   divisionData;
@@ -52,7 +53,8 @@ fileAdded:string='fileblank';
       iconRegistry.addSvgIcon('excel', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/svgIcon/excel.svg'));
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
-        this.editTimeTableData =this.router.getCurrentNavigation().extras.state;  
+        this.editTimeTableData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit School Timetable Details';  
       }
      }
 
@@ -74,6 +76,10 @@ fileAdded:string='fileblank';
       this.standardData = res.data;
       if(this.editTimeTableData){
         this.getDivisionData({value:this.editTimeTableData.idStandard},'update');
+      }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getDivisionData(this.form.get('idStandard'),'normal');
       }
     }
     });

@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../service/authentication.service';
 })
 export class AddParentMeetComponent implements OnInit {
 
+  header = 'Parent Meet Details';
   form: FormGroup;
   standardData;
   teacherData;
@@ -46,6 +47,7 @@ loading:boolean=false;
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editParentMeetingData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit Parent Meet Details';
         // this.getSpecificHomeworkData();
         
       }

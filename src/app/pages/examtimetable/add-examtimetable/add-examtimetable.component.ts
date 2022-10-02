@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../../service/authentication.service';
 })
 export class AddExamtimetableComponent implements OnInit {
 
+  header = 'ExamTimeTable Details';
   form: FormGroup;
   standardData;
   divisionData;
@@ -41,6 +42,7 @@ loading:boolean=false;
       this.idSchool = this.authservice.idSchool;
       if(this.router.getCurrentNavigation().extras.state != undefined){
         this.editedExamTimeTableData =this.router.getCurrentNavigation().extras.state;
+        // this.header = 'Edit ExamTimeTable Details';
         // this.getSpecificHomeworkData();
         
       }
@@ -77,6 +79,11 @@ loading:boolean=false;
       this.standardData = res.data;
       if(this.editedExamTimeTableData){
         this.getDivisionData({value:this.editedExamTimeTableData.idStandard},'update');
+      }
+      else{
+        this.form.get('idStandard').setValue(this.standardData[0].idStandard);
+        this.getDivisionData(this.form.get('idStandard'),'normal');
+        // this.getAllSubjectData(this.form.get('idStandard'),'normal');
       }
     });
   }

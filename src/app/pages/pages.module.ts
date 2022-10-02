@@ -12,6 +12,7 @@ import { LogoutPopupComponent } from './components/logout-popup/logout-popup.com
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { TeacherLinkListComponent } from './components/teacher-link/teacher-link-list.component';
 import { AddTeacherLinkComponent } from './components/add-teacher-link/add-teacher-link.component';
+import { DataUploadComponent } from './components/data-upload/data-upload.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { AddTeacherLinkComponent } from './components/add-teacher-link/add-teach
     LogoutPopupComponent,
     TeacherLinkListComponent,
     AddTeacherLinkComponent,
+    DataUploadComponent,
 
    
   ],

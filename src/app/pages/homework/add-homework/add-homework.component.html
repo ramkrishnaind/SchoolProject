@@ -10,7 +10,7 @@
         </div>
 
         <div class="bus-width set-item-width-back">
-            <h2>Homework Details</h2>
+            <h2>{{header}}</h2>
         </div>
     </div>
 
@@ -41,7 +41,8 @@
                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
               </div>
         </div>
-        <button *ngIf="editedHomeworkData" type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Attachment</button>
+       
+    <!-- <button *ngIf="editedHomeworkData" type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Attachment</button> -->
     </div>
 
     <form [formGroup]="form">

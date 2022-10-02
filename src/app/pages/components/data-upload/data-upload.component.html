@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="business-details-back">
+        <div class="bus-width set-item-width-back">
+            <h2>{{header}}</h2>
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="div-1">
+
+            <div class="business-details">
+                <div class="bus-width set-item-width">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Select Name for Bulk Upload</mat-label>
+                        <mat-select formControlName="bulkUpload" (selectionChange)="onChangeBulkUpload($event)">
+                            <mat-option *ngFor="let item of bulkUploadData" [value]="item.id">{{item.displayName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+           
+            
+        </div>
+    </form>
+
+    <div class="div-1"  [ngStyle]="{'margin-top.px':80,'display':'flex','justify-content':'center','align-items':'center'}">
+
+
+        <div class="file-div" (click)="clickToAddFile()" >
+            <input #inputFile accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"  type="file" id="file" class="display-none" (change)="onFileChange($event)" >
+            <div *ngIf="!fileUpload"  class="cursor-pointer w-100">
+                <div class="add-logo excel-upload">
+                    <mat-icon svgIcon="excel" [ngStyle]="{'margin-right.px':10}"></mat-icon>
+                        <div class="company-logo-text"  *ngIf="fileAdded=== 'fileblank' ">
+                            Add your excel file here 
+                        </div>
+                        <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileupload' ">
+                            <span>{{selectedFile.name}}</span>
+                            <span>File uploaded Successfully </span>
+                        </div>
+                        <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileerror' ">
+                            <span>{{selectedFile.name}}</span>
+                            <span>Excel format is not correct </span>
+                        </div>  
+                </div>
+
+                <!-- <mat-error *ngIf="logoError == true" class="img-error">Photo is required</mat-error> -->
+            </div>
+
+            <div *ngIf="fileUpload" style="width: 100%; text-align: center;" >
+                <span [ngStyle]="{'font-weight':600}">Uploading...</span>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            <!-- <div  class="image-preview">  -->
+
+                <!-- <div class="cursor-pointer change-logo" *ngIf="formService.formPreview != true" (click)="addLogo()">
+                    Change Logo
+                </div> -->
+             <!-- </div> -->
+        </div>    
+        <button type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Sample Format</button>
+
+        <!-- <div class="business-details">
+            <div class="bus-width set-item-width">
+                <mat-label class="labelfont">Upload Attendance Excel File Here</mat-label>
+            </div>
+            <div class="bus-width set-item-width">
+                <input #inputFile accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" type="file" id="file" (change)="onFileChange($event)">
+            </div>
+
+
+        </div> -->
+    </div>
+
+</div>
+
