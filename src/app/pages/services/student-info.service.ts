@@ -206,4 +206,12 @@ export class StudentInfoService {
     return name;
     
    }
+
+   getExcelDataFormat(excelFormat:string){
+    return this.http.get(`${this.baseurl}${excelFormat}/exelTemplate`)
+   }
+
+   bulkUpload(selectedValue,body){
+    return this.http.post(`${this.baseurl}Attendance/ByNameBulk`,body);
+  }
 }

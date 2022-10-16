@@ -149,3 +149,7 @@
     justify-content: center;
     flex-direction: column;
 }
+.disable{
+    pointer-events: none;
+    opacity: 0.5;
+}

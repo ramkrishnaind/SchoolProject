@@ -24,7 +24,7 @@
         </div>
     </form>
 
-    <div class="div-1"  [ngStyle]="{'margin-top.px':80,'display':'flex','justify-content':'center','align-items':'center'}">
+    <div class="div-1" [ngClass]="{'disable':excelDisable}"  [ngStyle]="{'margin-top.px':80,'display':'flex','justify-content':'center','align-items':'center'}">
 
 
         <div class="file-div" (click)="clickToAddFile()" >
@@ -33,7 +33,7 @@
                 <div class="add-logo excel-upload">
                     <mat-icon svgIcon="excel" [ngStyle]="{'margin-right.px':10}"></mat-icon>
                         <div class="company-logo-text"  *ngIf="fileAdded=== 'fileblank' ">
-                            Add your excel file here 
+                            Add excel file for selected value
                         </div>
                         <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileupload' ">
                             <span>{{selectedFile.name}}</span>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="company-logo-text company-excel-name" *ngIf="fileAdded === 'fileerror' ">
                             <span>{{selectedFile.name}}</span>
-                            <span>Excel format is not correct </span>
+                            <span>Excel format is not correct or Wrong Value entered </span>
                         </div>  
                 </div>
 
@@ -59,7 +59,7 @@
                 </div> -->
              <!-- </div> -->
         </div>    
-        <button type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Sample Format</button>
+        <button [disabled]="!form.valid" type="button" mat-raised-button color="primary" class="upload-btn-excel" (click)="downloadFormat()">Download Sample Format For Selected Value</button>
 
         <!-- <div class="business-details">
             <div class="bus-width set-item-width">
